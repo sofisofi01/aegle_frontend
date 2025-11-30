@@ -1,0 +1,7 @@
+@import '../variables/breakpoints';
+
+@mixin respond($size) {
+  @media (max-width: map-get($layout-breakpoints, $size)) {
+    @content;
+  }
+}
