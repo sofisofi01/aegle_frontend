@@ -1,0 +1,76 @@
+@import "../../styles/mixins/breakpoints.scss";
+@import "../../styles/variables/fonts.scss";
+@import "../../styles/variables/colors.scss";
+
+
+.header {
+width: 100%;
+padding: 24px 40px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+position: absolute;
+top: 0;
+left: 0;
+z-index: 10;
+background: transparent;
+}
+
+
+.logo {
+font-size: 20px;
+font-weight: 600;
+letter-spacing: 4px;
+}
+
+
+.nav {
+display: none;
+
+
+@include breakpoints(md) {
+display: block;
+}
+}
+
+
+.menuList {
+list-style: none;
+display: flex;
+gap: 40px;
+padding: 0;
+margin: 0;
+}
+
+
+.menuItem a {
+color: $color-dark;
+font-size: 16px;
+transition: 0.2s;
+
+
+&:hover {
+opacity: 0.7;
+}
+}
+
+
+.active a {
+border-bottom: 2px solid $color-green;
+padding-bottom: 4px;
+}
+
+
+.signIn {
+background-color: $color-green;
+color: white;
+border-radius: 20px;
+padding: 8px 20px;
+font-size: 14px;
+transition: 0.2s;
+
+
+&:hover {
+opacity: 0.8;
+}
+}
