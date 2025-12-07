@@ -1,3 +1,1 @@
-export type MainProps = {
-  
-};
+export type MainProps = {};
