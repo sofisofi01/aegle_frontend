@@ -38,7 +38,7 @@
 }
 
 .menuItem a {
-  color: $color-dark;
+  color: $color-text-black;
   font-size: 24px;
   transition: 0.2s;
 
@@ -48,13 +48,13 @@
 }
 
 .active a {
-  border-bottom: 2px solid $color-green;
+  border-bottom: 2px solid $color-mid-green;
   padding-bottom: 4px;
 }
 
 .signIn {
-  background-color: $color-green;
-  color: white;
+  background-color: $color-button;
+  color: $color-text-white;
   border-radius: 20px;
   padding: 8px 20px;
   font-size: 24px;

@@ -2,7 +2,7 @@ import { HeaderProps } from "./types";
 import styles from "./Header.module.scss";
 import classNames from "classnames";
 
-export default function Header({ active }: HeaderProps) {
+export default function Header({ active, isAuth }: HeaderProps) {
   const menuItems = [
     { id: "nutrition", name: "Nutrition" },
     { id: "workouts", name: "Workouts" },
@@ -29,7 +29,9 @@ export default function Header({ active }: HeaderProps) {
         </ul>
       </nav>
 
-      <button className={styles.signIn}>Sign in</button>
+      <button className={styles.signIn}>
+        {isAuth ? "My account" : "Sign in"}
+      </button>
     </header>
   );
 }

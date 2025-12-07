@@ -1,35 +1,15 @@
-import { HeaderProps } from "./types";
-import styles from "./Header.module.scss";
-import classNames from "classnames";
+import styles from "./Footer.module.scss";
+import { FooterProps } from "./types";
 
-export default function Header({ active }: HeaderProps) {
-  const menuItems = [
-    { id: "nutrition", name: "Nutrition" },
-    { id: "workouts", name: "Workouts" },
-    { id: "progress", name: "Progress" },
-    { id: "profile", name: "Profile" }
-  ];
-
+export default function Footer({}: FooterProps) {
   return (
-    <header className={styles.header}>
-      <div className={styles.logo}>E Q U I L I B R I A</div>
+    <footer className={styles.footer}>
+      <div className={styles.links}>
+        <a href="#privacy">Privacy policy</a>
+        <a href="#terms">Terms of use</a>
+      </div>
 
-      <nav className={styles.nav}>
-        <ul className={styles.menuList}>
-          {menuItems.map((item) => (
-            <li
-              key={item.id}
-              className={classNames(styles.menuItem, {
-                [styles.active]: active === item.id,
-              })}
-            >
-              <a href={`/#${item.id}`}>{item.name}</a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-
-      <button className={styles.signIn}>Sign in</button>
-    </header>
+      <p className={styles.copy}>Equilibria ©2025 — State of balance</p>
+    </footer>
   );
 }

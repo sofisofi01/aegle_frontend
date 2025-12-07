@@ -1,66 +1,47 @@
 @import "../../styles/mixins/breakpoints.scss";
-@import "../../styles/variables/fonts.scss";
 @import "../../styles/variables/colors.scss";
+@import "../../styles/variables/fonts.scss";
 
-.header {
+.footer {
   width: 100%;
-  padding: 24px 40px;
+  padding: 40px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 10;
-  background: transparent;
-}
-
-.logo {
-  font-size: 48px;
-  font-weight: 600;
-  letter-spacing: 4px;
-}
-
-.nav {
-  display: none;
+  flex-direction: column;
+  gap: 20px;
+  color: $color-dark;
+  font-family: $font-family;
 
   @include breakpoints(md) {
-    display: block;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 
-.menuList {
-  list-style: none;
+.links {
   display: flex;
-  gap: 40px;
-  padding: 0;
-  margin: 0;
-}
+  flex-direction: column;
+  gap: 8px;
+  font-size: 32px;
+  font-weight: bold;
 
-.menuItem a {
-  color: $color-dark;
-  font-size: 24px;
-  transition: 0.2s;
+  a {
+    color: $color-text-white;
+    transition: 0.2s;
 
-  &:hover {
-    opacity: 0.7;
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  @include breakpoints(md) {
+    flex-direction: row;
+    gap: 40px;
   }
 }
 
-.active a {
-  border-bottom: 2px solid $color-green;
-  padding-bottom: 4px;
-}
-
-.signIn {
-  background-color: $color-green;
-  color: white;
-  border-radius: 20px;
-  padding: 8px 20px;
-  font-size: 24px;
-  transition: 0.2s;
-
-  &:hover {
-    opacity: 0.8;
-  }
+.copy {
+  font-size: 32px;
+  font-weight: bold;
+  opacity: 0.9;
 }
