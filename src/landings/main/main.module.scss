@@ -3,7 +3,7 @@
 
 .hero {
   text-align: left;
-  padding: 4rem 10rem;
+  padding: 50px 200px;
 }
 
 .title {
@@ -13,7 +13,7 @@
   line-height: 1;
   width: 500px;
   color: $color-text-black;
-  margin-bottom: 1rem;
+  margin-bottom: 15px;
 }
 
 .subtitle {
@@ -21,24 +21,23 @@
   font-size: 22px;
   line-height: 1.5;
   color: $color-text-black;
-  margin-bottom: 2rem;
+  margin-bottom: 20px;
   max-width: 600px; 
 }
 
 .features {
   display: flex;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .featureItem {
-  font-family: $font-family-secondary;
-  font-size: 22px;
-  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 10px; 
+  font-family: $font-family;
+  font-size: 18px;
   color: $color-text-black;
-  padding: 0; 
-  background: none; 
-  border-radius: 0;
 }
 
 .cta {
@@ -59,6 +58,6 @@
 }
 
 .advantages {
-  margin-top: 4rem;
+  margin-top: 10px;
   text-align: center;
 }

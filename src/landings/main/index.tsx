@@ -3,8 +3,9 @@
 import { Page } from "@/containers/Page";
 import styles from "./Main.module.scss";
 import { hero, advantages } from "./const";
+import Image from "next/image";
 
-// СДЕЛАЛИ ИМЕННОВАННЫЙ ЭКСПОРТ
+// СДЕЛАН ИМЕННОВАННЫЙ ЭКСПОРТ
 export function MainPage() {
   return (
     <Page>
@@ -14,9 +15,10 @@ export function MainPage() {
         <p className={styles.subtitle}>{hero.subtitle}</p>
         <div className={styles.features}>
           {hero.features.map((feature, i) => (
-            <span key={i} className={styles.featureItem}>
-              ✓ {feature}
-            </span>
+            <div key={i} className={styles.featureItem}>
+              <Image src="/assets/check.png" alt="check" width={20} height={20} />
+              <span>{feature}</span>
+            </div>
           ))}
         </div>
         <button className={styles.cta}>Get Started Today</button>
