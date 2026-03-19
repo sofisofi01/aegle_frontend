@@ -1,3 +1,7 @@
+@import '../../styles/mixins/breakpoints.scss';
+@import '../../styles/variables/colors.scss';
+@import '../../styles/variables/fonts.scss';
+
 .body {
   display: flex;
   flex-direction: column;

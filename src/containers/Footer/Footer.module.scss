@@ -1,20 +1,25 @@
+@import '../../styles/mixins/breakpoints.scss';
+@import '../../styles/variables/colors.scss';
+@import '../../styles/variables/fonts.scss';
+
 .footer {
-  text-align: center;
-  padding: 2rem 1rem;
-  font-family: 'Lekton', sans-serif;
-  color: #0d3b66;
+  text-align: left;
+  padding: 10px 30px;
+  font-family: $font-family;
+  color: $color-text-black;
+  font-size: 20px;
 
   .top {
-    margin-bottom: 0.5rem;
+    margin-bottom: 10px;
 
     a {
-      margin: 0 0.5rem;
-      text-decoration: underline;
+      margin: 0 15px;
       color: inherit;
     }
   }
 
   .bottom {
+    margin: 50px 15px;
     font-weight: bold;
     text-decoration: underline;
   }
