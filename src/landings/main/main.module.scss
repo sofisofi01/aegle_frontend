@@ -1,0 +1,93 @@
+// landings/main/Main.module.scss
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  padding: 4rem 2rem;
+}
+
+.heroLeft {
+  max-width: 50%;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  max-width: 420px;
+}
+
+.features {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.featureItem {
+  background: rgba(0, 150, 136, 0.2);
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.cta button {
+  background: #009688;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.6rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.cta button:hover {
+  opacity: 0.9;
+}
+
+.heroImage img {
+  width: 320px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+/* Advantages */
+.advantagesSection {
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+.advTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  background: #f5f5f5;
+}
+
+.footerLinks {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.footerLink {
+  color: #009688;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.footerLink:hover {
+  text-decoration: underline;
+}
