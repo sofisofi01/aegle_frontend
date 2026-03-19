@@ -4,6 +4,7 @@ import { Page } from "@/containers/Page";
 import styles from "./Main.module.scss";
 import { hero, advantages } from "./const";
 import Image from "next/image";
+import checkIcon from './assets/check.png';
 
 // СДЕЛАН ИМЕННОВАННЫЙ ЭКСПОРТ
 export function MainPage() {
@@ -16,7 +17,7 @@ export function MainPage() {
         <div className={styles.features}>
           {hero.features.map((feature, i) => (
             <div key={i} className={styles.featureItem}>
-              <Image src="/assets/check.png" alt="check" width={20} height={20} />
+              <Image src={checkIcon} alt="check" width={20} height={20} />
               <span>{feature}</span>
             </div>
           ))}
