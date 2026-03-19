@@ -1,0 +1,21 @@
+.footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: 'Lekton', sans-serif;
+  color: #0d3b66;
+
+  .top {
+    margin-bottom: 0.5rem;
+
+    a {
+      margin: 0 0.5rem;
+      text-decoration: underline;
+      color: inherit;
+    }
+  }
+
+  .bottom {
+    font-weight: bold;
+    text-decoration: underline;
+  }
+}

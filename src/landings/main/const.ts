@@ -8,12 +8,3 @@ export const hero = {
 export const advantages = {
   title: "Advantages of our platform",
 };
-
-export const footer = {
-  text: "Follow us on social media",
-  links: [
-    { id: 1, text: "Instagram", href: "https://instagram.com" },
-    { id: 2, text: "Facebook", href: "https://facebook.com" },
-    { id: 3, text: "Twitter", href: "https://twitter.com" },
-  ],
-};
