@@ -59,7 +59,7 @@
   padding: 10px 20px;
   text-decoration: none;
   color: $color-text-black;
-  border-radius: 6px;
+  border-radius: 15px;
   transition: all 0.3s;
   z-index: 0;
 
@@ -71,7 +71,7 @@
     width: 100%; 
     height: 100%;
     background-color: $color-button;
-    border-radius: 6px;
+    border-radius: 15px;
     opacity: 0; 
     transition: opacity 0.3s; 
     z-index: -1;
