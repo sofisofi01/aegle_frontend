@@ -17,7 +17,7 @@ export function MainPage() {
         <div className={styles.features}>
           {hero.features.map((feature, i) => (
             <div key={i} className={styles.featureItem}>
-              <Image src={checkIcon} alt="check" width={20} height={20} />
+              <Image src={checkIcon} alt="check" width={50} height={50} />
               <span>{feature}</span>
             </div>
           ))}
