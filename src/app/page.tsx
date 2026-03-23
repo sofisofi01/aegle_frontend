@@ -1,6 +1,9 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 
+
+
+// TODO сделать тут главную
 export default function Home() {
   return (
     <div className={styles.page}>
