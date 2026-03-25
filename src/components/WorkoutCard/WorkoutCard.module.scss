@@ -1,0 +1,115 @@
+@import "../../styles/mixins/breakpoints.scss";
+@import "../../styles/variables/fonts.scss";
+@import "../../styles/variables/colors.scss";
+
+.card {
+    margin-left: auto;
+    margin-right: auto; 
+    width: 90%;
+    background: $color-white;
+    font-family: $font-family-secondary;
+    padding: 20px;
+    color: $color-text-black;
+    border-radius: 30px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    border-top: 3px solid $color-mid-green;
+}
+
+.cardInner {
+    display: flex;    
+    flex-direction: column;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.title {
+    text-align: center;
+    color: $color-text-black;
+    font-size: $font-size-title;
+    margin-bottom: 20px;
+}
+
+.muscles {
+    font-size: $font-size-base;
+    font-weight: $font-weight-regular;
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.text {
+    font-size: $font-size-base;
+    font-weight: $font-weight-regular;
+    white-space: pre-line;
+}
+
+.image {
+    object-fit: cover;
+    border-radius: 20px;
+    margin: 0 auto 20px auto;
+    display: block;
+}
+
+.imageWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.addButtonContainer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.addButton {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: none;
+    color: $color-text-green-dark;
+    font-size: $font-size-base;
+    cursor: pointer;
+    padding: 8px;
+    font-family: $font-family-secondary;
+    font-size: $font-size-base;
+    text-decoration: underline;
+}
+
+@include breakpoints(lg) {
+    .card {
+        width: 50%;
+    }
+    
+    .cardInner {
+        flex-direction: row;
+        align-items: flex-start;  
+        justify-content: flex-start;
+        gap: 40px;
+        padding: 20px 40px 0 40px;
+    }
+
+    .content {
+        text-align: left;         
+        flex: 1;
+        align-self: flex-start;  
+    }
+
+    .imageWrapper {
+        width: auto;
+        align-self: flex-start;  
+        flex-shrink: 0;
+    }
+
+    .title {
+        text-align: left;
+        margin-top: 0;          
+    }
+}
+
+@include breakpoints(sm) {
+    .card {
+        width: 50%;
+    }
+}
