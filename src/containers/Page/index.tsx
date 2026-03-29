@@ -1,16 +1,12 @@
-"use client";
-
-import { PropsWithChildren } from "react";
 import { Header } from "@/containers/Header";
 import { Footer } from "@/containers/Footer";
 import styles from "./Page.module.scss";
 import { data } from "./const";
-
-type PageProps = PropsWithChildren<{}>;
+import { PageProps } from "./types";
 
 export function Page({ children }: PageProps) {
   return (
-    <div className={styles.body}>
+    <div className={styles.pageWrapper}>
       <Header menu={data} />
       <main className={styles.main}>{children}</main>
       <Footer />

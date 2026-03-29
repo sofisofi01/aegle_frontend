@@ -8,18 +8,16 @@
   font-family: $font-family;
   color: $color-text-black;
   font-size: 22px;
+}
 
-  .top {
-    margin-bottom: 5px;
+.top {
+  margin-bottom: 10px;
+  display: flex;
+  gap: 20px;
+}
 
-    a {
-      margin: 0 10px;
-      color: inherit;
-    }
-  }
-
-  .bottom {
-    margin: 20px 10px;
-    text-decoration: underline;
-  }
+.bottom {
+  margin-top: 10px;
+  margin-bottom: 30px;
+  text-decoration: underline;
 }

@@ -1,5 +1,3 @@
 import { PropsWithChildren } from "react";
 
-export type PageProps = PropsWithChildren<{
-  id?: string;
-}>;
+export type PageProps = PropsWithChildren<{}>;

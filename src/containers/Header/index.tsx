@@ -1,5 +1,3 @@
-"use client";
-
 import { HeaderProps } from "./types";
 import styles from "./Header.module.scss";
 import Link from "next/link";
@@ -16,12 +14,17 @@ export function Header({ menu }: HeaderProps) {
           <h2 className={styles.logoSub}>your wellness app</h2>
         </div>
       </Link>
-      <nav className={styles.nav}>
-        {menu.map((item) => (
-          <Link key={item.id} href={item.href} className={styles.link}>
-            {item.text}
-          </Link>
-        ))}
+
+      <nav>
+        <ul className={styles.nav}>
+          {menu.map((item) => (
+            <li key={item.id}>
+              <Link href={item.href} className={styles.link}>
+                {item.text}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </nav>
     </header>
   );

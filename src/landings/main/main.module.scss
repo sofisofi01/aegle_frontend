@@ -2,8 +2,18 @@
 @import '../../styles/variables/fonts.scss';
 
 .hero {
-  text-align: left;
-  padding: 50px 200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 50px 300px;
+}
+
+.heroContent {
+  max-width: 900px;
+}
+
+.heroImage img {
+  border-radius: 20px;
 }
 
 .title {
@@ -58,7 +68,159 @@
   }
 }
 
+.advHeader {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.advSmallTitle {
+  font-family: $font-family;
+  font-size: 20px;
+  font-weight: lighter; 
+  color: $color-text-black;
+  margin-bottom: 10px;
+}
+
+.advBigTitle {
+  font-family: $font-family;
+  font-size: 32px;
+  font-weight: 400;
+  color: $color-text-black;
+}
+
 .advantages {
   margin-top: 10px;
   text-align: center;
+  color: $color-text-black;
+}
+
+.advantagesBlock {
+  padding: 80px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.advMainTitle {
+  font-family: $font-family;
+  font-size: 50px;
+  color: $color-text-black;
+  margin-bottom: 40px;
+}
+
+.advantagesBlock {
+  padding: 80px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.foodImages {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none; 
+}
+
+.foodImage1 {
+  position: absolute;
+  left: 650;
+  top: 150px; 
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 20px;
+  z-index: 0;
+}
+
+.foodImage2 {
+  position: absolute;
+  right: 700;
+  top: 800px; 
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 20px;
+  z-index: 0;
+}
+
+.advCard {
+  width: 900px;
+  border-radius: 30px;
+  padding: 50px;
+  position: relative;
+  z-index: 1;
+  background-image: url('/food1.png'), url('/food2.png');
+  background-position: left top, right bottom;
+  background-repeat: no-repeat, no-repeat;
+  background-size: 200px 200px, 250px 250px;
+
+  background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+}
+
+.sectionTitle {
+  font-family: $font-family;
+  font-size: 32px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  color: $color-text-black;
+  font-weight: lighter;
+}
+
+.sectionSubtitle {
+  font-family: $font-family-secondary;
+  font-size: 20px;
+  margin-bottom: 30px;
+  color: $color-text-black;
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  font-family: $font-family-secondary;
+  font-size: 20px;
+  color: $color-text-black;
+  margin-bottom: 70px;
+}
+
+.featureTitle {
+  font-family: $font-family-secondary;
+  margin-bottom: 2px;
+  color: $color-text-black;
+  text-decoration: underline;
+}
+
+.steps {
+  font-family: $font-family-secondary;
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  color: $color-text-black;
+  margin-bottom: 70px;
+}
+
+.reviews {
+  font-family: $font-family-secondary;
+  font-size: 20px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: $color-text-black;
+}
+
+.quote {
+  font-weight: bold;
+  font-style: italic;
+}
+
+.author {
+  font-weight: normal;
+  font-style: normal;
 }

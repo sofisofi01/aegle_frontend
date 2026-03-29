@@ -1,15 +1,15 @@
-"use client";
-
 import styles from "./Footer.module.scss";
 
 export function Footer() {
   return (
     <footer className={styles.footer}>
       <div className={styles.top}>
-        <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Use</a>
+        <span>Equilibria</span>
+        <span>Wellness platform</span>
       </div>
+
       <div className={styles.bottom}>
-        © Equilibria, 2026 – State of balance
+        © 2026 — State of balance
       </div>
     </footer>
   );
