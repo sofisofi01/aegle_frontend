@@ -5,8 +5,18 @@
 .header {
   padding: 30px 50px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column; 
   align-items: center;
+  gap: 20px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .logo {
@@ -45,14 +55,6 @@
   border-radius: 50%;
 }
 
-.nav {
-  display: flex;
-  gap: 40px;
-  list-style: none; 
-  padding: 0;
-  margin: 0;
-}
-
 .link {
   position: relative;
   display: inline-block;
@@ -86,5 +88,70 @@
 
   &:hover:before {
     opacity: 1; 
+  }
+}
+
+@include breakpoints(xs) {
+  .logo {
+    flex-direction: column; 
+    align-items: center;
+  }
+
+  .image {
+    order: 2; 
+    margin-top: -40px;
+  }
+
+  .nav {
+    flex-direction: column; 
+    gap: 15px;
+  }
+}
+
+@include breakpoints(sm) {
+   .header {
+    flex-direction: row; 
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    flex-direction: row;  
+    align-items: center;
+    gap: 20px;
+  }
+
+  .image {
+    order: 0; 
+    margin-top: 0px;
+  }
+  .nav {
+    
+    align-items: center;
+    flex-direction: column; 
+    gap: 15px;
+  }
+}
+
+@include breakpoints(xl) {
+  .header {
+    flex-direction: row; 
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    flex-direction: row;  
+    align-items: center;
+    gap: 20px;
+  }
+
+  .image {
+    order: 0; 
+    margin-top: 0px;
+  }
+  .nav {
+    flex-direction: row; 
+    gap: 40px;
   }
 }

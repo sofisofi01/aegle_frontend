@@ -1,5 +1,6 @@
 @import '../../styles/variables/colors.scss';
 @import '../../styles/variables/fonts.scss';
+@import "../../styles/mixins/breakpoints.scss";
 
 .hero {
   display: flex;
@@ -223,4 +224,112 @@
 .author {
   font-weight: normal;
   font-style: normal;
+}
+
+@include breakpoints(xs) {
+
+  .hero {
+    flex-direction: column; 
+    align-items: center;
+    padding: 40px 40px;
+    text-align: left;
+  }
+
+  .heroContent {
+    order: 1;
+    margin-left: 0px;
+    max-width: 400px;
+  }
+
+  .heroImage {
+    order: 2;
+  }
+
+  .heroImage img {
+    max-height: 300px; 
+    max-width: 400px;
+  }
+
+  .cta {
+    order: 3; 
+    margin-top: 20px;
+    margin-left: 100px;
+    margin-bottom: 40px;
+  }
+
+  .features {
+    flex-direction: column; 
+    align-items: left;
+    gap: 0px;
+  }
+
+  .advCard {
+    width: 400px;
+  }
+
+}
+
+@include breakpoints(sm) {
+  .hero {
+    flex-direction: row; 
+    justify-content: space-between;
+    align-items: left;
+    padding: 0px 10px;
+    text-align: left;
+    margin-left: -130px;
+  }
+
+  .heroContent {
+    max-width: 900px;
+    margin-left: 150px;
+  }
+
+  .title,
+  .subtitle {
+    text-align: left;
+  }
+
+  .features {
+    flex-direction: row; 
+    gap: 40px;
+    align-items: flex-start;
+  }
+
+  .featureItem {
+    font-size: 20px;
+  }
+
+  .cta {
+    margin-top: 0px; 
+    margin-left: 0px;
+  }
+
+  .heroImage img {
+    max-width: 350px;
+    max-height: 250px;
+  }
+  
+  .advCard {
+    width: 750px;
+  }
+
+}
+
+@include breakpoints(xl) {
+    .hero {
+    flex-direction: row; 
+    justify-content: space-between;
+    align-items: left;
+    padding: 50px 100px;
+    text-align: left;
+  }
+
+  .heroImage img {
+    max-width: 600px;
+    max-height: 400px;
+  }
+  
+  .advCard {
+    width: 900px;
+  }
 }
