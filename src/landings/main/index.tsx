@@ -50,7 +50,6 @@ export function MainPage() {
         </div>
 
         <div className={styles.advCard}>
-          <svg version="1.1" xmlns="http://www.w3.org/2000/svg"></svg>
           <filter id="blur">
           <feGaussianBlur stdDeviation="6"></feGaussianBlur>
           </filter>
