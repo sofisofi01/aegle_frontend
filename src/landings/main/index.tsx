@@ -50,6 +50,10 @@ export function MainPage() {
         </div>
 
         <div className={styles.advCard}>
+          <svg version="1.1" xmlns="http://www.w3.org/2000/svg"></svg>
+          <filter id="blur">
+          <feGaussianBlur stdDeviation="6"></feGaussianBlur>
+          </filter>
           <h3 className={styles.sectionTitle}>CORE FEATURES</h3>
           <p className={styles.sectionSubtitle}>
             Track, plan, and grow healthier — step by step.
