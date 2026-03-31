@@ -1,0 +1,106 @@
+@import '../../styles/variables/colors.scss';
+@import '../../styles/variables/fonts.scss';
+@import "../../styles/mixins/breakpoints.scss";
+
+.profilePage {
+  display: flex;
+  gap: 40px;
+  padding: 50px 100px;
+  align-items: flex-start;
+
+  @include breakpoints(xs) {
+    flex-direction: column;
+    gap: 30px;
+  }
+}
+
+/* Левая колонка */
+.profileLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 300px;
+
+  .avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+  }
+
+  .name {
+    font-family: $font-family;
+    font-size: 32px;
+    margin: 0;
+  }
+
+  .memberInfo {
+    font-family: $font-family-secondary;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-top: 5px;
+
+    p {
+      margin: 2px 0;
+    }
+
+    .strikeDays {
+      color: $color-button;
+      font-weight: bold;
+    }
+  }
+
+  .infoCard {
+    background-color: #d6f5e0;
+    padding: 15px 20px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-family: $font-family-secondary;
+    font-size: 12px;
+    margin-top: 10px;
+
+    .editProfile {
+      color: $color-button;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+}
+
+/* Правая колонка */
+.profileRight {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  h2 {
+    font-family: $font-family;
+    font-size: 24px;
+    margin: 0 0 10px 0;
+  }
+
+  .goalsCard {
+    background-color: #d6f5e0;
+    padding: 20px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    .editGoals {
+      color: $color-button;
+      text-decoration: underline;
+      cursor: pointer;
+      font-family: $font-family-secondary;
+      font-size: 12px;
+    }
+  }
+}
+
+@include breakpoints(xs) {
+  .profileLeft, .profileRight {
+    width: 100%;
+  }
+}
