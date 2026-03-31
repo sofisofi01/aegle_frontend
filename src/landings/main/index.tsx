@@ -6,6 +6,7 @@ import checkIcon from './assets/check.png';
 import heroImg from "./assets/yoga.jpg";
 import food1 from './assets/food 1.png';
 import food2 from './assets/food 2.png';
+import Link from "next/link";
 
 export function MainPage() {
   return (
@@ -24,7 +25,9 @@ export function MainPage() {
             ))}
           </div>
 
-          <button className={styles.cta}>Get Started Today</button>
+          <Link href="/signup">
+            <button className={styles.cta}>Get Started Today</button>
+          </Link>
         </div>
 
         <div className={styles.heroImage}>

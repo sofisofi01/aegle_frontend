@@ -1,10 +1,14 @@
+"use client"; 
 import { HeaderProps } from "./types";
 import styles from "./Header.module.scss";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import logo from "./assets/icon.png";
 
 export function Header({ menu }: HeaderProps) {
+  const pathname = usePathname(); 
+
   return (
     <header className={styles.header}>
       <Link href="/" className={styles.logo}>
@@ -19,7 +23,10 @@ export function Header({ menu }: HeaderProps) {
         <ul className={styles.nav}>
           {menu.map((item) => (
             <li key={item.id}>
-              <Link href={item.href} className={styles.link}>
+              <Link
+                href={item.href}
+                className={`${styles.link} ${pathname === item.href ? styles.active : ""}`}
+              >
                 {item.text}
               </Link>
             </li>

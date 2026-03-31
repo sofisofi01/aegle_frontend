@@ -1,0 +1,124 @@
+@import '../../styles/variables/colors.scss';
+@import '../../styles/variables/fonts.scss';
+@import "../../styles/mixins/breakpoints.scss";
+
+.pageBackground {
+  background-color: $color-dark-green;
+  min-height: 100vh;
+  color: $color-text-white;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 50px 900px;
+  gap: 30px;
+  margin-bottom: 100px;
+}
+
+.title {
+  font-family: $font-family;
+  font-size: 60px;
+  font-weight: 600;
+  color: $color-text-white;
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 500px;
+}
+
+.input {
+  padding: 15px 20px;
+  border-radius: 20px;
+  border: none;
+  background: $color-input-background;
+  font-size: 18px;
+  color: $color-text-black;
+  font-family: $font-family-secondary;
+}
+
+.passwordWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.inputPassword {
+  width: 100%;
+  padding: 15px 50px 15px 20px;
+  border-radius: 20px;
+  border: none;
+  background: $color-input-background;
+  font-size: 18px;
+  font-family: $font-family-secondary;
+  color: $color-text-black;
+  font-weight: 600;
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 20px;
+  color: $color-text-black;
+}
+
+.signInRow {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.submit {
+  padding: 15px 30px;
+  border-radius: 40px;
+  border: none;
+  background: $color-button;
+  color: $color-text-white;
+  font-size: 20px;
+  font-family: $font-family;
+  cursor: pointer;
+}
+
+.signInText {
+  font-size: 16px;
+  color: $color-light-green;
+  font-family: $font-family;
+}
+
+.signInLink {
+  color: $color-text-white;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+}
+
+@include breakpoints(xs) {
+  .wrapper { padding: 30px 50px; align-items: center; }
+  .block { width: 100%; }
+  .title { text-align: center; font-size: 40px; }
+  .subtitle { text-align: center; }
+  .row { flex-direction: column; align-items: flex-start; }
+}
+
+@include breakpoints(sm) {
+  .wrapper { padding: 40px 200px; }
+  .block { width: 100%; }
+}
+
+@include breakpoints(xl) {
+  .wrapper { padding: 50px 300px; }
+}
+
+@include breakpoints(xxl) {
+  .wrapper { padding: 50px 750px; margin-bottom: 100px; }
+}

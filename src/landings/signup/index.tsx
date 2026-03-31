@@ -4,6 +4,7 @@ import styles from "./signup.module.scss";
 import { data } from "./const"; 
 import { useState } from "react";
 import DatePicker from "react-datepicker";
+import Link from "next/link";
 import "react-datepicker/dist/react-datepicker.css"; 
 
 export function SignUpPage() {
@@ -158,9 +159,18 @@ export function SignUpPage() {
             </div>
           </div>
 
-          <button className={styles.submit} onClick={handleSubmit}>
-            Sign Up
-          </button>
+          <div className={styles.signInBlock}>
+            <p className={styles.signInText}>
+                {data.actions.haveAccount}{" "}
+                <Link href="/signin" className={styles.signInLink}>
+                {data.actions.signIn}
+                </Link>
+            </p>
+
+            <button className={styles.submit} onClick={handleSubmit}>
+                Sign Up
+            </button>
+            </div>
         </section>
       </Page>
     </div>

@@ -15,4 +15,8 @@ export const data = {
     safety: "And finally for your safety",
   },
   activity: ["Low activity", "Moderate", "Active", "Very active"],
+  actions: {
+    haveAccount: "Already have an account?",
+    signIn: "Sign In!",
+  },
 };

@@ -91,6 +91,14 @@
   }
 }
 
+.link.active {
+  color: $color-text-white;
+
+  &:before {
+    opacity: 1;
+  }
+}
+
 @include breakpoints(xs) {
   .logo {
     flex-direction: column; 
