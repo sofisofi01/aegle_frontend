@@ -143,19 +143,20 @@ export function SignUpPage() {
             )}
 
             <div className={styles.passwordWrapper}>
-              <input
+            <input
                 placeholder={data.fields.password}
                 type={showPassword ? "text" : "password"}
                 className={styles.inputPassword}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-              />
-              <span
+                style={{ fontWeight: password && !showPassword ? 700 : 400 }} 
+            />
+            <span
                 className={styles.passwordToggle}
                 onClick={() => setShowPassword(!showPassword)}
-              >
+            >
                 {showPassword ? "⌣" : "👁"}
-              </span>
+            </span>
             </div>
           </div>
 

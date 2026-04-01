@@ -7,100 +7,294 @@
   gap: 40px;
   padding: 50px 100px;
   align-items: flex-start;
-
-  @include breakpoints(xs) {
-    flex-direction: column;
-    gap: 30px;
-  }
 }
 
-/* Левая колонка */
 .profileLeft {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  width: 300px;
+  width: 400px;
+  margin-left: 100px;
+  align-items: flex-start;
 
   .avatar {
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
   }
 
   .name {
     font-family: $font-family;
-    font-size: 32px;
-    margin: 0;
+    font-size: 65px;
+    font-weight: lighter;
+    margin-left: 0;
   }
 
   .memberInfo {
     font-family: $font-family-secondary;
-    font-size: 14px;
+    font-size: 20px;
     line-height: 1.5;
     margin-top: 5px;
+    margin-left: 0;
+    text-align: left;
 
     p {
       margin: 2px 0;
     }
 
     .strikeDays {
-      color: $color-button;
+      color: $color-text-green;
       font-weight: bold;
     }
   }
 
   .infoCard {
-    background-color: #d6f5e0;
+    position: relative;
+    overflow: hidden;
+    background-color: $color-dark-green;
+    color: $color-text-white;
     padding: 15px 20px;
-    border-radius: 20px;
+    border-radius: 0 40px 40px 40px;
     display: flex;
     flex-direction: column;
-    gap: 5px;
     font-family: $font-family-secondary;
-    font-size: 12px;
+    font-size: 20px;
     margin-top: 10px;
+    width: 350px;
+
+    .content { // новый блок для текста поверх картинки
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
 
     .editProfile {
       color: $color-button;
       text-decoration: underline;
       cursor: pointer;
+      margin-top: 30px;
+    }
+
+    .cardImage {
+      position: absolute;
+      bottom: 20px;
+      right: 10px;
+      opacity: 0.7;
+      pointer-events: none;
+      z-index: 0;
     }
   }
 }
 
-/* Правая колонка */
 .profileRight {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin-left: 300px;
 
   h2 {
     font-family: $font-family;
-    font-size: 24px;
+    font-size: 40px;
+    font-weight: lighter;
     margin: 0 0 10px 0;
   }
 
   .goalsCard {
-    background-color: #d6f5e0;
+    position: relative;
+    overflow: hidden;
+    background-color: $color-green;
+    width: 600px;
     padding: 20px;
-    border-radius: 20px;
+    border-radius: 40px;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 12px;
+    font-size: 20px;
 
-    .editGoals {
-      color: $color-button;
-      text-decoration: underline;
-      cursor: pointer;
-      font-family: $font-family-secondary;
-      font-size: 12px;
+    .content { // текст поверх картинки
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .goalRow {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+
+    .left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .label {
+      font-weight: 400;
+    }
+
+    .value {
+      font-weight: 700;
+    }
+
+    .unit {
+      font-weight: 400;
+    }
+
+    .cardImage {
+      position: absolute;
+      bottom: 20px;
+      right: 10px;
+      opacity: 0.7;
+      pointer-events: none;
+      z-index: 0;
+    }
+  }
+
+  .editGoals {
+    color: $color-button;
+    text-decoration: underline;
+    cursor: pointer;
+    font-family: $font-family-secondary;
+    font-size: 20px;
+    margin-top: 30px;
+  }
+}
+
+// XS - мобильные
+@include breakpoints(xs) {
+  .profilePage {
+    flex-direction: column;
+    padding: 30px 20px;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .profileLeft {
+    width: 80%;
+    margin-left: 0;
+    align-items: center;
+
+    .name {
+      font-size: 45px;
+      text-align: center;
+    }
+
+    .memberInfo {
+      font-size: 16px;
+      text-align: center;
+    }
+
+    .infoCard {
+      width: 100%;
+      padding: 15px;
+    }
+  }
+
+  .profileRight {
+    width: 100%;
+    margin-left: 0;
+
+    h2 {
+      font-size: 28px;
+      text-align: left;
+    }
+
+    .goalsCard {
+      width: 100%;
+      padding: 15px;
+    }
+
+    .goalRow {
+      grid-template-columns: 1fr;
+      gap: 8px;
     }
   }
 }
 
-@include breakpoints(xs) {
-  .profileLeft, .profileRight {
-    width: 100%;
+// SM - планшет
+@include breakpoints(sm) {
+  .profilePage {
+    flex-direction: row;
+    padding: 40px 50px;
+    gap: 30px;
+  }
+
+  .profileLeft {
+    width: 350px;
+    align-items: flex-start;
+
+    .name {
+      font-size: 55px;
+      text-align: left;
+    }
+
+    .memberInfo {
+      font-size: 18px;
+      text-align: left;
+    }
+
+    .infoCard {
+      width: 320px;
+    }
+  }
+
+  .profileRight {
+    width: calc(100% - 350px - 30px);
+    margin-left: 0;
+
+    h2 {
+      font-size: 32px;
+    }
+
+    .goalsCard {
+      width: 100%;
+      padding: 18px;
+    }
+  }
+}
+
+// XL - десктоп
+@include breakpoints(xl) {
+  .profilePage {
+    padding: 50px 200px;
+  }
+
+  .profileLeft {
+    width: 400px;
+    align-items: flex-start;
+
+    .name {
+      font-size: 65px;
+    }
+
+    .memberInfo {
+      font-size: 20px;
+    }
+
+    .infoCard {
+      width: 350px;
+      padding: 20px;
+    }
+  }
+
+  .profileRight {
+    width: calc(100% - 400px - 40px);
+    margin-left: 200px;
+
+    h2 {
+      font-size: 40px;
+    }
+
+    .goalsCard {
+      width: 600px;
+      padding: 20px;
+      margin-left: 0;
+    }
   }
 }

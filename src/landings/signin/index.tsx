@@ -42,18 +42,17 @@ export function SignInPage() {
             />
 
             {!isValidEmail(email) && email.length > 0 && (
-              <span className={styles.error}>
-                Invalid email format
-              </span>
+              <span className={styles.error}>Invalid email format</span>
             )}
 
             <div className={styles.passwordWrapper}>
               <input
                 placeholder={data.fields.password}
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? "text" : "password"} 
                 className={styles.inputPassword}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                style={{ fontWeight: showPassword ? 400 : 700 }}
               />
               <span
                 className={styles.passwordToggle}

@@ -241,7 +241,6 @@ body {
 }
 
 @include breakpoints(xs) {
-
   .hero {
     flex-direction: column; 
     align-items: center;
@@ -251,8 +250,13 @@ body {
 
   .heroContent {
     order: 1;
-    margin-left: 0px;
-    max-width: 400px;
+    margin-left: -10px;
+    max-width: 300px;
+  }
+
+  .title {
+    width: 400px;
+    font-size: 60px;
   }
 
   .heroImage {
@@ -260,14 +264,14 @@ body {
   }
 
   .heroImage img {
-    max-height: 300px; 
-    max-width: 400px;
+    max-height: 250px; 
+    max-width: 350px;
   }
 
   .cta {
     order: 3; 
     margin-top: 20px;
-    margin-left: 100px;
+    margin-left: 50px;
     margin-bottom: 40px;
   }
 
@@ -277,8 +281,12 @@ body {
     gap: 0px;
   }
 
+  .advHeader {
+    width: 300px;
+  }
+
   .advCard {
-    width: 400px;
+    width: 350px;
   }
 
 }
@@ -296,6 +304,11 @@ body {
   .heroContent {
     max-width: 900px;
     margin-left: 150px;
+  }
+
+  .title {
+    width: 600px;
+    font-size: 80px;
   }
 
   .title,
@@ -322,7 +335,11 @@ body {
     max-width: 350px;
     max-height: 250px;
   }
-  
+
+  .advHeader {
+    width: 500px;
+  }
+
   .advCard {
     width: 750px;
   }
