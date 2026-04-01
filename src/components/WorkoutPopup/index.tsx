@@ -1,14 +1,9 @@
-// src/components/WorkoutPopup/index.tsx
 'use client';
 
 import { useState } from 'react';
 import styles from './WorkoutPopup.module.scss';
 import { data } from './const';
-
-interface PopupProps {
-    isOpen: boolean;
-    onClose: () => void;
-}
+import { PopupProps } from '@/landings/workout/types';
 
 export function Popup({ isOpen, onClose }: PopupProps) {
     const [expandedSectionIds, setExpandedSectionIds] = useState<number[]>([]);

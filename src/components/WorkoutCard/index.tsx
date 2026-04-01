@@ -1,14 +1,7 @@
 import styles from './WorkoutCard.module.scss';
 import Image, { StaticImageData } from 'next/image';
 import plusIcon from '@/landings/workout/assets/plusIcon.svg'; 
-
-interface WorkoutCardProps {
-    title: string;
-    muscles: string;
-    text: string;
-    image?: string | StaticImageData;
-    onAddToWorkout?: () => void; 
-}
+import { WorkoutCardProps } from '@/landings/workout/types';
 
 export function WorkoutCard({ title, muscles, text, image, onAddToWorkout }: WorkoutCardProps) {
     return (

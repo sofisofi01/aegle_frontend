@@ -77,9 +77,15 @@
     text-decoration: underline;
 }
 
-@include breakpoints(lg) {
+@include breakpoints(sm) {
     .card {
-        width: 50%;
+        width: 100%;
+    }
+}
+
+@include breakpoints(md) {
+    .card {
+        width: 100%;
     }
     
     .cardInner {
@@ -108,8 +114,8 @@
     }
 }
 
-@include breakpoints(sm) {
+@include breakpoints(lg) {
     .card {
-        width: 50%;
+        width: 80%;
     }
 }

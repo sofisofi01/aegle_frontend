@@ -1,0 +1,83 @@
+@import "../../styles/mixins/breakpoints.scss";
+@import "../../styles/variables/fonts.scss";
+@import "../../styles/variables/colors.scss";
+
+body {
+    background-color: $color-background;
+}
+
+.container {
+    display: flex;
+    gap: 30px;
+    padding: 20px;
+    align-items: flex-start;
+}
+
+.mainContent {
+    flex: 1;
+}
+
+.filtersWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 280px;
+    flex-shrink: 0;
+    
+    @media (max-width: 767px) {
+        width: auto;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        gap: 0;
+    }
+}
+
+.filterButton {
+    display: flex;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+.textStart {
+    text-align: center;
+}
+
+.title {
+    color: $color-text-black;
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+.openButton {
+    border: none;
+    background: none;
+    font-size: $font-size-base;
+    color: $color-text-green-dark;
+    text-decoration: underline;
+}
+
+.openButton img {
+    margin-right: 5px;
+}
+
+
+@include breakpoints(sm) {
+    .filterButton {
+        display: none;
+    }
+}
+
+@include breakpoints(lg) {
+    .title {
+        font-size: 50px;
+    }
+
+    .textStart {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 10px;
+    }
+}
