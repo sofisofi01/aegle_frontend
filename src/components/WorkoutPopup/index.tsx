@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import styles from './WorkoutPopup.module.scss';
 import { data } from './const';
-import { PopupProps } from '@/landings/workout/types';
+import { PopupProps } from './types';
 
 export function Popup({ isOpen, onClose }: PopupProps) {
     const [expandedSectionIds, setExpandedSectionIds] = useState<number[]>([]);

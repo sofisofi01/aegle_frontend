@@ -1,7 +1,7 @@
 'use client';
 
 import styles from './WorkoutFilterSidebar.module.scss';
-import { WorkoutFilterSidebarProps } from '@/landings/workout/types';
+import { WorkoutFilterSidebarProps } from './types';
 
 export function WorkoutFilterSidebar({ isOpen, onClose }: WorkoutFilterSidebarProps) {
     return (
