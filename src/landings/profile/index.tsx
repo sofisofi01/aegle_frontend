@@ -1,6 +1,8 @@
+"use client";
 import { Page } from "@/containers/Page";
 import styles from "./profile.module.scss";
 import Image from "next/image";
+import { useState } from "react";
 import caloriesIcon from "./assets/calories.svg";
 import workoutIcon from "./assets/workout.svg";
 import timeIcon from "./assets/time.svg";
@@ -8,9 +10,12 @@ import stepsIcon from "./assets/steps.svg";
 import decorProfile from "./assets/decor-profile.png";
 import decorGoals from "./assets/decor-goals.png";
 
-import { profileData, goalsData } from "./const";
+import { profileData, goalsData, mealsData } from "./const";
 
 export function ProfilePage() {
+  const [activeTab, setActiveTab] = useState<"meals" | "workouts" | "analytics">("meals");
+
+const [openMeal, setOpenMeal] = useState<string | null>(null);
   return (
     <Page>
       <div className={styles.profilePage}>
@@ -32,11 +37,15 @@ export function ProfilePage() {
           </div>
 
           <div className={styles.infoCard}>
-            <p>{profileData.email}</p>
-            <p>{profileData.sex}, {profileData.age} y.o</p>
-            <p>{profileData.height} cm</p>
-            <p>{profileData.weight} kg</p>
-            <span className={styles.editProfile}>Edit profile</span>
+            <div className={styles.content}>
+              <p>{profileData.email}</p>
+              <p>
+                {profileData.sex}, {profileData.age} y.o
+              </p>
+              <p>{profileData.height} cm</p>
+              <p>{profileData.weight} kg</p>
+              <span className={styles.editProfile}>Edit profile</span>
+            </div>
 
             <Image
               src={decorProfile}
@@ -52,51 +61,53 @@ export function ProfilePage() {
           <h2>Your goals are...</h2>
 
           <div className={styles.goalsCard}>
-            <div className={styles.goalRow}>
-              <div className={styles.left}>
-                <Image src={caloriesIcon} alt="" width={30} height={30} />
-                <span className={styles.label}>Daily calories:</span>
+            <div className={styles.content}>
+              <div className={styles.goalRow}>
+                <div className={styles.left}>
+                  <Image src={caloriesIcon} alt="" width={30} height={30} />
+                  <span className={styles.label}>Daily calories:</span>
+                </div>
+                <span>
+                  <span className={styles.value}>{goalsData.dailyCalories}</span>{" "}
+                  kcal
+                </span>
               </div>
-              <span>
-                <span className={styles.value}>{goalsData.dailyCalories}</span>{" "}
-                <span className={styles.unit}>kcal</span>
-              </span>
-            </div>
 
-            <div className={styles.goalRow}>
-              <div className={styles.left}>
-                <Image src={workoutIcon} alt="" width={30} height={30} />
-                <span className={styles.label}>Workout:</span>
+              <div className={styles.goalRow}>
+                <div className={styles.left}>
+                  <Image src={workoutIcon} alt="" width={30} height={30} />
+                  <span className={styles.label}>Workout:</span>
+                </div>
+                <span>
+                  <span className={styles.value}>{goalsData.workoutSessions}</span>{" "}
+                  sessions/week
+                </span>
               </div>
-              <span>
-                <span className={styles.value}>{goalsData.workoutSessions}</span>{" "}
-                <span className={styles.unit}>sessions/week</span>
-              </span>
-            </div>
 
-            <div className={styles.goalRow}>
-              <div className={styles.left}>
-                <Image src={timeIcon} alt="" width={30} height={30} />
-                <span className={styles.label}>Workout time:</span>
+              <div className={styles.goalRow}>
+                <div className={styles.left}>
+                  <Image src={timeIcon} alt="" width={30} height={30} />
+                  <span className={styles.label}>Workout time:</span>
+                </div>
+                <span>
+                  <span className={styles.value}>{goalsData.workoutMinutes}</span>{" "}
+                  min/week
+                </span>
               </div>
-              <span>
-                <span className={styles.value}>{goalsData.workoutMinutes}</span>{" "}
-                <span className={styles.unit}>min/week</span>
-              </span>
-            </div>
 
-            <div className={styles.goalRow}>
-              <div className={styles.left}>
-                <Image src={stepsIcon} alt="" width={30} height={30} />
-                <span className={styles.label}>Steps:</span>
+              <div className={styles.goalRow}>
+                <div className={styles.left}>
+                  <Image src={stepsIcon} alt="" width={30} height={30} />
+                  <span className={styles.label}>Steps:</span>
+                </div>
+                <span>
+                  <span className={styles.value}>{goalsData.stepsPerDay}</span>{" "}
+                  steps/day
+                </span>
               </div>
-              <span>
-                <span className={styles.value}>{goalsData.stepsPerDay}</span>{" "}
-                <span className={styles.unit}>steps/day</span>
-              </span>
-            </div>
 
-            <span className={styles.editGoals}>Edit goals</span>
+              <span className={styles.editGoals}>Edit goals</span>
+            </div>
 
             <Image
               src={decorGoals}
@@ -108,6 +119,130 @@ export function ProfilePage() {
           </div>
         </div>
       </div>
+
+      <div className={styles.activityWrapper}>
+        <div className={styles.activitySection}>
+          <h2 className={styles.activityTitle}>ACTIVITY OVERVIEW</h2>
+          <p className={styles.activitySubtitle}>Your weekly summary!</p>
+
+          <div className={styles.tabs}>
+            <div
+              className={`${styles.tab} ${
+                activeTab === "meals" ? styles.active : ""
+              }`}
+              onClick={() => setActiveTab("meals")}
+            >
+              Meals
+            </div>
+
+            <div
+              className={`${styles.tab} ${
+                activeTab === "workouts" ? styles.active : ""
+              }`}
+              onClick={() => setActiveTab("workouts")}
+            >
+              Workouts
+            </div>
+
+            <div
+              className={`${styles.tab} ${
+                activeTab === "analytics" ? styles.active : ""
+              }`}
+              onClick={() => setActiveTab("analytics")}
+            >
+              Analytics
+            </div>
+
+            <div
+              className={`${styles.activeBg} ${styles[activeTab]}`}
+            />
+          </div>
+        </div>
+      </div>
+      <div className={styles.activityContentWrapper}>
+        <div className={styles.activityContent}>
+          {activeTab === "meals" && (
+  <div className={styles.mealsContentWrapper}>
+    <div className={styles.mealsContent} id="mealsScroll">
+      {mealsData.map(dayData => (
+        <div key={dayData.day} className={styles.dayColumn}>
+          <h3 className={styles.dayTitle}>{dayData.day}</h3>
+          <ul className={styles.macrosList}>
+            {Object.entries(dayData.macros).map(([k, v]) => (
+              <li key={k} className={styles.macroRow}>
+                <span className={styles.macroName}>✦ {k.charAt(0).toUpperCase() + k.slice(1)}:</span>
+                <span className={styles.macroValue}>{v}</span>
+              </li>
+            ))}
+          </ul>
+          <p className={styles.totalMeals}><strong>{dayData.totalMeals}</strong> meals logged</p>
+          <div className={styles.mealsList}>
+  {dayData.meals.map((meal, idx) => {
+    const id = `${dayData.day}-${idx}`;
+
+    return (
+      <div className={styles.mealCard}>
+  <div
+  className={`${styles.mealImageWrapper} ${
+    openMeal === id ? styles.activeMeal : ""
+  }`}
+>
+    <img
+      src={meal.image.src}
+      alt={meal.name}
+      className={styles.mealImg}
+      onClick={() =>
+        setOpenMeal(openMeal === id ? null : id)
+      }
+    />
+
+    <div className={styles.mealLabel}>{meal.name}</div>
+  </div>
+
+  <div
+    className={`${styles.mealInfo} ${
+      openMeal === id ? styles.mealInfoOpen : ""
+    }`}
+  >
+    <p>{meal.kcal} kcal</p>
+    <p>Carbs {meal.carbs}g</p>
+    <p>Protein {meal.protein}g</p>
+    <p>Fat {meal.fat}g</p>
+  </div>
+</div>
+    );
+  })}
+          </div>
+        </div>
+      ))}
+    </div>
+    <button
+      className={styles.scrollBtn}
+      onClick={() => {
+        const container = document.getElementById("mealsScroll");
+        if (container) {
+          container.scrollBy({ left: 250, behavior: "smooth" });
+        }
+      }}
+    >
+      →
+    </button>
+  </div>
+)}
+
+    {activeTab === "workouts" && (
+      <div className={styles.workoutsContent}>
+        <p>Тут информация по тренировкам</p>
+      </div>
+    )}
+
+    {activeTab === "analytics" && (
+      <div className={styles.analyticsContent}>
+        <p>Тут аналитика</p>
+      </div>
+    )}
+  </div>
+</div>
     </Page>
   );
 }
