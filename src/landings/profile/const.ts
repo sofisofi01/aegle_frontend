@@ -1,5 +1,5 @@
 import avatarImg from "./assets/avatar.jpg";
-import breakfastImg from "./assets/breakfast.png"; 
+import breakfastImg from "./assets/breakfast.png";
 
 export const profileData = {
   avatar: avatarImg,
@@ -91,6 +91,77 @@ export const mealsData = [
       { name: "French toast", image: breakfastImg, kcal: 350, carbs: 50, protein: 10, fat: 12 },
       { name: "Smoothie", image: breakfastImg, kcal: 250, carbs: 45, protein: 5, fat: 2 },
       { name: "Chicken wrap", image: breakfastImg, kcal: 400, carbs: 35, protein: 30, fat: 15 },
+    ],
+  },
+];
+
+export const workoutsData = [
+  {
+    day: "Monday",
+    stats: { totalWorkouts: 5, totalTime: "4h 15m", caloriesBurned: 1150, steps: 5000 },
+    totalWorkouts: 3,
+    workouts: [
+      { name: "Bent Over Dumbbell Fly", image: breakfastImg, type: "Strength", duration: 25, calories: 280 },
+      { name: "Chest Press", image: breakfastImg, type: "Strength", duration: 20, calories: 240 },
+      { name: "Cardio Plus Endurance", image: breakfastImg, type: "Cardio", duration: 35, calories: 320 },
+    ],
+  },
+  {
+    day: "Tuesday",
+    stats: { totalWorkouts: 4, totalTime: "3h 45m", caloriesBurned: 980, steps: 4500 },
+    totalWorkouts: 3,
+    workouts: [
+      { name: "Leg Press", image: breakfastImg, type: "Strength", duration: 30, calories: 350 },
+      { name: "Squats", image: breakfastImg, type: "Strength", duration: 25, calories: 300 },
+      { name: "HIIT Training", image: breakfastImg, type: "Cardio", duration: 20, calories: 330 },
+    ],
+  },
+  {
+    day: "Wednesday",
+    stats: { totalWorkouts: 6, totalTime: "5h", caloriesBurned: 1300, steps: 6200 },
+    totalWorkouts: 4,
+    workouts: [
+      { name: "Pull Ups", image: breakfastImg, type: "Strength", duration: 20, calories: 280 },
+      { name: "Rows", image: breakfastImg, type: "Strength", duration: 25, calories: 300 },
+      { name: "Running", image: breakfastImg, type: "Cardio", duration: 40, calories: 480 },
+      { name: "Core Work", image: breakfastImg, type: "Strength", duration: 15, calories: 180 },
+    ],
+  },
+  {
+    day: "Thursday",
+    stats: { totalWorkouts: 3, totalTime: "2h 30m", caloriesBurned: 720, steps: 3800 },
+    totalWorkouts: 2,
+    workouts: [
+      { name: "Shoulder Press", image: breakfastImg, type: "Strength", duration: 30, calories: 340 },
+      { name: "Cycling", image: breakfastImg, type: "Cardio", duration: 35, calories: 380 },
+    ],
+  },
+  {
+    day: "Friday",
+    stats: { totalWorkouts: 5, totalTime: "4h", caloriesBurned: 1100, steps: 5500 },
+    totalWorkouts: 3,
+    workouts: [
+      { name: "Deadlifts", image: breakfastImg, type: "Strength", duration: 25, calories: 360 },
+      { name: "Bench Press", image: breakfastImg, type: "Strength", duration: 20, calories: 280 },
+      { name: "Jump Rope", image: breakfastImg, type: "Cardio", duration: 20, calories: 280 },
+    ],
+  },
+  {
+    day: "Saturday",
+    stats: { totalWorkouts: 4, totalTime: "3h 20m", caloriesBurned: 950, steps: 4700 },
+    totalWorkouts: 2,
+    workouts: [
+      { name: "Swimming", image: breakfastImg, type: "Cardio", duration: 60, calories: 600 },
+      { name: "Yoga Flow", image: breakfastImg, type: "Flexibility", duration: 40, calories: 200 },
+    ],
+  },
+  {
+    day: "Sunday",
+    stats: { totalWorkouts: 2, totalTime: "1h 30m", caloriesBurned: 450, steps: 3000 },
+    totalWorkouts: 2,
+    workouts: [
+      { name: "Light Stretching", image: breakfastImg, type: "Flexibility", duration: 30, calories: 80 },
+      { name: "Walking", image: breakfastImg, type: "Cardio", duration: 60, calories: 280 },
     ],
   },
 ];
