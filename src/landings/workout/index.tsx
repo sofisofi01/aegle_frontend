@@ -1,17 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { WorkoutProps } from './types'
 import { Popup } from '@/components/WorkoutPopup';
 import { WorkoutCard } from '@/components/WorkoutCard';
 import { WorkoutFilterSidebar } from '@/components/WorkoutFilterSidebar';
+import { WorkoutMiniCard } from '@/components/WorkoutMiniCard';
 import styles from './workout.module.scss';
 import { data } from './const'; 
+import { minicardData } from './const'; 
 import Image from 'next/image'; 
 import filterIcon from './assets/filterIcon.svg';
 import checkIcon from './assets/checkIcon.png';
 
-export function WorkoutPage({}: WorkoutProps) {
+export function WorkoutPage() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
@@ -31,6 +32,17 @@ export function WorkoutPage({}: WorkoutProps) {
                     />
                     Check our recommendations
                 </button>
+            </div>
+
+            <div className={styles.minicardContainer}>
+                {minicardData.map((workout) => (
+                    <WorkoutMiniCard
+                        key={workout.id}
+                        title={workout.title}
+                        sets={workout.sets}
+                        image={workout.image}
+                    />
+                ))}
             </div>
 
             <div className={styles.container}>

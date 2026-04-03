@@ -1,0 +1,33 @@
+@import "../../styles/mixins/breakpoints.scss";
+@import "../../styles/variables/fonts.scss";
+@import "../../styles/variables/colors.scss";
+
+.card {
+    background-color: $color-white;
+    display: flex;
+    border-radius: 30px;
+    flex-direction: column;
+    height: 250px;
+    width: 200px;
+    overflow: hidden;
+}
+
+.bottom {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    padding: 10px 10px 0;
+    font-family: $font-family-secondary;
+}
+
+.bottom h3 {
+    color: $color-text-green-dark;
+}
+
+.bottom p {
+    color: $color-text-black;
+}
+
+.image {
+    object-fit: cover;
+}
