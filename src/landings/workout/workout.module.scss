@@ -2,8 +2,39 @@
 @import "../../styles/variables/fonts.scss";
 @import "../../styles/variables/colors.scss";
 
+
 body {
-    background-color: $color-background;
+  background: inherit;
+  background: url(/public/back.png);
+}
+
+.textStart {
+    text-align: center;
+}
+
+.title {
+    color: $color-text-black;
+    font-family: $font-family;
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+.openButton {
+    border: none;
+    background: none;
+    font-size: $font-size-base;
+    color: $color-text-green-dark;
+    font-family: $font-family-secondary;
+    text-decoration: underline;
+    font-style: italic;
+    display: inline-flex;  
+    align-items: center; 
+    cursor: pointer;
+}
+
+.openButton img {
+    margin-right: 5px;
+    margin-bottom: 5px;
 }
 
 .minicardContainer {
@@ -64,49 +95,30 @@ body {
     background: none;
 }
 
-.textStart {
-    text-align: center;
-}
-
-.title {
-    color: $color-text-black;
-    font-size: 30px;
-    margin-bottom: 20px;
-}
-
-.openButton {
-    border: none;
-    background: none;
-    font-size: $font-size-base;
-    color: $color-text-green-dark;
-    font-family: $font-family-secondary;
-    text-decoration: underline;
-    font-style: italic;
-    display: inline-flex;  
-    align-items: center; 
-    cursor: pointer;
-}
-
-.openButton img {
-    margin-right: 5px;
-    margin-bottom: 5px;
-}
-
-
 @include breakpoints(sm) {
     .filterButton {
         display: none;
+    }
+
+    .title {
+        font-size: 40px;;
+    }
+}
+
+@include breakpoints(md) {
+    .textStart {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 40px;
     }
 }
 
 @include breakpoints(lg) {
     .title {
-        font-size: 50px;
+        font-size: 60px;
     }
 
     .textStart {
-        display: flex;
-        justify-content: space-between;
-        padding: 0 10px;
+        margin-top: -50px;
     }
 }
