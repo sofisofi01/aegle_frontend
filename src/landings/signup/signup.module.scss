@@ -1,0 +1,234 @@
+@import '../../styles/variables/colors.scss';
+@import '../../styles/variables/fonts.scss';
+@import "../../styles/mixins/breakpoints.scss";
+
+.pageBackground {
+  background-color: $color-dark-green;
+  min-height: 100vh;
+  color: $color-text-white;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 30px;
+}
+
+.title {
+  font-family: $font-family;
+  font-size: 60px;
+  font-weight: 600;
+  color: $color-text-white;
+}
+
+.subtitle {
+  font-family: $font-family;
+  font-size: 25px;
+  font-weight: 400;
+  color: $color-text-white;
+}
+
+.sectionTitle {
+  text-align: center;
+  font-family: $font-family;
+  font-size: 25px;
+  font-weight: 400;
+  margin-top: 20px;
+  color: $color-text-white;
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 500px;
+  margin-bottom: 50px;
+}
+
+.input {
+  padding: 15px 20px;
+  border-radius: 20px;
+  border: none;
+  background: $color-input-background;
+  font-size: 18px;
+  color: $color-text-black;
+  font-family: $font-family-secondary;
+}
+
+.inputDate {
+  display: inline-block;
+  width: 200px;
+  padding: 12px 15px;
+  border-radius: 20px;
+  border: none;
+  background: $color-input-background;
+  color: $color-text-black;
+  font-family: $font-family-secondary;
+  font-size: 16px;
+
+  &::placeholder {
+    color: $color-text-black;
+  }
+}
+
+.label {
+  font-family: $font-family;
+  font-size: 25px;
+  font-weight: 400;
+  color: $color-text-white;
+}
+
+.labelRow {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  width: 100%;
+}
+
+.rowOptions {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.option {
+  padding: 8px 20px;
+  border-radius: 20px;
+  border: none;
+  background: $color-mid-green;
+  font-family: $font-family-secondary;
+  color: $color-text-white;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 20px;
+}
+
+.option:hover {
+  opacity: 0.8;
+}
+
+.active {
+  background: $color-light-green;
+  color: $color-text-black;
+}
+
+.submit {
+  margin-top: 20px;
+  margin-left: 50px;
+  padding: 15px 30px;
+  border-radius: 40px;
+  border: none;
+  background: $color-button;
+  color: $color-text-white;
+  font-family: $font-family;
+  font-size: 22px;
+}
+
+.datepickerCalendar {
+  background-color: $color-mid-green !important;
+  border-radius: 20px;
+  font-family: $font-family-secondary !important;
+  color: $color-text-white !important;
+
+  .react-datepicker__header {
+    background-color: $color-mid-green !important;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+  }
+
+  .react-datepicker__day-name,
+  .react-datepicker__day {
+    color: $color-text-white !important;
+  }
+
+  .react-datepicker__current-month {
+    color: $color-text-white !important;
+    font-family: $font-family-secondary !important;
+  }
+}
+
+.passwordWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.inputPassword {
+  width: 100%;
+  padding: 15px 50px 15px 20px;
+  border-radius: 20px;
+  border: none;
+  background: $color-input-background;
+  font-size: 18px;
+  font-family: $font-family-secondary;
+  color: $color-text-black;
+
+  &::placeholder {
+    font-weight: lighter; 
+    color: $color-text-black;
+  }
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 20px;
+  user-select: none;
+  color: $color-text-black;
+}
+
+.genderOption {
+  font-size: 32px;   
+  font-weight: 700;  
+  padding: 0px 15px;
+}
+
+.signInRow {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.signInText {
+  font-size: 16px;
+  color: $color-light-green;
+  font-family: $font-family;
+}
+
+.signInLink {
+  color: $color-text-white;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+@include breakpoints(xs) {
+  .wrapper { padding: 30px 50px; align-items: center; }
+  .block { width: 100%; }
+  .title { text-align: center; font-size: 40px; }
+  .subtitle { text-align: center; }
+  .row { flex-direction: column; align-items: flex-start; }
+}
+
+@include breakpoints(sm) {
+  .wrapper { padding: 40px 200px; }
+  .block { width: 100%; }
+  .rowOptions { flex-direction: row; }
+}
+
+@include breakpoints(xl) {
+  .wrapper { padding: 50px 300px; }
+}
+
+@include breakpoints(xxl) {
+  .wrapper { padding: 50px 750px; }
+}
