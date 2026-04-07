@@ -79,11 +79,17 @@ body {
     background: none;
     font-size: $font-size-base;
     color: $color-text-green-dark;
+    font-family: $font-family-secondary;
     text-decoration: underline;
+    font-style: italic;
+    display: inline-flex;  
+    align-items: center; 
+    cursor: pointer;
 }
 
 .openButton img {
     margin-right: 5px;
+    margin-bottom: 5px;
 }
 
 
