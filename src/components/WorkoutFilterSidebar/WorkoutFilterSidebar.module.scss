@@ -73,8 +73,9 @@
 
 .options div {
     cursor: pointer;
-    text-align: center;
+    text-align: left;
     position: relative;
+    margin-left: 35px;
 
     &:last-child {
         padding-bottom: 10px;
@@ -83,13 +84,13 @@
     &::after {
         content: '';
         position: absolute;
-        bottom: -7px;
+        bottom: -5px;
         left: 0;
         right: 0;
-        width: 70%;
+        width: 90%;
         height: 1px;
         background: $color-text-green-dark;
-        margin: 0 auto; 
+        margin-left: -13px;
     }
     
     &:last-child::after {

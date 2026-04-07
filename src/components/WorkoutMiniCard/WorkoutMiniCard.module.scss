@@ -7,8 +7,8 @@
     display: flex;
     border-radius: 30px;
     flex-direction: column;
-    height: 250px;
-    width: 200px;
+    height: 200px;
+    width: 150px;
     overflow: hidden;
 }
 
@@ -18,16 +18,38 @@
     font-size: 15px;
     padding: 10px 10px 0;
     font-family: $font-family-secondary;
+    font-weight: bold;
 }
 
-.bottom h3 {
+.title {
     color: $color-text-green-dark;
 }
 
-.bottom p {
+.sets {
     color: $color-text-black;
 }
 
 .image {
     object-fit: cover;
+    width: 100%;
+    height: 100%;
+
+}
+
+.imageWrapper {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 50px); 
+    overflow: hidden;
+}
+
+@include breakpoints(xl) {
+    .card {
+        width: 200px;
+        height: 250px;
+    }
+    
+    .bottom {
+        font-size: 18px;
+    }
 }

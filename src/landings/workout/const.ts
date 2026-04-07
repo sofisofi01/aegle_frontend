@@ -36,8 +36,15 @@ export const minicardData = [
 
     {
         id: 2,
-        title: 'Jumping Jack',
+        title: 'Barbell Squats',
         sets: '10x3',
+        image: workout2Img
+    },
+
+    {
+        id: 3,
+        title: 'Jumping Jack',
+        sets: '12x3',
         image: workout1Img
     }
 ];
