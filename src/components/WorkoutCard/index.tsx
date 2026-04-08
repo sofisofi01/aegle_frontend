@@ -5,6 +5,7 @@ import Image, { StaticImageData } from 'next/image';
 import plusIcon from '@/landings/workout/assets/plusIcon.svg'; 
 import { WorkoutCardProps } from './types';
 import { useState, useEffect } from 'react';
+import { breakpoints } from '@/styles/variables/breakpoints'; 
 
 export function WorkoutCard({ title, muscles, text, image, onAddToWorkout }: WorkoutCardProps) {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -13,11 +14,13 @@ export function WorkoutCard({ title, muscles, text, image, onAddToWorkout }: Wor
     useEffect(() => {
         const handleResize = () => {
             const width = window.innerWidth;
-            if (width >= 1200) { // lg 
+            if (width >= breakpoints.lg) { 
                 setMaxLength(350);
-            } else if (width >= 768) { // md
+            } else if (width >= breakpoints.md) { 
                 setMaxLength(150);
-            } else { // sm
+            } else if (width >= breakpoints.sm) { 
+                setMaxLength(100);
+            } else { 
                 setMaxLength(80);
             }
         };
@@ -27,6 +30,7 @@ export function WorkoutCard({ title, muscles, text, image, onAddToWorkout }: Wor
         
         return () => window.removeEventListener('resize', handleResize);
     }, []);
+
     
     const shouldTruncate = text.length > maxLength && !isExpanded;
     const displayText = shouldTruncate 
