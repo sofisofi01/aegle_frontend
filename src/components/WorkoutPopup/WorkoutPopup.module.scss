@@ -44,12 +44,21 @@
   color: #666666;
 }
 
+.firstSectionTitle {
+  font-weight: bold;
+  font-size: $font-size-title;
+  margin-bottom: 5px;
+}
+
 .sectionHeader {
   display: flex;
   align-items: center;
+  font-size: $font-size-title;
+  margin-top: 15px;
+  margin-bottom: 7px;
   cursor: pointer;
-  padding: 10px 0;
   gap: 8px;
+  font-weight: bold;
 }
 
 .arrowIcon {

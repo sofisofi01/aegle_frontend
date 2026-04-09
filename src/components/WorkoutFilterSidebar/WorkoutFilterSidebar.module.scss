@@ -29,7 +29,7 @@
 }
 
 .filterGroup {
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba($color-white, 0.6);
     border-radius: 30px;
     border-top: 3px solid $color-mid-green;
     backdrop-filter: blur(10px);
@@ -73,8 +73,9 @@
 
 .options div {
     cursor: pointer;
-    text-align: center;
+    text-align: left;
     position: relative;
+    margin-left: 35px;
 
     &:last-child {
         padding-bottom: 10px;
@@ -83,13 +84,13 @@
     &::after {
         content: '';
         position: absolute;
-        bottom: -7px;
+        bottom: -5px;
         left: 0;
         right: 0;
-        width: 70%;
+        width: 90%;
         height: 1px;
         background: $color-text-green-dark;
-        margin: 0 auto; 
+        margin-left: -13px;
     }
     
     &:last-child::after {
@@ -111,7 +112,8 @@
     }
     
     .filterGroup {
-        margin-bottom: 30px;
+        margin-bottom: 30px; 
+        backdrop-filter: none;
     }
     
     .overlay {
