@@ -12,6 +12,8 @@ import { minicardData as initialMinicardData } from './const';
 import Image from 'next/image'; 
 import filterIcon from './assets/filterIcon.svg';
 import checkIcon from './assets/checkIcon.png';
+import racket from './assets/racket.png';
+import weights from './assets/weights.png';
 
 export function WorkoutPage() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -70,11 +72,34 @@ export function WorkoutPage() {
                 </div>
 
                 <div className={styles.container}>
-                    <WorkoutFilterSidebar 
-                        isOpen={isFiltersOpen}
-                        onClose={() => setIsFiltersOpen(false)}
-                    />
-                    
+                    {/* Оборачиваем фильтры и картинки в один div с position relative */}
+                    <div className={styles.filtersWrapper}>
+                        <WorkoutFilterSidebar 
+                            isOpen={isFiltersOpen}
+                            onClose={() => setIsFiltersOpen(false)}
+                        />
+                        <div className={styles.peekingImages}>
+                            <div className={`${styles.imageContainer} ${styles.racket}`}>
+                                <Image
+                                    src={racket}
+                                    alt="racket"
+                                    width={120}
+                                    height={120}
+                                    className={styles.peekingImage}
+                                />
+                            </div>
+                            <div className={`${styles.imageContainer} ${styles.weights}`}>
+                                <Image
+                                    src={weights}
+                                    alt="weights"
+                                    width={120}
+                                    height={120}
+                                    className={styles.peekingImage}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                        
                     <button 
                         className={styles.filterButton}
                         onClick={() => setIsFiltersOpen(true)}
