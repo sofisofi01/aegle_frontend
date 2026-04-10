@@ -28,6 +28,45 @@
 
 .sets {
     color: $color-text-black;
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+    min-width: 40px;
+    text-align: right;
+}
+
+.setsText {
+    display: inline-block;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    font-size: 15px;
+    background-color: rgba(0, 0, 0, 0.05);
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.15);
+    }
+}
+
+.setsInput {
+    width: auto;
+    max-width: 50px;
+    padding: 2px 4px;
+    font-size: 15px;
+    font-family: $font-family-secondary;
+    font-weight: bold;
+    color: $color-text-black;
+    border: none;
+    border-bottom: 2px solid $color-mid-green;
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.05);
+    outline: none;
+    text-align: right;
+    
+    &:focus {
+        border-color: $color-text-green-dark;
+    }
 }
 
 .image {

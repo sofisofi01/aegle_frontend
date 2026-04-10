@@ -48,6 +48,8 @@ body {
     gap: 15px;
     padding: 15px;
     scrollbar-width: thin;  
+    scrollbar-color: rgba($color-mid-green, 0.6) rgba($color-light-green, 0.3);
+
     @supports(justify-content: safe center) {
         justify-content: safe center;
     }
