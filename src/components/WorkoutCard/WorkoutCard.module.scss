@@ -90,6 +90,11 @@
     font-family: $font-family-secondary;
     font-size: $font-size-base;
     text-decoration: underline;
+    transform: transform 0.1 ease;
+
+    &:active {
+        transform: scale(0.98);
+    }
 }
 
 @include breakpoints(sm) {

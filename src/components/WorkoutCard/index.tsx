@@ -36,6 +36,12 @@ export function WorkoutCard({ title, muscles, text, image, onAddToWorkout }: Wor
     const displayText = shouldTruncate 
         ? text.slice(0, maxLength) : text;
 
+    const handleAddClick = () => {
+        if (onAddToWorkout) {
+            onAddToWorkout();
+        }
+    };
+
     return (
         <div className={styles.card}>
             <div className={styles.cardInner}>
@@ -69,7 +75,7 @@ export function WorkoutCard({ title, muscles, text, image, onAddToWorkout }: Wor
             <div className={styles.addButtonContainer}>
                 <button 
                     className={styles.addButton}
-                    onClick={onAddToWorkout}
+                    onClick={handleAddClick}
                 >
                     <span>Add to your workout</span>
                     <Image 
