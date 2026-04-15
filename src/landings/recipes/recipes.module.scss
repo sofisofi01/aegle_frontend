@@ -1,0 +1,171 @@
+@import "../../styles/mixins/breakpoints.scss";
+@import "../../styles/variables/fonts.scss";
+@import "../../styles/variables/colors.scss";
+
+body {
+  background: inherit;
+  background: url(/public/back.png);
+}
+
+.searchBlock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.headerContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 20px;
+}
+
+.title {
+    color: $color-text-black;
+    font-family: $font-family;
+    font-size: 30px;
+    line-height: 25px;
+    text-align: center;
+}
+
+.searchContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+}
+
+.searchWrapper {
+    border-radius: 30px;
+    border: none;
+    background-color: $color-white;
+    box-shadow: 0 0 2px black;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    max-width: 400px;
+}
+
+.searchInput {
+    border: none;
+    flex: 1;
+    background: none;
+    font-size: 14px;
+    padding: 12px 0 12px 20px;
+    color: $color-text-black;
+
+    &:focus {
+        outline: none;
+        background: none;
+    }
+}
+
+.searchInput::placeholder {
+    font-size: 14px; 
+}
+
+.searchButton {
+    background: none;
+    border: none;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-right: 10px;
+    
+    &:hover {
+        opacity: 0.7;
+    }
+}
+
+.createButton {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background-color: $color-white;
+    color: $color-text-green;
+    font-size: 14px;
+    text-decoration: underline;
+    border: none;
+    box-shadow: 0 0 2px black;
+    border-radius: 30px;
+    cursor: pointer;
+    white-space: nowrap;
+    
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+}
+
+@include breakpoints(sm) {
+    .title {
+        font-size: 40px;
+        line-height: 30px;
+    }
+    
+    .searchWrapper {
+        max-width: 500px; 
+    }
+
+    .searchInput {
+        font-size: $font-size-base;
+    }
+    .searchInput::placeholder {
+        font-size: $font-size-base;
+    }
+
+
+    .createButton {
+        font-size: $font-size-base;
+    }
+}
+
+@include breakpoints(lg) {
+    .title {
+        font-size: 50px;
+        line-height: normal;
+    }
+    
+    .searchWrapper {
+        max-width: 600px; 
+    }
+}
+
+@include breakpoints(xxl) {
+    .headerContainer {
+        margin-top: -50px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 40px;
+    }
+    
+    .title {
+        text-align: left;
+        font-size: 60px;
+        margin-left: 30px;
+    }
+    
+    .searchContainer {
+        justify-content: flex-end;
+        flex: 1;
+        margin-right: 30px;
+    }
+    
+    .searchWrapper {
+        margin: 20px;
+        max-width: 1200px;
+        width: 100%;
+    }
+}
