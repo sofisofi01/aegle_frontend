@@ -1,4 +1,4 @@
-import avatarImg from "./assets/avatar.jpg";
+import avatarImg from "./assets/avatar.png";
 import breakfastImg from "./assets/breakfast.png";
 
 export const profileData = {
