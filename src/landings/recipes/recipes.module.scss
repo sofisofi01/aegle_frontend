@@ -7,6 +7,11 @@ body {
   background: url(/public/back.png);
 }
 
+.page {
+    padding: 20px;
+    position: relative;
+}
+
 .searchBlock {
     display: flex;
     flex-direction: column;
@@ -15,6 +20,7 @@ body {
     width: 100%;
     padding: 0 20px;
     box-sizing: border-box;
+    margin-bottom: 30px;
 }
 
 .headerContainer {
@@ -47,7 +53,7 @@ body {
     border-radius: 30px;
     border: none;
     background-color: $color-white;
-    box-shadow: 0 0 2px black;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
     display: flex;
     align-items: center;
     flex: 1;
@@ -98,7 +104,7 @@ body {
     font-size: 14px;
     text-decoration: underline;
     border: none;
-    box-shadow: 0 0 2px black;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
     border-radius: 30px;
     cursor: pointer;
     white-space: nowrap;
@@ -108,7 +114,61 @@ body {
     }
 }
 
+.filterButton {
+    display: flex;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    border: none;
+    background: none;
+    z-index: 100;
+    cursor: pointer;
+    
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+.container {
+    display: flex;
+    gap: 30px;
+    padding: 20px;
+    align-items: flex-start;
+}
+
+.filtersWrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 280px;
+    flex-shrink: 0;
+    
+    @media (max-width: 767px) {
+        width: auto;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        gap: 0;
+    }
+}
+
+.mainContent {
+    flex: 1;
+}
+
+.cardsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 @include breakpoints(sm) {
+    .filterButton {
+        display: none; 
+    }
+    
     .title {
         font-size: 40px;
         line-height: 30px;
@@ -121,13 +181,33 @@ body {
     .searchInput {
         font-size: $font-size-base;
     }
+    
     .searchInput::placeholder {
         font-size: $font-size-base;
     }
 
-
     .createButton {
         font-size: $font-size-base;
+    }
+    
+    .container {
+        flex-direction: row;
+    }
+    
+    .filtersWrapper {
+        position: sticky;
+        top: 20px;
+        width: 250px;
+    }
+}
+
+@include breakpoints(md) {
+    .filterButton {
+        display: none; 
+    }
+    
+    .container {
+        flex-direction: row;
     }
 }
 
@@ -142,7 +222,7 @@ body {
     }
 }
 
-@include breakpoints(xxl) {
+@include breakpoints(xl) {
     .headerContainer {
         margin-top: -50px;
         flex-direction: row;
