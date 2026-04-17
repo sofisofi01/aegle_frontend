@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import styles from '../RecipesFilterSidebar/RecipesFilterSidebar.module.scss'; 
-import { MacroSliderProps } from '@/landings/recipes/types';
+import { MacroSliderProps } from './types';
 
 export function MacroSlider({ 
     title, 

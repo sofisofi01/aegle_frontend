@@ -5,7 +5,7 @@ import Image from 'next/image';
 import styles from '../RecipesFilterSidebar/RecipesFilterSidebar.module.scss'; 
 import minusIcon from '@/landings/recipes/assets/minus.png';
 import { availableIngredients } from './const';
-import { IngredientsFilterProps } from '@/landings/recipes/types';
+import { IngredientsFilterProps } from './types';
 
 export function IngredientsFilter({ selectedIngredients, onSelectIngredients }: IngredientsFilterProps) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);

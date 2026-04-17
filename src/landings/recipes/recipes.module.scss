@@ -131,8 +131,6 @@ body {
 
 .container {
     display: flex;
-    gap: 30px;
-    padding: 20px;
     align-items: flex-start;
 }
 
@@ -162,6 +160,27 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
+}
+
+.popupOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.popupContent {
+    position: relative;
+    width: 100%;
+    max-height: 100vh;
+    overflow-y: auto;
 }
 
 @include breakpoints(sm) {
@@ -198,16 +217,6 @@ body {
         position: sticky;
         top: 20px;
         width: 250px;
-    }
-}
-
-@include breakpoints(md) {
-    .filterButton {
-        display: none; 
-    }
-    
-    .container {
-        flex-direction: row;
     }
 }
 

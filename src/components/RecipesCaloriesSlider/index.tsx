@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import styles from '../RecipesFilterSidebar/RecipesFilterSidebar.module.scss'; 
-import { CaloriesSliderProps } from '@/landings/recipes/types';
+import { CaloriesSliderProps } from './types';
 
 export function CaloriesSlider({ onRangeChange, minValue = 0, maxValue = 900 }: CaloriesSliderProps) {
     const MIN_LIMIT = 0;

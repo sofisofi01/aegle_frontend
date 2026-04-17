@@ -2,12 +2,8 @@
 
 import styles from '../RecipesFilterSidebar/RecipesFilterSidebar.module.scss'; 
 import { MacroSlider } from '../RecipesMacroSlider';
+import { MacronutrientsFilterProps } from './types';
 
-interface MacronutrientsFilterProps {
-    onCarbsRangeChange?: (min: number, max: number) => void;
-    onProteinsRangeChange?: (min: number, max: number) => void;
-    onFatsRangeChange?: (min: number, max: number) => void;
-}
 
 export function MacronutrientsFilter({ 
     onCarbsRangeChange, 

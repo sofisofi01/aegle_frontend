@@ -1,7 +1,7 @@
 'use client';
 
 import styles from '../RecipesFilterSidebar/RecipesFilterSidebar.module.scss'; 
-import { TypeFilterProps } from '@/landings/recipes/types';
+import { TypeFilterProps } from './types';
 
 const types = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
 

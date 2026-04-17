@@ -4,7 +4,7 @@ import styles from './RecipesCard.module.scss';
 import Image from 'next/image';
 import time from '@/landings/recipes/assets/time.png';
 import { data } from '@/landings/recipes/const';
-import { RecipesCardProps } from '@/landings/recipes/types';
+import { RecipesCardProps } from './types';
 
 export function RecipesCard({ 
     selectedType, 

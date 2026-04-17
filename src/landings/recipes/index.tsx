@@ -5,18 +5,18 @@ import Image from 'next/image';
 import { Page } from '@/containers/Page';
 import { RecipesCard } from '@/components/RecipesCard';
 import { RecipesFilterSidebar } from '@/components/RecipesFilterSidebar';
-import { RecipesProps } from './types';
+import { CreateRecipesCard } from '@/components/RecipesCreateCard';
 import styles from './recipes.module.scss';
 import searchIcon from './assets/searchIcon.svg';
 import plusIcon from './assets/plusIcon.svg';
 import filterIcon from './assets/filterIcon.svg';
 
-export function RecipesPage({ image }: RecipesProps) {
+export function RecipesPage() {
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+    const [isCreatePopupOpen, setIsCreatePopupOpen] = useState(false);
     const [selectedType, setSelectedType] = useState<string | null>(null);
     const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
     
-    // Состояния для слайдеров
     const [caloriesRange, setCaloriesRange] = useState<{ min: number; max: number }>();
     const [carbsRange, setCarbsRange] = useState<{ min: number; max: number }>();
     const [proteinsRange, setProteinsRange] = useState<{ min: number; max: number }>();
@@ -47,9 +47,22 @@ export function RecipesPage({ image }: RecipesProps) {
         setFatsRange({ min, max });
     };
 
+    const handleClosePopup = () => {
+        setIsCreatePopupOpen(false);
+    };
+
     return (
         <Page>
             <div className={styles.page}>
+                {/* Попап с CreateRecipesCard */}
+                {isCreatePopupOpen && (
+                    <div className={styles.popupOverlay} onClick={handleClosePopup}>
+                        <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
+                            <CreateRecipesCard onCancel={handleClosePopup} />
+                        </div>
+                    </div>
+                )}
+
                 <div className={styles.searchBlock}>
                     <div className={styles.headerContainer}>
                         <h1 className={styles.title}>
@@ -71,7 +84,10 @@ export function RecipesPage({ image }: RecipesProps) {
                                     />
                                 </button>
                             </div>
-                            <button className={styles.createButton}>
+                            <button 
+                                className={styles.createButton}
+                                onClick={() => setIsCreatePopupOpen(true)}
+                            >
                                 <span>create</span>
                                 <Image
                                     src={plusIcon}
