@@ -1,0 +1,14 @@
+@import "../../styles/mixins/breakpoints.scss";
+@import "../../styles/variables/fonts.scss";
+@import "../../styles/variables/colors.scss";
+
+body {
+    background: inherit;
+    background: url(/public/back.png);
+}
+
+.upperContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
