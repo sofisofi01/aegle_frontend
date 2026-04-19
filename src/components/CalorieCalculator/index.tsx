@@ -17,7 +17,7 @@ export function CalorieCalculator() {
     const [isActivityDropdownOpen, setIsActivityDropdownOpen] = useState(false);
 
     // Варианты для дропдаунов
-    const goalOptions = ['to lose weight', 'to maintain weight', 'to gain weight'];
+    const goalOptions = ['lose weight', 'maintain weight', 'gain weight'];
     const activityOptions = ['sedentary', 'low', 'medium', 'high'];
 
     const handleSelectGoal = (goal: string) => {
