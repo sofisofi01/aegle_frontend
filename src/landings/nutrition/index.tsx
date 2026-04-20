@@ -7,8 +7,10 @@ import { Page } from '@/containers/Page';
 import { CalorieCalculator } from '@/components/CalorieCalculator';
 import { NutritionCard } from '@/components/NutritionCard';
 import { NutritionEmptyCard } from '@/components/NutritionEmptyCard';
-import { NutritionTotalCard } from '@/components/NutritionTotalCard'; // Импортируем тотал карточку
+import { NutritionTotalCard } from '@/components/NutritionTotalCard';
+import { NutritionTableCard } from '@/components/NutritionTableCard'; 
 import { cardData as initialCardData } from './const';
+import { tableCardData } from './const';
 
 import mondayImg from './assets/mon.png';
 import tuesdayImg from './assets/tue.png';
@@ -32,6 +34,8 @@ const mealTypes = ['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Total'];
 
 export function NutritionPage() {
     const [cardData, setCardData] = useState(initialCardData);
+    const [tableCardDataState, setTableCardDataState] = useState(tableCardData);
+    
     const [tableData, setTableData] = useState(() => {
         const initialData: any = {};
         daysOfWeek.forEach(day => {
@@ -45,6 +49,14 @@ export function NutritionPage() {
 
     const handleAddMeal = (day: string, meal: string) => {
         console.log(`Add meal to ${day} - ${meal}`);
+    };
+
+    const handleDeleteTableCard = (id: number) => {
+        setTableCardDataState(tableCardDataState.filter(item => item.id !== id));
+    };
+
+    const getTableCardForDayAndMeal = (day: string, meal: string) => {
+        return tableCardDataState.find(item => item.day === day && item.mealType === meal);
     };
 
     return (
@@ -100,18 +112,33 @@ export function NutritionPage() {
                                     />
                                 </div>
                                 
-                                {mealTypes.map(meal => (
-                                    <div 
-                                        key={`${day.name}-${meal}`} 
-                                        className={`${styles.cell} ${meal === 'Total' ? styles.totalCell : ''}`}
-                                    >
-                                        {meal === 'Total' ? (
-                                            <NutritionTotalCard />
-                                        ) : (
-                                            <NutritionEmptyCard />
-                                        )}
-                                    </div>
-                                ))}
+                                {mealTypes.map(meal => {
+                                    const tableCard = getTableCardForDayAndMeal(day.name, meal);
+                                    
+                                    return (
+                                        <div 
+                                            key={`${day.name}-${meal}`} 
+                                            className={`${styles.cell} ${meal === 'Total' ? styles.totalCell : ''}`}
+                                        >
+                                            {meal === 'Total' ? (
+                                                <NutritionTotalCard />
+                                            ) : tableCard ? (
+                                                <NutritionTableCard 
+                                                    id={tableCard.id}
+                                                    title={tableCard.title}
+                                                    calories={tableCard.calories}
+                                                    proteins={tableCard.proteins}
+                                                    carbs={tableCard.carbs}
+                                                    fats={tableCard.fats}
+                                                    image={tableCard.image}
+                                                    onDelete={handleDeleteTableCard}
+                                                />
+                                            ) : (
+                                                <NutritionEmptyCard day={day.name} mealType={meal} />
+                                            )}
+                                        </div>
+                                    );
+                                })}
                             </React.Fragment>
                         ))}
                     </div>

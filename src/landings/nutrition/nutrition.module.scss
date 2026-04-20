@@ -109,12 +109,15 @@ body {
     border-radius: 8px;
     padding: 8px;
     height: 120px;
-    width: 90px;
+    width: 100px; 
+    min-width: 100px;
+    max-width: 100px;
 }
 
 .totalCell {
-    max-width: 150px;
+    width: 150px;
     min-width: 150px;
+    max-width: 150px;
 }
 
 .cell > div {
@@ -131,6 +134,21 @@ body {
         flex-direction: row;
         align-items: flex-start;
         gap: 20px;
+    }
+    
+    .cell {
+        width: 110px;
+        min-width: 110px;
+        max-width: 110px;
+        height: auto;
+        min-height: 100px;
+        padding: 6px;
+    }
+
+    .totalCell {
+        width: 140px;
+        min-width: 140px;
+        max-width: 140px;
     }
 
     .title {
@@ -161,14 +179,7 @@ body {
     .dayCell {
         width: 60px;
     }
-    
-    .cell {
-        min-height: 100px;
-        width: 110px;
-        height: auto;
-        padding: 6px;
-    }
-    
+
     .dayImage {
         width: 25px;
         height: 100px;
@@ -185,16 +196,26 @@ body {
         margin-right: 50px;
         margin-top: 20px;
     }
+
+    .cell {
+        width: 120px;
+        min-width: 120px;
+        max-width: 120px;
+        height: 160px;
+        padding: 12px;
+    }
+    
+    .totalCell {
+        width: 180px;
+        min-width: 180px;
+        max-width: 180px;
+    }
     
     .nutritionTable {
         grid-template-columns: 100px repeat(5, minmax(120px, 1fr));
         gap: 12px;
     }
 
-    .totalCell {
-        min-width: 190px;
-    }
-    
     .headerCell {
         font-size: 18px;
         height: 70px;
@@ -205,12 +226,6 @@ body {
         width: 40px;
         height: 140px;
     }
-    
-    .cell {
-        height: 160px;
-        width: 150px;
-        padding: 12px;
-    }
 }
 
 @include breakpoints(xl) {
@@ -220,8 +235,16 @@ body {
     }
     
     .cell {
-        height: 250px;
-        width: 200px;
+        width: 160px;
+        min-width: 160px;
+        max-width: 160px;
+        height: 200px;
+    }
+    
+    .totalCell {
+        width: 220px;
+        min-width: 220px;
+        max-width: 220px;
     }
 
     .dayImage {

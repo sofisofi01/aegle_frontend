@@ -1,5 +1,4 @@
-// const.ts
-import defaultFoodImage from './assets/burger.png'; // Add your default image
+import defaultFoodImage from './assets/burger.png'; 
 
 export const cardData = [
     {
@@ -30,3 +29,17 @@ export const cardData = [
         image: defaultFoodImage
     }
 ];
+
+export const tableCardData = [
+    {
+        id: 1,
+        day: 'Monday',
+        mealType: 'Breakfast',
+        title: 'Oatmeal with Berries',
+        calories: 350,
+        proteins: 12,
+        carbs: 45,
+        fats: 8,
+        image: defaultFoodImage
+    },
+]
