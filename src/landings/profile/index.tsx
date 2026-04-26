@@ -13,16 +13,20 @@ import food1 from "./assets/food 1.png";
 import food2 from "./assets/food 2.png";
 
 import { profileData, goalsData, mealsData, workoutsData } from "./const";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export function ProfilePage() {
+  const { user } = useAuthStore();
   const [activeTab, setActiveTab] = useState<"meals" | "workouts" | "analytics">("meals");
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [profileInfo, setProfileInfo] = useState({
-    email: profileData.email,
-    sex: profileData.sex,
-    age: String(profileData.age),
-    height: String(profileData.height),
-    weight: String(profileData.weight),
+    email: user?.email || profileData.email,
+    sex: user?.gender || profileData.sex,
+    age: user?.birth_date
+      ? String(new Date().getFullYear() - new Date(user.birth_date).getFullYear())
+      : String(profileData.age),
+    height: user?.height ? String(user.height) : String(profileData.height),
+    weight: user?.weight ? String(user.weight) : String(profileData.weight),
   });
   const [emailError, setEmailError] = useState("");
   const [isEditingGoals, setIsEditingGoals] = useState(false);
@@ -81,7 +85,9 @@ export function ProfilePage() {
             height={150}
           />
 
-          <h1 className={styles.name}>{profileData.name}</h1>
+          <h1 className={styles.name}>
+            {user ? `${user.first_name} ${user.last_name || ""}` : profileData.name}
+          </h1>
 
           <div className={styles.memberInfo}>
             <p>Member since: {profileData.memberSince}</p>

@@ -7,6 +7,11 @@ interface User {
   email: string;
   first_name?: string;
   last_name?: string;
+  height?: number;
+  weight?: number;
+  gender?: string;
+  age?: number;
+  birth_date?: string;
 }
 
 interface AuthState {

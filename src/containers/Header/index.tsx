@@ -35,12 +35,24 @@ export function Header({ menu }: HeaderProps) {
           ))}
           <li>
             {isAuthenticated ? (
-              <Link
-                href="/profile"
-                className={`${styles.link} ${pathname === "/profile" ? styles.active : ""}`}
-              >
-                {user?.first_name || "Profile"}
-              </Link>
+              <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+                <Link
+                  href="/profile"
+                  className={`${styles.link} ${pathname === "/profile" ? styles.active : ""}`}
+                >
+                  {user?.first_name || "Profile"}
+                </Link>
+                <button
+                  onClick={() => {
+                    useAuthStore.getState().logout();
+                    window.location.href = "/";
+                  }}
+                  className={styles.link}
+                  style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                >
+                  Logout
+                </button>
+              </div>
             ) : (
               <Link
                 href="/signin"

@@ -17,6 +17,11 @@ export interface RegisterData {
   password?: string;
   first_name?: string;
   last_name?: string;
+  height?: number;
+  weight?: number;
+  gender?: string;
+  birth_date?: string;
+  activity_level?: number;
 }
 
 export const authService = {

@@ -62,6 +62,11 @@ export function SignUpPage() {
         password,
         first_name: name,
         last_name: surname,
+        height: parseInt(height),
+        weight: parseInt(weight),
+        gender: gender || undefined,
+        birth_date: birthDate ? birthDate.toISOString().split("T")[0] : undefined,
+        activity_level: activity !== null ? activity + 1 : undefined,
       });
 
       setAuth(data.user, data.access, data.refresh);
