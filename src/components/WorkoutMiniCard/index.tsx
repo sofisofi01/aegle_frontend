@@ -1,113 +1,112 @@
-import styles from './WorkoutMiniCard.module.scss';
-import { useState } from 'react';
-import Image, { StaticImageData } from 'next/image';
-import { WorkoutMiniCardProps } from './types';
-import doneIcon from '@/landings/workout/assets/doneIcon.png';
-import nodoneIcon from '@/landings/workout/assets/nodoneIcon.svg';
+import styles from "./WorkoutMiniCard.module.scss";
+import { useState } from "react";
+import Image from "next/image";
+import { WorkoutMiniCardProps } from "./types";
+import doneIcon from "@/landings/workout/assets/doneIcon.png";
+import nodoneIcon from "@/landings/workout/assets/nodoneIcon.svg";
 
-export function WorkoutMiniCard({ id, title, sets, image, onDelete, onUpdateSets }: WorkoutMiniCardProps) {
-    const [showDone, setShowDone] = useState(false);
-    const [isCompleted, setIsCompleted] = useState(false);
-    const [isEditing, setIsEditing] = useState(false);
-    const [editedSets, setEditedSets] = useState(sets);
+export function WorkoutMiniCard({
+  id,
+  title,
+  sets,
+  image,
+  onDelete,
+  onUpdateSets,
+}: WorkoutMiniCardProps) {
+  const [showDone, setShowDone] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedSets, setEditedSets] = useState(sets);
 
-    const handleComplete = () => {
-        const newStatus = !isCompleted;
-        setIsCompleted(newStatus);
-        
-        if (newStatus) {
-            setShowDone(true);
-            setTimeout(() => {
-                setShowDone(false);
-            }, 1500);
-        }
-    };
+  const handleComplete = () => {
+    const newStatus = !isCompleted;
+    setIsCompleted(newStatus);
 
-    const handleDelete = () => {
-        if (onDelete) {
-            onDelete(id);
-        }
-    };
+    if (newStatus) {
+      setShowDone(true);
+      setTimeout(() => {
+        setShowDone(false);
+      }, 1500);
+    }
+  };
 
-    const handleSetsClick = () => {
-        setIsEditing(true);
-    };
+  const handleDelete = () => {
+    if (onDelete) {
+      onDelete(id);
+    }
+  };
 
-    const handleSetsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        if (value.length <= 8) {
-            setEditedSets(value);
-        }
-    };
+  const handleSetsClick = () => {
+    setIsEditing(true);
+  };
 
-    const handleSetsBlur = () => {
-        setIsEditing(false);
-        
-        if (editedSets.trim() !== '') {
-            if (editedSets !== sets && onUpdateSets) {
-                onUpdateSets(id, editedSets);
-            }
-        } else {
-            setEditedSets(sets);
-        }
-    };
+  const handleSetsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value.length <= 8) {
+      setEditedSets(value);
+    }
+  };
 
-    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-            handleSetsBlur();
-        }
-    };
+  const handleSetsBlur = () => {
+    setIsEditing(false);
 
-    return (
-        <div className={styles.card}>
-            {image && (
-                <div className={styles.imageWrapper}>
-                    <Image
-                        src={image}
-                        alt={title}
-                        className={styles.image}
-                    />
-                    {showDone && (
-                        <div className={styles.donePopup}>
-                            Done!
-                        </div>
-                    )}
-                    <div className={styles.buttonGroup}>
-                        <button className={styles.doneButton} onClick={handleComplete}>
-                            <Image
-                                src={isCompleted ? doneIcon : nodoneIcon}
-                                alt={isCompleted ? "done" : "no done"}
-                                width={20}
-                                height={20}
-                                className={styles.doneIcon}
-                            />
-                        </button>
-                        <button className={styles.deleteButton} onClick={handleDelete}>
-                            <span>—</span>
-                        </button>
-                    </div>
-                </div>
-            )}
-            <div className={styles.bottom}>
-                <div className={styles.title}>{title}</div>
-                <div className={styles.sets}>
-                    {isEditing ? (
-                        <input
-                            type="text"
-                            value={editedSets}
-                            onChange={handleSetsChange}
-                            onBlur={handleSetsBlur}
-                            onKeyPress={handleKeyPress}
-                            className={styles.setsInput}
-                            autoFocus
-                        />
-                    ) : (
-                        <span onClick={handleSetsClick} className={styles.setsText}>
-                            {editedSets}
-                        </span>
-                    )}
-                </div>
-            </div>
+    if (editedSets.trim() !== "") {
+      if (editedSets !== sets && onUpdateSets) {
+        onUpdateSets(id, editedSets);
+      }
+    } else {
+      setEditedSets(sets);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSetsBlur();
+    }
+  };
+
+  return (
+    <div className={styles.card}>
+      {image && (
+        <div className={styles.imageWrapper}>
+          <Image src={image} alt={title} className={styles.image} />
+          {showDone && <div className={styles.donePopup}>Done!</div>}
+          <div className={styles.buttonGroup}>
+            <button className={styles.doneButton} onClick={handleComplete}>
+              <Image
+                src={isCompleted ? doneIcon : nodoneIcon}
+                alt={isCompleted ? "done" : "no done"}
+                width={20}
+                height={20}
+                className={styles.doneIcon}
+              />
+            </button>
+            <button className={styles.deleteButton} onClick={handleDelete}>
+              <span>—</span>
+            </button>
+          </div>
         </div>
-    )
+      )}
+      <div className={styles.bottom}>
+        <div className={styles.title}>{title}</div>
+        <div className={styles.sets}>
+          {isEditing ? (
+            <input
+              type="text"
+              value={editedSets}
+              onChange={handleSetsChange}
+              onBlur={handleSetsBlur}
+              onKeyPress={handleKeyPress}
+              className={styles.setsInput}
+              autoFocus
+            />
+          ) : (
+            <span onClick={handleSetsClick} className={styles.setsText}>
+              {editedSets}
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
