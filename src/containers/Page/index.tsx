@@ -8,7 +8,7 @@ export function Page({ children }: PageProps) {
   return (
     <div className={styles.pageWrapper}>
       <Header menu={data} />
-      <main className={styles.main}>{children}</main>
+      <main className={styles.body}>{children}</main>
       <Footer />
     </div>
   );
