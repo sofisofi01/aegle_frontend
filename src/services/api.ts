@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useAuthStore } from "@/store/useAuthStore";
 
-// Хардкодим относительный путь для работы на одном домене
+// АБСОЛЮТНЫЙ ХАРДКОД - МЫ НЕ ИСПОЛЬЗУЕМ ENV ДЛЯ ЭТОЙ ПЕРЕМЕННОЙ
 const API_URL = "/api";
 
 const api = axios.create({
@@ -11,7 +11,6 @@ const api = axios.create({
   },
 });
 
-// Интерцептор для добавления токена к запросам
 api.interceptors.request.use(
   (config) => {
     const token = useAuthStore.getState().accessToken;
@@ -23,25 +22,20 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Интерцептор для обработки истечения токена
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       const refreshToken = useAuthStore.getState().refreshToken;
-
       if (refreshToken) {
         try {
           const response = await axios.post(`${API_URL}/users/token/refresh/`, {
             refresh: refreshToken,
           });
-
           const { access } = response.data;
           useAuthStore.getState().setAccessToken(access);
-
           originalRequest.headers.Authorization = `Bearer ${access}`;
           return api(originalRequest);
         } catch (refreshError) {
