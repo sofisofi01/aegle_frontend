@@ -2,7 +2,7 @@
 import { Page } from "@/containers/Page";
 import styles from "./profile.module.scss";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import caloriesIcon from "./assets/calories.svg";
 import workoutIcon from "./assets/workout.svg";
 import timeIcon from "./assets/time.svg";
@@ -13,6 +13,7 @@ import food1 from "./assets/food 1.png";
 import food2 from "./assets/food 2.png";
 
 import { profileData, goalsData, mealsData, workoutsData } from "./const";
+import { profileService } from "@/services/profileService";
 
 export function ProfilePage() {
   const [activeTab, setActiveTab] = useState<"meals" | "workouts" | "analytics">("meals");
@@ -23,6 +24,8 @@ export function ProfilePage() {
     age: String(profileData.age),
     height: String(profileData.height),
     weight: String(profileData.weight),
+    firstName: "",
+    lastName: "",
   });
   const [emailError, setEmailError] = useState("");
   const [isEditingGoals, setIsEditingGoals] = useState(false);
@@ -31,17 +34,70 @@ export function ProfilePage() {
     workoutSessions: String(goalsData.workoutSessions),
     workoutMinutes: String(goalsData.workoutMinutes),
     stepsPerDay: String(goalsData.stepsPerDay),
+    targetWeight: String(profileData.weight),
+    goal: "maintain",
+    activityLevel: "moderate",
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [user, profile] = await Promise.all([
+          profileService.getUser(),
+          profileService.getProfile(),
+        ]);
+
+        setProfileInfo({
+          email: user.email,
+          sex: profile.gender || "male",
+          age: String(profile.age || 0),
+          height: String(profile.height || 0),
+          weight: String(profile.current_weight || 0),
+          firstName: user.first_name,
+          lastName: user.last_name,
+        });
+
+        setGoalsInfo((prev) => ({
+          ...prev,
+          dailyCalories: String(profile.daily_calories || 0),
+          targetWeight: String(profile.target_weight || 0),
+          goal: profile.goal || "maintain",
+          activityLevel: profile.activity_level || "moderate",
+        }));
+      } catch (error) {
+        console.error("Failed to fetch profile data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const handleProfileEditToggle = () => {
+  const handleProfileEditToggle = async () => {
     if (isEditingProfile) {
       if (!isValidEmail(profileInfo.email)) {
         setEmailError("Invalid email format");
         return;
       }
       setEmailError("");
+
+      try {
+        await Promise.all([
+          profileService.updateUser({
+            email: profileInfo.email,
+          }),
+          profileService.updateProfile({
+            gender: profileInfo.sex,
+            age: Number(profileInfo.age),
+            height: Number(profileInfo.height),
+            current_weight: Number(profileInfo.weight),
+          }),
+        ]);
+      } catch (error) {
+        console.error("Failed to update profile:", error);
+        return;
+      }
     }
     setIsEditingProfile((prev) => !prev);
   };
@@ -56,12 +112,36 @@ export function ProfilePage() {
     setProfileInfo((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleGoalsEditToggle = () => {
+  const handleGoalsEditToggle = async () => {
+    if (isEditingGoals) {
+      try {
+        const updatedProfile = await profileService.updateProfile({
+          target_weight: Number(goalsInfo.targetWeight),
+          goal: goalsInfo.goal,
+          activity_level: goalsInfo.activityLevel,
+        });
+
+        setGoalsInfo((prev) => ({
+          ...prev,
+          dailyCalories: String(updatedProfile.daily_calories),
+        }));
+      } catch (error) {
+        console.error("Failed to update goals:", error);
+        return;
+      }
+    }
     setIsEditingGoals((prev) => !prev);
   };
 
   const handleGoalsFieldChange = (
-    field: "dailyCalories" | "workoutSessions" | "workoutMinutes" | "stepsPerDay",
+    field:
+      | "dailyCalories"
+      | "workoutSessions"
+      | "workoutMinutes"
+      | "stepsPerDay"
+      | "targetWeight"
+      | "goal"
+      | "activityLevel",
     value: string
   ) => {
     setGoalsInfo((prev) => ({ ...prev, [field]: value }));
@@ -81,7 +161,9 @@ export function ProfilePage() {
             height={150}
           />
 
-          <h1 className={styles.name}>{profileData.name}</h1>
+          <h1 className={styles.name}>
+            {profileInfo.firstName} {profileInfo.lastName}
+          </h1>
 
           <div className={styles.memberInfo}>
             <p>Member since: {profileData.memberSince}</p>
@@ -184,17 +266,73 @@ export function ProfilePage() {
                   <Image src={caloriesIcon} alt="" width={30} height={30} />
                   <span className={styles.label}>Daily calories:</span>
                 </div>
+                <span>
+                  <span className={styles.value}>{goalsInfo.dailyCalories}</span> kcal
+                </span>
+              </div>
+
+              <div className={styles.goalRow}>
+                <div className={styles.left}>
+                  <Image src={stepsIcon} alt="" width={30} height={30} />
+                  <span className={styles.label}>Target weight:</span>
+                </div>
                 {isEditingGoals ? (
                   <input
                     className={styles.profileInput}
                     type="number"
                     min="0"
-                    value={goalsInfo.dailyCalories}
-                    onChange={(e) => handleGoalsFieldChange("dailyCalories", e.target.value)}
+                    value={goalsInfo.targetWeight}
+                    onChange={(e) => handleGoalsFieldChange("targetWeight", e.target.value)}
                   />
                 ) : (
                   <span>
-                    <span className={styles.value}>{goalsInfo.dailyCalories}</span> kcal
+                    <span className={styles.value}>{goalsInfo.targetWeight}</span> kg
+                  </span>
+                )}
+              </div>
+
+              <div className={styles.goalRow}>
+                <div className={styles.left}>
+                  <Image src={stepsIcon} alt="" width={30} height={30} />
+                  <span className={styles.label}>Goal:</span>
+                </div>
+                {isEditingGoals ? (
+                  <select
+                    className={styles.profileInput}
+                    value={goalsInfo.goal}
+                    onChange={(e) => handleGoalsFieldChange("goal", e.target.value)}
+                  >
+                    <option value="lose">Lose weight</option>
+                    <option value="maintain">Maintain weight</option>
+                    <option value="gain">Gain weight</option>
+                  </select>
+                ) : (
+                  <span>
+                    <span className={styles.value}>{goalsInfo.goal}</span>
+                  </span>
+                )}
+              </div>
+
+              <div className={styles.goalRow}>
+                <div className={styles.left}>
+                  <Image src={stepsIcon} alt="" width={30} height={30} />
+                  <span className={styles.label}>Activity:</span>
+                </div>
+                {isEditingGoals ? (
+                  <select
+                    className={styles.profileInput}
+                    value={goalsInfo.activityLevel}
+                    onChange={(e) => handleGoalsFieldChange("activityLevel", e.target.value)}
+                  >
+                    <option value="sedentary">Sedentary</option>
+                    <option value="light">Lightly active</option>
+                    <option value="moderate">Moderately active</option>
+                    <option value="very_active">Very active</option>
+                    <option value="extra_active">Extra active</option>
+                  </select>
+                ) : (
+                  <span>
+                    <span className={styles.value}>{goalsInfo.activityLevel}</span>
                   </span>
                 )}
               </div>

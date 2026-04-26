@@ -4,5 +4,4 @@ export const data: MenuItem[] = [
   { id: 1, text: "Nutrition", href: "/nutrition" },
   { id: 2, text: "Workout", href: "/workout" },
   { id: 3, text: "Progress", href: "/progress" },
-  { id: 4, text: "ВОЙТИ", href: "/signin" },
 ];
