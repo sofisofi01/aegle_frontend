@@ -9,33 +9,52 @@ import timeIcon from "./assets/time.svg";
 import stepsIcon from "./assets/steps.svg";
 import decorProfile from "./assets/decor-profile.png";
 import decorGoals from "./assets/decor-goals.png";
-import food1 from "./assets/food 1.png";
-import food2 from "./assets/food 2.png";
 
 import { profileData, goalsData, mealsData, workoutsData } from "./const";
 import { useAuthStore } from "@/store/useAuthStore";
+import { authService } from "@/services/authService";
+import { DayMeals, DayWorkouts } from "./types";
 
 export function ProfilePage() {
-  const { user } = useAuthStore();
+  const { user, updateUser } = useAuthStore();
   const [activeTab, setActiveTab] = useState<"meals" | "workouts" | "analytics">("meals");
   const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [isEditingGoals, setIsEditingGoals] = useState(false);
+
   const [profileInfo, setProfileInfo] = useState({
     email: user?.email || profileData.email,
-    sex: user?.gender || profileData.sex,
-    age: user?.birth_date
-      ? String(new Date().getFullYear() - new Date(user.birth_date).getFullYear())
-      : String(profileData.age),
+    sex: user?.gender === "M" ? "male" : user?.gender === "F" ? "female" : profileData.sex,
+    age: user?.age ? String(user.age) : String(profileData.age),
     height: user?.height ? String(user.height) : String(profileData.height),
     weight: user?.weight ? String(user.weight) : String(profileData.weight),
   });
-  const [emailError, setEmailError] = useState("");
-  const [isEditingGoals, setIsEditingGoals] = useState(false);
+
   const [goalsInfo, setGoalsInfo] = useState({
     dailyCalories: String(goalsData.dailyCalories),
     workoutSessions: String(goalsData.workoutSessions),
     workoutMinutes: String(goalsData.workoutMinutes),
     stepsPerDay: String(goalsData.stepsPerDay),
   });
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("avatar", file);
+
+    try {
+      setIsLoading(true);
+      const updatedUser = await authService.updateProfile(formData);
+      updateUser(updatedUser);
+    } catch (err) {
+      console.error("Failed to upload avatar", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -73,17 +92,57 @@ export function ProfilePage() {
 
   const [openMeal, setOpenMeal] = useState<string | null>(null);
   const [openWorkout, setOpenWorkout] = useState<string | null>(null);
+
   return (
     <Page>
       <div className={styles.profilePage}>
         <div className={styles.profileLeft}>
-          <Image
-            src={profileData.avatar}
-            alt="Avatar"
-            className={styles.avatar}
-            width={150}
-            height={150}
-          />
+          <div
+            style={{
+              position: "relative",
+              cursor: "pointer",
+              width: "150px",
+              height: "150px",
+              margin: "0 auto",
+            }}
+          >
+            <Image
+              src={user?.avatar || profileData.avatar}
+              alt="Avatar"
+              className={styles.avatar}
+              width={150}
+              height={150}
+              onClick={() => document.getElementById("avatar-input")?.click()}
+              style={{ objectFit: "cover", borderRadius: "50%" }}
+            />
+            <input
+              id="avatar-input"
+              type="file"
+              hidden
+              accept="image/*"
+              onChange={handleAvatarChange}
+              disabled={isLoading}
+            />
+            {isLoading && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: "rgba(0,0,0,0.3)",
+                  borderRadius: "50%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  color: "white",
+                }}
+              >
+                ...
+              </div>
+            )}
+          </div>
 
           <h1 className={styles.name}>
             {user ? `${user.first_name} ${user.last_name || ""}` : profileData.name}
@@ -265,289 +324,110 @@ export function ProfilePage() {
                 )}
               </div>
 
-              <button type="button" className={styles.editGoals} onClick={handleGoalsEditToggle}>
+              <button type="button" className={styles.editProfile} onClick={handleGoalsEditToggle}>
                 {isEditingGoals ? "Save goals" : "Edit goals"}
               </button>
             </div>
-
-            <Image src={decorGoals} alt="" className={styles.cardImage} width={140} height={140} />
+            <Image src={decorGoals} alt="" className={styles.cardImage} width={120} height={120} />
           </div>
-        </div>
-      </div>
-
-      <div className={styles.activityWrapper}>
-        <div className={styles.activitySection}>
-          <h2 className={styles.activityTitle}>ACTIVITY OVERVIEW</h2>
-          <p className={styles.activitySubtitle}>Your weekly summary!</p>
 
           <div className={styles.tabs}>
-            <div
+            <button
               className={`${styles.tab} ${activeTab === "meals" ? styles.active : ""}`}
               onClick={() => setActiveTab("meals")}
             >
               Meals
-            </div>
-
-            <div
+            </button>
+            <button
               className={`${styles.tab} ${activeTab === "workouts" ? styles.active : ""}`}
               onClick={() => setActiveTab("workouts")}
             >
               Workouts
-            </div>
-
-            <div
+            </button>
+            <button
               className={`${styles.tab} ${activeTab === "analytics" ? styles.active : ""}`}
               onClick={() => setActiveTab("analytics")}
             >
               Analytics
-            </div>
-
-            <div className={`${styles.activeBg} ${styles[activeTab]}`} />
+            </button>
           </div>
-        </div>
-      </div>
-      <div className={styles.activityContentWrapper}>
-        <div className={styles.activityContent}>
-          {activeTab === "meals" && (
-            <div className={styles.mealsContentWrapper}>
-              <div className={styles.mealsContent} id="mealsScroll">
-                {mealsData.map((dayData) => (
-                  <div key={dayData.day} className={styles.dayColumn}>
-                    <h3 className={styles.dayTitle}>{dayData.day}</h3>
-                    <ul className={styles.macrosList}>
-                      {Object.entries(dayData.macros).map(([k, v]) => {
-                        const units: Record<string, string> = {
-                          calories: "",
-                          carbs: "g",
-                          protein: "g",
-                          fats: "g",
-                        };
-                        const displayName = k.charAt(0).toUpperCase() + k.slice(1);
-                        const unit = units[k as keyof typeof units] || "";
-                        return (
-                          <li key={k} className={styles.macroRow}>
-                            <span className={styles.macroName}>
-                              ✦ {displayName}
-                              {unit ? ` (${unit})` : ""}:
-                            </span>
-                            <span className={styles.macroValue}>{v}</span>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                    <p className={styles.totalMeals}>
-                      <strong>{dayData.totalMeals}</strong> meals logged
-                    </p>
-                    <div className={styles.mealsList}>
-                      {dayData.meals.map((meal, idx) => {
-                        const id = `${dayData.day}-${idx}`;
 
-                        return (
-                          <div key={id} className={styles.mealCard}>
-                            <div
-                              className={`${styles.mealImageWrapper} ${
-                                openMeal === id ? styles.activeMeal : ""
-                              }`}
-                            >
-                              <Image
-                                src={meal.image.src}
-                                alt={meal.name}
-                                className={styles.mealImg}
-                                width={100}
-                                height={100}
-                                onClick={() => setOpenMeal(openMeal === id ? null : id)}
-                              />
-
-                              <div className={styles.mealLabel}>{meal.name}</div>
-                            </div>
-
-                            <div
-                              className={`${styles.mealInfo} ${
-                                openMeal === id ? styles.mealInfoOpen : ""
-                              }`}
-                            >
-                              <p>{meal.kcal}</p>
-                              <p>Carbs {meal.carbs}g</p>
-                              <p>Protein {meal.protein}g</p>
-                              <p>Fat {meal.fat}g</p>
+          <div className={styles.tabContent}>
+            {activeTab === "meals" && (
+              <div className={styles.mealsList}>
+                {(mealsData as unknown as DayMeals[]).map((dayData, dayIdx) => (
+                  <div key={dayIdx}>
+                    {dayData.meals.map((meal, idx) => (
+                      <div key={idx} className={styles.mealItem}>
+                        <div
+                          className={styles.mealHeader}
+                          onClick={() => setOpenMeal(openMeal === meal.name ? null : meal.name)}
+                        >
+                          <div className={styles.mealInfo}>
+                            <Image src={meal.image} alt="" width={50} height={50} />
+                            <div>
+                              <h3>{meal.name}</h3>
+                              <p>{meal.kcal} kcal</p>
                             </div>
                           </div>
-                        );
-                      })}
-                    </div>
+                          <span className={styles.arrow}>{openMeal === meal.name ? "▲" : "▼"}</span>
+                        </div>
+                        {openMeal === meal.name && (
+                          <div className={styles.mealDetails}>
+                            <p>Proteins: {meal.protein}g</p>
+                            <p>Fats: {meal.fat}g</p>
+                            <p>Carbs: {meal.carbs}g</p>
+                          </div>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 ))}
               </div>
-              <button
-                className={styles.scrollBtn}
-                onClick={() => {
-                  const container = document.getElementById("mealsScroll");
-                  if (container) {
-                    container.scrollBy({ left: 250, behavior: "smooth" });
-                  }
-                }}
-              >
-                →
-              </button>
-            </div>
-          )}
+            )}
 
-          {activeTab === "workouts" && (
-            <div className={styles.workoutsContentWrapper}>
-              <div className={styles.workoutsContent} id="workoutsScroll">
-                {workoutsData.map((dayData) => (
-                  <div key={dayData.day} className={styles.dayColumn}>
-                    <h3 className={styles.dayTitle}>{dayData.day}</h3>
-                    <ul className={styles.workoutStats}>
-                      <li className={styles.statRow}>
-                        <span className={styles.statLabel}>✦ Total workouts:</span>
-                        <span className={styles.statValue}>{dayData.stats.totalWorkouts}</span>
-                      </li>
-                      <li className={styles.statRow}>
-                        <span className={styles.statLabel}>✦ Total time:</span>
-                        <span className={styles.statValue}>{dayData.stats.totalTime}</span>
-                      </li>
-                      <li className={styles.statRow}>
-                        <span className={styles.statLabel}>✦ Kcal burned:</span>
-                        <span className={styles.statValue}>{dayData.stats.caloriesBurned}</span>
-                      </li>
-                      <li className={styles.statRow}>
-                        <span className={styles.statLabel}>✦ Steps:</span>
-                        <span className={styles.statValue}>{dayData.stats.steps}</span>
-                      </li>
-                    </ul>
-                    <p className={styles.totalWorkouts}>
-                      <strong>{dayData.totalWorkouts}</strong> workouts logged
-                    </p>
-                    <div className={styles.workoutsList}>
-                      {dayData.workouts.map((workout, idx) => {
-                        const id = `${dayData.day}-${idx}`;
-
-                        return (
-                          <div key={id} className={styles.workoutCard}>
-                            <div
-                              className={`${styles.workoutImageWrapper} ${
-                                openWorkout === id ? styles.activeWorkout : ""
-                              }`}
-                            >
-                              <Image
-                                src={workout.image.src}
-                                alt={workout.name}
-                                className={styles.workoutImg}
-                                width={100}
-                                height={100}
-                                onClick={() => setOpenWorkout(openWorkout === id ? null : id)}
-                              />
-
-                              <div className={styles.workoutLabel}>{workout.name}</div>
-                            </div>
-
-                            <div
-                              className={`${styles.workoutInfo} ${
-                                openWorkout === id ? styles.workoutInfoOpen : ""
-                              }`}
-                            >
-                              <p>{workout.type}</p>
-                              <p>Duration: {workout.duration} minutes</p>
-                              <p>Calories: {workout.calories}</p>
+            {activeTab === "workouts" && (
+              <div className={styles.workoutsList}>
+                {(workoutsData as unknown as DayWorkouts[]).map((dayData, dayIdx) => (
+                  <div key={dayIdx}>
+                    {dayData.workouts.map((workout, idx) => (
+                      <div key={idx} className={styles.workoutItem}>
+                        <div
+                          className={styles.workoutHeader}
+                          onClick={() =>
+                            setOpenWorkout(openWorkout === workout.name ? null : workout.name)
+                          }
+                        >
+                          <div className={styles.workoutInfo}>
+                            <div className={styles.workoutIcon}>🏋️</div>
+                            <div>
+                              <h3>{workout.name}</h3>
+                              <p>{workout.duration} min</p>
                             </div>
                           </div>
-                        );
-                      })}
-                    </div>
+                          <span className={styles.arrow}>
+                            {openWorkout === workout.name ? "▲" : "▼"}
+                          </span>
+                        </div>
+                        {openWorkout === workout.name && (
+                          <div className={styles.workoutDetails}>
+                            <p>Type: {workout.type}</p>
+                            <p>Calories burned: {workout.calories} kcal</p>
+                          </div>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 ))}
               </div>
-              <button
-                className={styles.scrollBtn}
-                onClick={() => {
-                  const container = document.getElementById("workoutsScroll");
-                  if (container) {
-                    container.scrollBy({ left: 250, behavior: "smooth" });
-                  }
-                }}
-              >
-                →
-              </button>
-            </div>
-          )}
+            )}
 
-          {activeTab === "analytics" && (
-            <div className={styles.analyticsContent}>
-              <Image
-                src={food1}
-                alt="Food decor left"
-                className={styles.analyticsSideImageLeft}
-                width={220}
-                height={260}
-              />
-
-              <div className={styles.analyticsInner}>
-                <div className={styles.analyticsBlock}>
-                  <h3 className={styles.analyticsTitle}>Meals</h3>
-                  <div className={styles.analyticsText}>
-                    <div>Your calorie intake over the last 7 days</div>
-                    <div>
-                      Your <span className={styles.analyticsStrong}>average</span>{" "}
-                      <span className={styles.analyticsStrong}>calorie</span> intake was{" "}
-                      <span className={styles.analyticsStrong}>1207</span> kcal
-                    </div>
-                    <div>
-                      <span className={styles.analyticsStrong}>45% Carbs</span>: Your main fuel
-                      source for workouts and daily activity.
-                    </div>
-                    <div>
-                      <span className={styles.analyticsStrong}>30% Protein</span>: Crucial for
-                      muscle repair after your 3 workouts.
-                    </div>
-                    <div>
-                      <span className={styles.analyticsStrong}>25% Fats</span>: Essential for
-                      hormone production and vitamin absorption.
-                    </div>
-                    <div>
-                      <span className={styles.analyticsStrong}>This is 33% below your target</span>,
-                      putting you in a significant calorie deficit for weight loss.
-                    </div>
-                  </div>
-                </div>
-
-                <div className={styles.analyticsBlock}>
-                  <h3 className={styles.analyticsTitle}>Workouts</h3>
-                  <div className={styles.analyticsText}>
-                    <div>
-                      You completed <span className={styles.analyticsStrong}>30 workouts</span>
-                      <span className={styles.analyticsStatusOk}>Status: On track ✔</span>
-                    </div>
-                    <div>
-                      You logged <span className={styles.analyticsStrong}>135 active minutes</span>
-                      <span className={styles.analyticsStatusBad}>Status: Below target ✘</span>
-                    </div>
-                    <div>
-                      Your <span className={styles.analyticsStrong}>average</span> daily{" "}
-                      <span className={styles.analyticsStrong}>step</span> count was{" "}
-                      <span className={styles.analyticsStrong}>7800</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className={styles.analyticsBlock}>
-                  <div className={styles.analyticsText}>
-                    You were excellent with your diet and workout consistency this week. The main
-                    area for improvement is increasing your overall daily activity (like walking) to
-                    hit your minute goal. Keep up the great work with your workouts!
-                  </div>
-                </div>
+            {activeTab === "analytics" && (
+              <div className={styles.analyticsPlaceholder}>
+                <p>Analytics coming soon...</p>
               </div>
-
-              <Image
-                src={food2}
-                alt="Food decor right"
-                className={styles.analyticsSideImageRight}
-                width={220}
-                height={260}
-              />
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </Page>

@@ -12,6 +12,7 @@ interface User {
   gender?: string;
   age?: number;
   birth_date?: string;
+  avatar?: string;
 }
 
 interface AuthState {
@@ -21,6 +22,7 @@ interface AuthState {
   isAuthenticated: boolean;
   setAuth: (user: User, access: string, refresh: string) => void;
   setAccessToken: (access: string) => void;
+  updateUser: (user: User) => void;
   logout: () => void;
 }
 
@@ -39,6 +41,7 @@ export const useAuthStore = create<AuthState>()(
           isAuthenticated: true,
         }),
       setAccessToken: (access) => set({ accessToken: access }),
+      updateUser: (user) => set({ user }),
       logout: () =>
         set({
           user: null,
