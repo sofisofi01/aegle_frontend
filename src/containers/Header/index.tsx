@@ -23,16 +23,17 @@ export function Header({ menu }: HeaderProps) {
 
       <nav>
         <ul className={styles.nav}>
-          {menu.map((item) => (
-            <li key={item.id}>
-              <Link
-                href={item.href}
-                className={`${styles.link} ${pathname === item.href ? styles.active : ""}`}
-              >
-                {item.text}
-              </Link>
-            </li>
-          ))}
+          {isAuthenticated &&
+            menu.map((item) => (
+              <li key={item.id}>
+                <Link
+                  href={item.href}
+                  className={`${styles.link} ${pathname === item.href ? styles.active : ""}`}
+                >
+                  {item.text}
+                </Link>
+              </li>
+            ))}
           <li>
             {isAuthenticated ? (
               <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
