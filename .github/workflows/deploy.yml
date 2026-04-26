@@ -23,7 +23,7 @@ jobs:
           push: true
           tags: sofisofi01/aegle-frontend:latest
           build-args: |
-            NEXT_PUBLIC_API_URL=http://xn--80abcyabjk1czh.xn--p1ai/admin/api
+            NEXT_PUBLIC_API_BASE_URL=/api
 
   deploy:
     needs: build-and-push
