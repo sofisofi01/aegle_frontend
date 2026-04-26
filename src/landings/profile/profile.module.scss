@@ -2,13 +2,6 @@
 @import "../../styles/variables/fonts.scss";
 @import "../../styles/mixins/breakpoints.scss";
 
-:global {
-  body {
-    background: inherit;
-    background: url(/back.png);
-  }
-}
-
 .profilePage {
   display: flex;
   gap: 40px;

@@ -1,11 +1,14 @@
-@import './variables/fonts';
+@import "./variables/fonts";
 
-html, body {
+html,
+body {
   min-width: 320px;
   font-family: $font-family, sans-serif;
   font-size: $font-size-base;
   font-weight: $font-weight-regular;
-  background: $color-white;
+  background: url(/back.png);
+  background-attachment: fixed;
+  background-size: cover;
   color: $color-text-black;
 }
 

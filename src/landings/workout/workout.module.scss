@@ -2,13 +2,6 @@
 @import "../../styles/variables/fonts.scss";
 @import "../../styles/variables/colors.scss";
 
-:global {
-  body {
-    background: inherit;
-    background: url(/back.png);
-  }
-}
-
 .textStart {
   text-align: center;
 }
