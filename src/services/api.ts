@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useAuthStore } from "@/store/useAuthStore";
 
-// АБСОЛЮТНЫЙ ХАРДКОД - МЫ НЕ ИСПОЛЬЗУЕМ ENV ДЛЯ ЭТОЙ ПЕРЕМЕННОЙ
+// МАКСИМАЛЬНО ЖЕСТКИЙ ХАРДКОД ДЛЯ ПРОВЕРКИ
 const API_URL = "/api";
 
 const api = axios.create({
