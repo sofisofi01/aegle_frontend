@@ -5,6 +5,10 @@ import { data } from "./const";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import { authService } from "@/services/authService";
+import { useAuthStore } from "@/store/useAuthStore";
 import "react-datepicker/dist/react-datepicker.css";
 
 export function SignUpPage() {
@@ -19,6 +23,11 @@ export function SignUpPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const router = useRouter();
+  const setAuth = useAuthStore((state) => state.setAuth);
 
   const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -38,12 +47,34 @@ export function SignUpPage() {
     setFn(value);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!name || !surname || !height || !weight || !isValidEmail(email) || !password) {
-      alert("Please fill all fields correctly!");
+      setError("Please fill all fields correctly!");
       return;
     }
-    alert("Form submitted!");
+
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const data = await authService.register({
+        email,
+        password,
+        first_name: name,
+        last_name: surname,
+      });
+
+      setAuth(data.user, data.access, data.refresh);
+      router.push("/profile");
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.detail || "Registration failed. Please try again.");
+      } else {
+        setError("An unexpected error occurred.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -52,6 +83,14 @@ export function SignUpPage() {
         <section className={styles.wrapper}>
           <h1 className={styles.title}>{data.title}</h1>
           <p className={styles.subtitle}>{data.subtitle}</p>
+          {error && (
+            <p
+              className={styles.error}
+              style={{ color: "red", textAlign: "center", marginBottom: "10px" }}
+            >
+              {error}
+            </p>
+          )}
 
           <div className={styles.block}>
             <input
@@ -173,8 +212,8 @@ export function SignUpPage() {
               </Link>
             </p>
 
-            <button className={styles.submit} onClick={handleSubmit}>
-              Sign Up
+            <button className={styles.submit} onClick={handleSubmit} disabled={isLoading}>
+              {isLoading ? "Signing Up..." : "Sign Up"}
             </button>
           </div>
         </section>

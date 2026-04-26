@@ -1,23 +1,58 @@
-const BASE_URL = typeof window === 'undefined' 
-  ? (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://72.56.6.10/api')
-  : '/api-proxy';
+import axios from "axios";
+import { useAuthStore } from "@/store/useAuthStore";
 
-export async function apiFetch<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-  const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-  const url = `${BASE_URL}${cleanEndpoint}`;
-  
-  const response = await fetch(url, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
+const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000/api";
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.message || `API error: ${response.status}`);
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+// Интерцептор для добавления токена к запросам
+api.interceptors.request.use(
+  (config) => {
+    const token = useAuthStore.getState().accessToken;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Интерцептор для обработки истечения токена
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      const refreshToken = useAuthStore.getState().refreshToken;
+
+      if (refreshToken) {
+        try {
+          const response = await axios.post(`${API_URL}/users/token/refresh/`, {
+            refresh: refreshToken,
+          });
+
+          const { access } = response.data;
+          useAuthStore.getState().setAccessToken(access);
+
+          originalRequest.headers.Authorization = `Bearer ${access}`;
+          return api(originalRequest);
+        } catch (refreshError) {
+          useAuthStore.getState().logout();
+          return Promise.reject(refreshError);
+        }
+      } else {
+        useAuthStore.getState().logout();
+      }
+    }
+    return Promise.reject(error);
   }
+);
 
-  return response.json();
-}
+export default api;

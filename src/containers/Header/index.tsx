@@ -1,13 +1,15 @@
-"use client"; 
+"use client";
 import { HeaderProps } from "./types";
 import styles from "./Header.module.scss";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import logo from "./assets/icon.png";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export function Header({ menu }: HeaderProps) {
-  const pathname = usePathname(); 
+  const pathname = usePathname();
+  const { isAuthenticated, user } = useAuthStore();
 
   return (
     <header className={styles.header}>
@@ -31,6 +33,23 @@ export function Header({ menu }: HeaderProps) {
               </Link>
             </li>
           ))}
+          <li>
+            {isAuthenticated ? (
+              <Link
+                href="/profile"
+                className={`${styles.link} ${pathname === "/profile" ? styles.active : ""}`}
+              >
+                {user?.first_name || "Profile"}
+              </Link>
+            ) : (
+              <Link
+                href="/signin"
+                className={`${styles.link} ${pathname === "/signin" ? styles.active : ""}`}
+              >
+                Sign In
+              </Link>
+            )}
+          </li>
         </ul>
       </nav>
     </header>
