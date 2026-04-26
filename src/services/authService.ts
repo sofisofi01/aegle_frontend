@@ -40,10 +40,11 @@ export const authService = {
     return response.data;
   },
 
-  async updateProfile(data: FormData) {
+  async updateProfile(data: FormData | Record<string, unknown>) {
+    const isFormData = data instanceof FormData;
     const response = await api.patch("/users/me/", data, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": isFormData ? "multipart/form-data" : "application/json",
       },
     });
     return response.data;

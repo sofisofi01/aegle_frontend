@@ -58,15 +58,38 @@ export function ProfilePage() {
 
   const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const handleProfileEditToggle = () => {
+  const handleProfileEditToggle = async () => {
     if (isEditingProfile) {
       if (!isValidEmail(profileInfo.email)) {
         setEmailError("Invalid email format");
         return;
       }
       setEmailError("");
+
+      try {
+        setIsLoading(true);
+        // Создаем объект для обновления
+        const updateData = {
+          email: profileInfo.email,
+          gender: profileInfo.sex,
+          age: parseInt(profileInfo.age),
+          height: parseFloat(profileInfo.height),
+          weight: parseFloat(profileInfo.weight),
+        };
+
+        // Используем PATCH запрос
+        const updatedUser = await authService.updateProfile(updateData as Record<string, unknown>);
+        updateUser(updatedUser);
+        setIsEditingProfile(false);
+      } catch (err) {
+        console.error("Failed to update profile", err);
+        alert("Failed to update profile");
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      setIsEditingProfile(true);
     }
-    setIsEditingProfile((prev) => !prev);
   };
 
   const handleProfileFieldChange = (
