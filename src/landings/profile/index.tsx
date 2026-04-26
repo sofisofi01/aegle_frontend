@@ -70,7 +70,7 @@ export function ProfilePage() {
         setIsLoading(true);
         const updateData = {
           email: profileInfo.email,
-          gender: profileInfo.sex,
+          gender: profileInfo.sex === "male" ? "M" : "F",
           age: parseInt(profileInfo.age),
           height: parseFloat(profileInfo.height),
           weight: parseFloat(profileInfo.weight),
