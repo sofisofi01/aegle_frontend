@@ -28,7 +28,8 @@
 
 .bottom {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: baseline;
     padding: 8px 10px;
     font-family: $font-family-secondary;
     font-weight: bold;

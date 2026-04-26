@@ -35,7 +35,7 @@ export const tableCardData = [
         id: 1,
         day: 'Monday',
         mealType: 'Breakfast',
-        title: 'Oatmeal with Berries',
+        title: 'Burger',
         calories: 350,
         proteins: 12,
         carbs: 45,
