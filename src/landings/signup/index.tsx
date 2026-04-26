@@ -84,7 +84,7 @@ export function SignUpPage() {
               <p className={styles.label}>Enter your date of birth</p>
               <DatePicker
                 selected={birthDate}
-                onChange={(date) => setBirthDate(date)}
+                onChange={(date: Date | null) => setBirthDate(date)}
                 placeholderText="DD/MM/YYYY"
                 className={styles.inputDate}
                 calendarClassName={styles.datepickerCalendar}
