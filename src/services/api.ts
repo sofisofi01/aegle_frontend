@@ -1,9 +1,8 @@
 import axios from "axios";
 import { useAuthStore } from "@/store/useAuthStore";
 
-const API_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ||
-  (typeof window !== "undefined" ? "/api" : "http://web:8000/api");
+// Хардкодим относительный путь для работы на одном домене
+const API_URL = "/api";
 
 const api = axios.create({
   baseURL: API_URL,
