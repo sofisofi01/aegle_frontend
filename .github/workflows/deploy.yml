@@ -37,6 +37,6 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            cd /home/user/wellness
+            cd /root/wellness
             docker compose -f docker-compose.prod.yml pull frontend
             docker compose -f docker-compose.prod.yml up -d frontend
