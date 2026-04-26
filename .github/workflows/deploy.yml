@@ -44,8 +44,10 @@ jobs:
             # Используем конкретный тег коммита для деплоя
             export FRONTEND_IMAGE=sofisofi01/aegle-frontend:${{ github.sha }}
             docker pull $FRONTEND_IMAGE
+            # Принудительно обновляем локальный тег latest, чтобы он указывал на новый образ
+            docker tag $FRONTEND_IMAGE sofisofi01/aegle-frontend:latest
             docker compose -f docker-compose.prod.yml stop frontend
             docker compose -f docker-compose.prod.yml rm -f frontend
-            # Запускаем с новым образом, переопределяя его через переменную окружения
-            IMAGE_FRONTEND=$FRONTEND_IMAGE docker compose -f docker-compose.prod.yml up -d frontend
+            # Теперь можно запускать просто через compose, так как latest обновлен
+            docker compose -f docker-compose.prod.yml up -d frontend
             docker image prune -f
