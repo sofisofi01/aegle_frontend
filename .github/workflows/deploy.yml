@@ -23,11 +23,11 @@ jobs:
           push: true
           no-cache: true
           tags: sofisofi01/aegle-frontend:latest
+          build-args: |
+            NEXT_PUBLIC_API_BASE_URL=/api
       
       - name: Debug API file
         run: cat src/services/api.ts
-          build-args: |
-            NEXT_PUBLIC_API_BASE_URL=/api
 
   deploy:
     needs: build-and-push
