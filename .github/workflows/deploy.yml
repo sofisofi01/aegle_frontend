@@ -21,7 +21,7 @@ jobs:
         with:
           context: ./aegle_frontend
           push: true
-          tags: aegle/aegle-frontend:latest
+          tags: sofisofi01/aegle-frontend:latest
           build-args: |
             NEXT_PUBLIC_API_URL=http://xn--80abcyabjk1czh.xn--p1ai/admin/api
 
