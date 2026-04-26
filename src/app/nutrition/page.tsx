@@ -1,5 +1,10 @@
 import { NutritionPage } from "@/landings/nutrition";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 
-export default function Nutrition() {
-  return <NutritionPage />;
+export default function Page() {
+  return (
+    <ProtectedRoute>
+      <NutritionPage />
+    </ProtectedRoute>
+  );
 }
