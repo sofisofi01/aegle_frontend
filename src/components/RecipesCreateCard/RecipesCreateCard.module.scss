@@ -1,0 +1,569 @@
+@import "../../styles/mixins/breakpoints.scss";
+@import "../../styles/variables/fonts.scss";
+@import "../../styles/variables/colors.scss";
+
+.form {
+    width: 100%;
+}
+
+.card {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    background: white;
+    font-family: $font-family-secondary;
+    padding: 20px;
+    color: $color-text-black;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+    border-radius: 30px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+// Image styles
+.imageWrapper {
+    flex: 1;
+    flex-shrink: 0;
+    width: auto;
+}
+
+.recipeHeader {
+    display: flex;
+    flex-direction: column;;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.recipeImage {
+    object-fit: cover;
+    border-radius: 30px;
+    margin: 0 auto 10px auto;
+    display: block;
+}
+
+.imagePreviewContainer {
+    text-align: center;
+}
+
+.changeImageButton {
+    background: $color-mid-green;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-top: 8px;
+    
+    &:hover {
+        opacity: 0.9;
+    }
+}
+
+.imageUploadLabel {
+    display: block;
+    cursor: pointer;
+}
+
+.imageInput {
+    display: none;
+}
+
+.imagePlaceholder {
+    width: 150px;
+    height: 150px;
+    background: #f5f5f5;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    border: 2px dashed $color-mid-green;
+    
+    span {
+        font-size: 12px;
+        color: #999;
+    }
+}
+
+.macronutrients {
+    flex: 1;
+    text-align: left;
+}
+
+.titleInput {
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: $color-text-black;
+    font-family: $font-family-secondary;
+    background-color: $color-light-green;
+    border: none;
+    border-bottom: 2px solid $color-mid-green;
+    margin-bottom: 15px;
+    
+    &::placeholder {
+        color: #888;
+    }
+    
+    &:focus {
+        outline: none;
+    }
+}
+
+.macroItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba($color-dark-green, 0.2);
+    
+    &:last-child {
+        border-bottom: none;
+        margin-bottom: 20px;
+    }
+}
+
+.macroLabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: $color-text-black;
+}
+
+.macroValue {
+    font-size: 16px;
+    font-weight: bold;
+    color: $color-dark-green;
+}
+
+.macroField {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    
+    label {
+        font-size: 14px;
+        font-weight: 500;
+        color: $color-text-black;
+        flex-shrink: 0;
+    }
+}
+
+.selectInput {
+    width: auto;
+    padding: 4px 8px;
+    font-size: 14px;
+    font-family: $font-family-secondary;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    color: $color-text-black;
+    text-align: right;
+    
+    &:focus {
+        outline: none;
+        border-color: $color-mid-green;
+    }
+}
+
+.previewContainer {
+    text-align: center;
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+// Ingredients section
+.ingredientsTitle {
+    font-size: 18px;
+    text-align: center;
+    font-weight: bold;
+    margin: 10px;
+    color: $color-text-black;
+}
+
+.addButtonWrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.addButton {
+    background: none;
+    border: none;
+    color: $color-text-green;
+    font-size: 16px;
+    font-family: $font-family-secondary;
+    text-decoration: underline;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    width: 100%;
+    text-align: left;
+    padding: 8px 0;
+    
+    &:hover {
+        opacity: 0.7;
+    }
+}
+
+// Selected Ingredients List
+.selectedIngredients {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 16px;
+}
+
+.ingredientItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba($color-dark-green, 0.2);
+}
+
+.ingredientInfo {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.ingredientName {
+    flex: 1;
+    text-align: left;
+    font-size: 14px;
+    color: $color-text-black;
+}
+
+.ingredientAmountControls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.ingredientAmountInput {
+    width: 60px;
+    padding: 4px 8px;
+    font-size: 14px;
+    font-family: $font-family-secondary;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    color: $color-text-black;
+    text-align: right;
+    
+    &:focus {
+        outline: none;
+        border-color: $color-mid-green;
+    }
+}
+
+.ingredientUnitSelect {
+    width: 70px;
+    padding: 4px 8px;
+    font-size: 14px;
+    font-family: $font-family-secondary;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    color: $color-text-black;
+    cursor: pointer;
+    
+    &:focus {
+        outline: none;
+        border-color: $color-mid-green;
+    }
+}
+
+.removeButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.6;
+    margin-left: 8px;
+    padding: 4px;
+    
+    &:hover {
+        opacity: 1;
+    }
+}
+
+.emptyIngredients {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    font-size: 14px;
+    padding: 12px;
+}
+
+// Dropdown styles
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    min-width: 200px;
+    z-index: 100;
+    overflow: hidden;
+    margin-top: 4px;
+}
+
+.dropdownList {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.dropdownItem {
+    padding: 8px 16px;
+    font-size: 14px;
+    font-family: $font-family-secondary;
+    color: $color-text-black;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    
+    &:hover {
+        background: rgba($color-mid-green, 0.1);
+    }
+}
+
+.searchWrapper {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.searchInput {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    background-color: $color-white;
+    color: $color-text-black;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: $font-family-secondary;
+    outline: none;
+    
+    &:focus {
+        border-color: $color-mid-green;
+    }
+}
+
+.noResults {
+    text-align: center;
+    color: #999;
+    padding: 12px;
+    font-size: 14px;
+}
+
+// Time section
+.timeContainer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.timeLabel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: $color-text-black;
+}
+
+.timeControls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.timeAmountInput {
+    width: 60px;
+    padding: 4px 8px;
+    font-size: 14px;
+    font-family: $font-family-secondary;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    color: $color-text-black;
+    text-align: right;
+    
+    &:focus {
+        outline: none;
+        border-color: $color-mid-green;
+    }
+}
+
+.timeUnitSelect {
+    width: 70px;
+    padding: 4px 8px;
+    font-size: 14px;
+    font-family: $font-family-secondary;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    color: $color-text-black;
+    cursor: pointer;
+    
+    &:focus {
+        outline: none;
+        border-color: $color-mid-green;
+    }
+}
+
+// Recipe section
+.recipeTitle {
+    font-size: 18px;
+    font-weight: bold;
+    color: $color-text-black;
+}
+
+.recipeTextarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 20px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.25);
+    font-size: 14px;
+    font-family: $font-family-secondary;
+    resize: vertical;
+    background-color: $color-light-green;
+    border: none;
+    color: $color-text-black;
+    
+    &::placeholder {
+        color: #888;
+    }
+    
+    &:focus {
+        outline: none;
+        border-bottom-color: $color-mid-green;
+        background-color: $color-light-green;
+        color: $color-text-black;
+    }
+}
+
+.recipeContainer {
+    flex: 1;
+}
+
+// Action buttons
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+}
+
+.cancelButton, .saveButton {
+    padding: 10px 24px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cancelButton {
+    background: transparent;
+    border: 1px solid #ccc;
+    color: #666;
+    
+    &:hover {
+        background: #f5f5f5;
+    }
+}
+
+.saveButton {
+    background: $color-dark-green;
+    border: none;
+    color: white;
+    
+    &:hover {
+        background: $color-mid-green;
+    }
+}
+
+@include breakpoints(sm) {
+    .recipeImage, .imagePlaceholder {
+        width: 300px;
+        height: 200px;
+    }
+    .card {
+        * {
+            font-size: $font-size-base;
+        }
+    }
+
+    .ingredientAmountInput {    
+        width: 70px;
+    }
+
+    .recipeTitle, .ingredientsTitle, .titleInput {
+        font-size: $font-size-title;
+    }
+
+    .selectInput {
+        width: 100px;
+    }
+
+    .removeButton img{
+        width: 20px;
+        height: 20px;
+    }
+
+    
+}
+
+@include breakpoints(md) {
+    .card {
+        width: 800px;
+    }
+}
+
+@include breakpoints(xl) {
+    .cardChars {
+        display: flex;
+        flex-direction: row;
+        gap: 30px;
+    }
+    
+    .previewContainer {
+        flex-direction: column;
+        padding-right: 30px;
+    }
+    
+    .recipeContainer {
+        flex: 1;
+    }
+    
+    .recipeImage, .imagePlaceholder {
+        width: 350px;
+        height: 250px;
+    }
+    
+    .card {
+        width: 90%;
+    }
+}
+

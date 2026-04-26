@@ -1,0 +1,146 @@
+@import "../../styles/mixins/breakpoints.scss";
+@import "../../styles/variables/fonts.scss";
+@import "../../styles/variables/colors.scss";
+
+.card {
+    background-color: $color-white;
+    display: flex;
+    border-radius: 20px;
+    flex-direction: column;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.imageWrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.image {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+.bottom {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    padding: 8px 10px;
+    font-family: $font-family-secondary;
+    font-weight: bold;
+    gap: 6px;
+    flex: 1; 
+    justify-content: space-between;
+}
+
+.title {
+    color: $color-text-green-dark;
+    font-size: 10px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    line-height: 1.3;
+}
+
+.calories {
+    color: $color-text-black;
+    text-align: right;
+    font-size: 10px;
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+.deleteButton {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    font-size: 16px;
+    z-index: 10;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: $color-light-green;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: $color-text-black;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    
+    &:hover {
+        filter: brightness(0.8);  
+    }
+}
+
+.deletePopup {
+    position: absolute;
+    bottom: 40px;
+    right: 10px;
+    background: $color-light-green;
+    color: black;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: $font-family-secondary;
+    z-index: 10;
+    pointer-events: none;
+    white-space: nowrap;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@include breakpoints(sm) {
+    .bottom {
+        padding: 6px 8px;
+        gap: 4px;
+    }
+    
+    .title {
+        font-size: 9px;
+    }
+    
+    .calories {
+        font-size: 8px;
+    }
+}
+
+@include breakpoints(lg) {
+    .bottom {
+        padding: 10px 12px;
+        gap: 8px;
+    }
+    
+    .title {
+        font-size: 13px;
+    }
+    
+    .calories {
+        font-size: 12px;
+    }
+    
+    .deleteButton {
+        width: 28px;
+        height: 28px;
+        font-size: 18px;
+    }
+}

@@ -1,0 +1,71 @@
+@import "../../styles/mixins/breakpoints.scss";
+@import "../../styles/variables/fonts.scss";
+@import "../../styles/variables/colors.scss";
+
+.card {
+    border: 1px dashed $color-text-green-dark;
+    background-color: $color-white;
+    display: flex;
+    border-radius: 20px;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    aspect-ratio: 1 / 1;
+}
+
+.addButton {
+    border: none;
+    background: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: $color-text-green-dark;
+    font-size: $font-size-base;
+    text-decoration: underline;
+    
+    p {
+        margin: 0;
+    }
+}
+
+.plusIcon {
+    width: 24px;
+    height: 24px;
+}
+
+@include breakpoints(lg) {
+    .card {
+        gap: 24px;
+        padding: 16px;
+    }
+    
+    .addButton {
+        font-size: $font-size-base + 2;
+    }
+    
+    .plusIcon {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+@include breakpoints(sm) {
+    .card {
+        gap: 15px;
+        padding: 6px;
+    }
+    
+    .addButton {
+        font-size: $font-size-base - 2;
+    }
+    
+    .plusIcon {
+        width: 20px;
+        height: 20px;
+    }
+}

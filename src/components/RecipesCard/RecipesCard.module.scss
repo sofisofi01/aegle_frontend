@@ -1,0 +1,138 @@
+@import "../../styles/mixins/breakpoints.scss";
+@import "../../styles/variables/fonts.scss";
+@import "../../styles/variables/colors.scss";
+
+.card {
+    margin-left: auto;
+    margin-right: auto; 
+    width: 100%;
+    background: $color-white;
+    font-family: $font-family-secondary;
+    padding: 20px;
+    color: $color-text-black;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+    border-radius: 30px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.recipeImage {
+    object-fit: cover;
+    border-radius: 20px;
+    margin: 0 auto 20px auto;
+    display: block;
+    border-radius: 30px;
+}
+
+.imageWrapper {
+    flex: 1;
+    flex-shrink: 0; 
+    width: auto;
+}
+
+.macronutrients {
+    flex: 1;
+    text-align: left; 
+}
+
+.value {
+    color:$color-text-green-dark;
+    font-weight: bold;
+}
+
+.previewContainer {
+    text-align: center;
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.title {
+    color: $color-text-green-dark;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.ingredientsTitle {
+    font-size: 18px;
+    text-align: center;
+    font-weight: bold;
+    margin: 10px;
+}
+
+.ingredientsList {
+    font-size: 14px;
+    white-space: pre-line;
+    word-break: break-word;
+}
+
+.perunit {
+    font-size: 14px;
+}
+
+.recipeTitle {
+    font-size: 18px;
+    text-align: center;
+    font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 15px;
+    margin: 10px;
+}
+
+.time {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.recipeText {
+    font-size: 14px;
+    white-space: pre-line;
+    word-break: break-word;
+}
+
+@include breakpoints(sm) {
+    .recipeImage {
+        width: 300px;
+        height: 200px;
+    }   
+
+    .recipeTitle, .ingredientsTitle, .title {
+        font-size: $font-size-title;
+        margin: 20px;
+    }
+
+    .recipeText, .ingredientsList, .macronutrients {
+        font-size: $font-size-base;
+    }
+}
+
+@include breakpoints(xl) {
+    .cardChars {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .previewContainer {
+        flex-direction: column;
+        padding-right: 30px;
+    }
+
+    .recipesContainer {
+        padding-left: 30px;
+    }
+
+    .recipeImage {
+        width: 700px;
+        height: 250px;
+    }
+
+    .card {
+        width: 90%;
+    }
+}
