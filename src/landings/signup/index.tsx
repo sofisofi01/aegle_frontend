@@ -1,11 +1,11 @@
 "use client";
 import { Page } from "@/containers/Page";
 import styles from "./signup.module.scss";
-import { data } from "./const"; 
+import { data } from "./const";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import Link from "next/link";
-import "react-datepicker/dist/react-datepicker.css"; 
+import "react-datepicker/dist/react-datepicker.css";
 
 export function SignUpPage() {
   const [gender, setGender] = useState<"male" | "female" | null>(null);
@@ -20,15 +20,20 @@ export function SignUpPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const isValidEmail = (email: string) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const handleLettersOnly = (e: React.ChangeEvent<HTMLInputElement>, setFn: Function) => {
+  const handleLettersOnly = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setFn: (val: string) => void
+  ) => {
     const value = e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ\s-]/g, "");
     setFn(value);
   };
 
-  const handleNumbersOnly = (e: React.ChangeEvent<HTMLInputElement>, setFn: Function) => {
+  const handleNumbersOnly = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setFn: (val: string) => void
+  ) => {
     const value = e.target.value.replace(/[^0-9]/g, "");
     setFn(value);
   };
@@ -143,35 +148,35 @@ export function SignUpPage() {
             )}
 
             <div className={styles.passwordWrapper}>
-            <input
+              <input
                 placeholder={data.fields.password}
                 type={showPassword ? "text" : "password"}
                 className={styles.inputPassword}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                style={{ fontWeight: password && !showPassword ? 700 : 400 }} 
-            />
-            <span
+                style={{ fontWeight: password && !showPassword ? 700 : 400 }}
+              />
+              <span
                 className={styles.passwordToggle}
                 onClick={() => setShowPassword(!showPassword)}
-            >
+              >
                 {showPassword ? "⌣" : "👁"}
-            </span>
+              </span>
             </div>
           </div>
 
           <div className={styles.signInBlock}>
             <p className={styles.signInText}>
-                {data.actions.haveAccount}{" "}
-                <Link href="/signin" className={styles.signInLink}>
+              {data.actions.haveAccount}{" "}
+              <Link href="/signin" className={styles.signInLink}>
                 {data.actions.signIn}
-                </Link>
+              </Link>
             </p>
 
             <button className={styles.submit} onClick={handleSubmit}>
-                Sign Up
+              Sign Up
             </button>
-            </div>
+          </div>
         </section>
       </Page>
     </div>
