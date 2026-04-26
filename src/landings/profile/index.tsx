@@ -68,7 +68,6 @@ export function ProfilePage() {
 
       try {
         setIsLoading(true);
-        // Создаем объект для обновления
         const updateData = {
           email: profileInfo.email,
           gender: profileInfo.sex,
@@ -77,7 +76,6 @@ export function ProfilePage() {
           weight: parseFloat(profileInfo.weight),
         };
 
-        // Используем PATCH запрос
         const updatedUser = await authService.updateProfile(updateData as Record<string, unknown>);
         updateUser(updatedUser);
         setIsEditingProfile(false);
@@ -120,52 +118,22 @@ export function ProfilePage() {
     <Page>
       <div className={styles.profilePage}>
         <div className={styles.profileLeft}>
-          <div
-            style={{
-              position: "relative",
-              cursor: "pointer",
-              width: "150px",
-              height: "150px",
-              margin: "0 auto",
-            }}
-          >
-            <Image
-              src={user?.avatar || profileData.avatar}
-              alt="Avatar"
-              className={styles.avatar}
-              width={150}
-              height={150}
-              onClick={() => document.getElementById("avatar-input")?.click()}
-              style={{ objectFit: "cover", borderRadius: "50%" }}
-            />
-            <input
-              id="avatar-input"
-              type="file"
-              hidden
-              accept="image/*"
-              onChange={handleAvatarChange}
-              disabled={isLoading}
-            />
-            {isLoading && (
-              <div
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  background: "rgba(0,0,0,0.3)",
-                  borderRadius: "50%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  color: "white",
-                }}
-              >
-                ...
-              </div>
-            )}
-          </div>
+          <Image
+            src={user?.avatar || profileData.avatar}
+            alt="Avatar"
+            className={styles.avatar}
+            width={150}
+            height={150}
+            onClick={() => document.getElementById("avatar-input")?.click()}
+            style={{ cursor: "pointer", objectFit: "cover", borderRadius: "50%" }}
+          />
+          <input
+            id="avatar-input"
+            type="file"
+            hidden
+            accept="image/*"
+            onChange={handleAvatarChange}
+          />
 
           <h1 className={styles.name}>
             {user ? `${user.first_name} ${user.last_name || ""}` : profileData.name}
@@ -248,8 +216,9 @@ export function ProfilePage() {
                 type="button"
                 className={styles.editProfile}
                 onClick={handleProfileEditToggle}
+                disabled={isLoading}
               >
-                {isEditingProfile ? "Save profile" : "Edit profile"}
+                {isLoading ? "Saving..." : isEditingProfile ? "Save profile" : "Edit profile"}
               </button>
             </div>
             <Image
