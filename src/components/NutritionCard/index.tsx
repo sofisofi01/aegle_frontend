@@ -8,21 +8,24 @@ import nodoneIcon from "@/landings/workout/assets/nodoneIcon.svg";
 import { NutritionCardProps } from "./types";
 
 export function NutritionCard({
+  id,
   title,
   calories = 200,
   image,
   proteins,
   carbs,
   fats,
+  isEaten,
+  onToggleEaten,
 }: NutritionCardProps) {
   const [showDone, setShowDone] = useState(false);
-  const [isCompleted, setIsCompleted] = useState(false);
 
   const handleComplete = () => {
-    const newStatus = !isCompleted;
-    setIsCompleted(newStatus);
+    if (onToggleEaten) {
+      onToggleEaten(id);
+    }
 
-    if (newStatus) {
+    if (!isEaten) {
       setShowDone(true);
       setTimeout(() => {
         setShowDone(false);
@@ -34,12 +37,18 @@ export function NutritionCard({
     <div className={styles.card}>
       {image && (
         <div className={styles.imageWrapper}>
-          <Image src={image} alt={title} className={styles.image} />
+          <Image
+            src={typeof image === "string" ? image : image.src}
+            alt={title}
+            width={200}
+            height={200}
+            className={styles.image}
+          />
           {showDone && <div className={styles.donePopup}>Done!</div>}
           <button className={styles.doneButton} onClick={handleComplete}>
             <Image
-              src={isCompleted ? doneIcon : nodoneIcon}
-              alt={isCompleted ? "done" : "no done"}
+              src={isEaten ? doneIcon : nodoneIcon}
+              alt={isEaten ? "done" : "no done"}
               width={20}
               height={20}
               className={styles.doneIcon}

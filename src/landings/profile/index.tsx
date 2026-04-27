@@ -63,7 +63,7 @@ export function ProfilePage() {
         setActivePlan(plan);
         setProfileInfo({
           email: user.email || profileData.email,
-          sex: profile.gender || profileData.sex || "male",
+          sex: profile.gender === "M" ? "male" : profile.gender === "F" ? "female" : "male",
           age: String(profile.age || profileData.age || 0),
           height: String(profile.height || profileData.height || 0),
           weight: String(profile.current_weight || profileData.weight || 0),
@@ -143,7 +143,7 @@ export function ProfilePage() {
         const [updatedUser, updatedProfile] = await Promise.all([
           profileService.updateUser(userFormData),
           profileService.updateProfile({
-            gender: profileInfo.sex,
+            gender: profileInfo.sex === "male" ? "M" : "F",
             age: Number(profileInfo.age),
             height: Number(profileInfo.height),
             current_weight: Number(profileInfo.weight),
@@ -675,9 +675,20 @@ export function ProfilePage() {
                     (ex) => ex.is_completed
                   ).length;
 
+                  const dayNames = [
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday",
+                    "Saturday",
+                    "Sunday",
+                  ];
+                  const displayName = dayNames[dayData.day_number - 1] || dayData.name;
+
                   return (
                     <div key={dayData.id} className={styles.dayColumn}>
-                      <h3 className={styles.dayTitle}>{dayData.name}</h3>
+                      <h3 className={styles.dayTitle}>{displayName}</h3>
                       <ul className={styles.workoutStats}>
                         <li className={styles.statRow}>
                           <span className={styles.statLabel}>✦ Completed:</span>

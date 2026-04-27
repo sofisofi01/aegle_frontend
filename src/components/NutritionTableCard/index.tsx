@@ -15,7 +15,7 @@ export function NutritionTableCard({
   const [showDelete, setShowDelete] = useState(false);
 
   const handleDelete = () => {
-    if (onDelete && id) {
+    if (onDelete) {
       onDelete(id);
     }
   };
@@ -24,7 +24,13 @@ export function NutritionTableCard({
     <div className={styles.card}>
       {image && (
         <div className={styles.imageWrapper}>
-          <Image src={image} alt={title} className={styles.image} />
+          <Image
+            src={typeof image === "string" ? image : image.src}
+            alt={title}
+            width={100}
+            height={100}
+            className={styles.image}
+          />
           <button
             className={styles.deleteButton}
             onClick={handleDelete}
