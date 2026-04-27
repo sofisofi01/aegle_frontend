@@ -10,15 +10,17 @@ import decorGoals from "./assets/decor-goals.png";
 import food1 from "./assets/food 1.png";
 import food2 from "./assets/food 2.png";
 
-import { profileData, goalsData, mealsData } from "./const";
+import { profileData, goalsData } from "./const";
 import { profileService } from "@/services/profileService";
 import { exerciseService, WorkoutPlan } from "@/services/exerciseService";
+import { nutritionService, NutritionPlan } from "@/services/nutritionService";
 import workoutDefaultImg from "@/landings/workout/assets/workout.png";
 
 export function ProfilePage() {
   const [activeTab, setActiveTab] = useState<"meals" | "workouts" | "analytics">("meals");
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [activePlan, setActivePlan] = useState<WorkoutPlan | null>(null);
+  const [nutritionPlan, setNutritionPlan] = useState<NutritionPlan | null>(null);
   const [profileInfo, setProfileInfo] = useState({
     email: profileData.email,
     sex: profileData.sex,
@@ -43,61 +45,52 @@ export function ProfilePage() {
     activityLevel: "moderate",
   });
 
-  const [openMeal, setOpenMeal] = useState<string | null>(null);
-  const [openWorkout, setOpenWorkout] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const fetchData = async () => {
+    try {
+      const [user, profile, plan, nPlan] = await Promise.all([
+        profileService.getUser(),
+        profileService.getProfile(),
+        exerciseService.getActivePlan().catch(() => null),
+        nutritionService.getActivePlan().catch(() => null),
+      ]);
+
+      setActivePlan(plan);
+      setNutritionPlan(nPlan);
+      setProfileInfo({
+        email: user.email || profileData.email,
+        sex: profile.gender === "M" ? "male" : profile.gender === "F" ? "female" : "male",
+        age: String(profile.age || profileData.age || 0),
+        height: String(profile.height || profileData.height || 0),
+        weight: String(profile.current_weight || profileData.weight || 0),
+        firstName: user.first_name || "",
+        lastName: user.last_name || "",
+        avatar: user.avatar
+          ? user.avatar.startsWith("http")
+            ? user.avatar
+            : `https://xn--80abcyabjk1czh.xn--p1ai${user.avatar}`
+          : (profileData.avatar as unknown as string),
+        memberSince: user.created_at
+          ? new Date(user.created_at).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+          : "Unknown",
+      });
+
+      setGoalsInfo((prev) => ({
+        ...prev,
+        dailyCalories: String(profile.daily_calories || goalsData.dailyCalories || 0),
+        targetWeight: String(profile.target_weight || profileData.weight || 0),
+        goal: profile.goal || "maintain",
+        activityLevel: profile.activity_level || "moderate",
+      }));
+    } catch (error) {
+      console.error("Failed to fetch profile data:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-
-        const [user, profile, plan] = await Promise.all([
-          profileService.getUser(),
-          profileService.getProfile(),
-          exerciseService.getActivePlan().catch(() => null),
-        ]);
-
-        setActivePlan(plan);
-        setProfileInfo({
-          email: user.email || profileData.email,
-          sex: profile.gender === "M" ? "male" : profile.gender === "F" ? "female" : "male",
-          age: String(profile.age || profileData.age || 0),
-          height: String(profile.height || profileData.height || 0),
-          weight: String(profile.current_weight || profileData.weight || 0),
-          firstName: user.first_name || "",
-          lastName: user.last_name || "",
-          avatar: user.avatar
-            ? user.avatar.startsWith("http")
-              ? user.avatar
-              : `https://xn--80abcyabjk1czh.xn--p1ai${user.avatar}`
-            : (profileData.avatar as unknown as string),
-          memberSince: user.created_at
-            ? new Date(user.created_at).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })
-            : "Unknown",
-        });
-
-        setGoalsInfo((prev) => ({
-          ...prev,
-          dailyCalories: String(profile.daily_calories || goalsData.dailyCalories || 0),
-          targetWeight: String(profile.target_weight || profileData.weight || 0),
-          goal: profile.goal || "maintain",
-          activityLevel: profile.activity_level || "moderate",
-        }));
-      } catch (error) {
-        console.error("Failed to fetch profile data:", error);
-        setError("Failed to load profile data. Please try again later.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
 
@@ -105,32 +98,10 @@ export function ProfilePage() {
 
   const handleProfileEditToggle = async () => {
     if (isEditingProfile) {
-      // Валидация
-      if (!profileInfo.email.trim()) {
-        setEmailError("Email is required");
-        return;
-      }
-
       if (!isValidEmail(profileInfo.email)) {
         setEmailError("Invalid email format");
         return;
       }
-
-      if (!profileInfo.age || Number(profileInfo.age) <= 0) {
-        setEmailError("Valid age is required");
-        return;
-      }
-
-      if (!profileInfo.height || Number(profileInfo.height) <= 0) {
-        setEmailError("Valid height is required");
-        return;
-      }
-
-      if (!profileInfo.weight || Number(profileInfo.weight) <= 0) {
-        setEmailError("Valid weight is required");
-        return;
-      }
-
       setEmailError("");
 
       try {
@@ -140,7 +111,7 @@ export function ProfilePage() {
           userFormData.append("avatar", avatarFile);
         }
 
-        const [updatedUser, updatedProfile] = await Promise.all([
+        await Promise.all([
           profileService.updateUser(userFormData),
           profileService.updateProfile({
             gender: profileInfo.sex === "male" ? "M" : "F",
@@ -149,23 +120,10 @@ export function ProfilePage() {
             current_weight: Number(profileInfo.weight),
           }),
         ]);
-
-        setProfileInfo((prev) => ({
-          ...prev,
-          avatar: updatedUser.avatar
-            ? updatedUser.avatar.startsWith("http")
-              ? updatedUser.avatar
-              : `https://xn--80abcyabjk1czh.xn--p1ai${updatedUser.avatar}`
-            : prev.avatar,
-        }));
-        setGoalsInfo((prev) => ({
-          ...prev,
-          dailyCalories: String(updatedProfile.daily_calories || prev.dailyCalories),
-        }));
+        await fetchData();
         setAvatarFile(null);
       } catch (error) {
         console.error("Failed to update profile:", error);
-        setEmailError("Failed to update profile. Please try again.");
         return;
       }
     }
@@ -179,30 +137,18 @@ export function ProfilePage() {
     if (field === "email") {
       setEmailError("");
     }
-
-    // Валидация числовых полей
-    if (["age", "height", "weight"].includes(field)) {
-      if (value !== "" && (isNaN(Number(value)) || Number(value) < 0)) {
-        return; // Не обновляем если значение некорректное
-      }
-    }
-
     setProfileInfo((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleGoalsEditToggle = async () => {
     if (isEditingGoals) {
       try {
-        const updatedProfile = await profileService.updateProfile({
+        await profileService.updateProfile({
           target_weight: Number(goalsInfo.targetWeight),
           goal: goalsInfo.goal,
           activity_level: goalsInfo.activityLevel,
         });
-
-        setGoalsInfo((prev) => ({
-          ...prev,
-          dailyCalories: String(updatedProfile.daily_calories || prev.dailyCalories),
-        }));
+        await fetchData();
       } catch (error) {
         console.error("Failed to update goals:", error);
         return;
@@ -222,48 +168,11 @@ export function ProfilePage() {
       | "activityLevel",
     value: string
   ) => {
-    // Валидация числовых полей
-    if (
-      [
-        "dailyCalories",
-        "workoutSessions",
-        "workoutMinutes",
-        "stepsPerDay",
-        "targetWeight",
-      ].includes(field)
-    ) {
-      if (value !== "" && (isNaN(Number(value)) || Number(value) < 0)) {
-        return;
-      }
-    }
-
     setGoalsInfo((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Loading state
-  if (isLoading) {
-    return (
-      <Page>
-        <div className={styles.profilePage}>
-          <div className={styles.loadingState}>Loading profile...</div>
-        </div>
-      </Page>
-    );
-  }
-
-  // Error state
-  if (error) {
-    return (
-      <Page>
-        <div className={styles.profilePage}>
-          <div className={styles.errorState}>
-            <p>{error}</p>
-            <button onClick={() => window.location.reload()}>Retry</button>
-          </div>
-        </div>
-      </Page>
-    );
-  }
+  const [openMeal, setOpenMeal] = useState<string | null>(null);
+  const [openWorkout, setOpenWorkout] = useState<string | null>(null);
 
   return (
     <Page>
@@ -271,17 +180,12 @@ export function ProfilePage() {
         <div className={styles.profileLeft}>
           <div className={styles.avatarWrapper} style={{ position: "relative" }}>
             <Image
-              src={profileInfo.avatar || "/default-avatar.png"}
+              src={profileInfo.avatar}
               alt="Avatar"
               className={styles.avatar}
               width={150}
               height={150}
               style={{ objectFit: "cover", borderRadius: "50%" }}
-              onError={(e) => {
-                // Fallback для битых изображений
-                const target = e.target as HTMLImageElement;
-                target.src = "/default-avatar.png";
-              }}
             />
             {isEditingProfile && (
               <label
@@ -303,13 +207,7 @@ export function ProfilePage() {
                   accept="image/*"
                   onChange={(e) => {
                     if (e.target.files?.[0]) {
-                      const file = e.target.files[0];
-                      // Проверка размера файла (например, максимум 5MB)
-                      if (file.size > 5 * 1024 * 1024) {
-                        setEmailError("File size should be less than 5MB");
-                        return;
-                      }
-                      setAvatarFile(file);
+                      setAvatarFile(e.target.files[0]);
                       const reader = new FileReader();
                       reader.onload = (event) => {
                         setProfileInfo((prev) => ({
@@ -317,7 +215,7 @@ export function ProfilePage() {
                           avatar: event.target?.result as string,
                         }));
                       };
-                      reader.readAsDataURL(file);
+                      reader.readAsDataURL(e.target.files[0]);
                     }
                   }}
                 />
@@ -329,11 +227,9 @@ export function ProfilePage() {
             {profileInfo.firstName} {profileInfo.lastName}
           </h1>
 
-          {profileInfo.memberSince && (
-            <div className={styles.memberInfo}>
-              <p>Member since: {profileInfo.memberSince}</p>
-            </div>
-          )}
+          <div className={styles.memberInfo}>
+            <p>Member since: {profileInfo.memberSince}</p>
+          </div>
 
           <div className={styles.infoCard}>
             <div className={styles.content}>
@@ -346,7 +242,6 @@ export function ProfilePage() {
                       type="email"
                       value={profileInfo.email}
                       onChange={(e) => handleProfileFieldChange("email", e.target.value)}
-                      placeholder="Enter your email"
                     />
                     {emailError && <span className={styles.profileError}>{emailError}</span>}
                   </label>
@@ -357,8 +252,8 @@ export function ProfilePage() {
                       value={profileInfo.sex}
                       onChange={(e) => handleProfileFieldChange("sex", e.target.value)}
                     >
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
+                      <option value="male">male</option>
+                      <option value="female">female</option>
                     </select>
                   </label>
                   <label className={styles.profileField}>
@@ -366,35 +261,29 @@ export function ProfilePage() {
                     <input
                       className={styles.profileInput}
                       type="number"
-                      min="1"
-                      max="120"
+                      min="0"
                       value={profileInfo.age}
                       onChange={(e) => handleProfileFieldChange("age", e.target.value)}
-                      placeholder="Enter your age"
                     />
                   </label>
                   <label className={styles.profileField}>
-                    <span>Height (cm)</span>
+                    <span>Height</span>
                     <input
                       className={styles.profileInput}
                       type="number"
                       min="0"
-                      max="300"
                       value={profileInfo.height}
                       onChange={(e) => handleProfileFieldChange("height", e.target.value)}
-                      placeholder="Enter your height"
                     />
                   </label>
                   <label className={styles.profileField}>
-                    <span>Weight (kg)</span>
+                    <span>Weight</span>
                     <input
                       className={styles.profileInput}
                       type="number"
                       min="0"
-                      max="700"
                       value={profileInfo.weight}
                       onChange={(e) => handleProfileFieldChange("weight", e.target.value)}
-                      placeholder="Enter your weight"
                     />
                   </label>
                 </>
@@ -413,7 +302,6 @@ export function ProfilePage() {
                 type="button"
                 className={styles.editProfile}
                 onClick={handleProfileEditToggle}
-                disabled={isEditingProfile && !!emailError}
               >
                 {isEditingProfile ? "Save profile" : "Edit profile"}
               </button>
@@ -453,7 +341,6 @@ export function ProfilePage() {
                     className={styles.profileInput}
                     type="number"
                     min="0"
-                    max="700"
                     value={goalsInfo.targetWeight}
                     onChange={(e) => handleGoalsFieldChange("targetWeight", e.target.value)}
                   />
@@ -481,13 +368,7 @@ export function ProfilePage() {
                   </select>
                 ) : (
                   <span>
-                    <span className={styles.value}>
-                      {goalsInfo.goal === "lose"
-                        ? "Lose"
-                        : goalsInfo.goal === "gain"
-                          ? "Gain"
-                          : "Maintain"}
-                    </span>
+                    <span className={styles.value}>{goalsInfo.goal}</span>
                   </span>
                 )}
               </div>
@@ -510,15 +391,7 @@ export function ProfilePage() {
                   </select>
                 ) : (
                   <span>
-                    <span className={styles.value}>
-                      {goalsInfo.activityLevel === "sedentary"
-                        ? "Sedentary"
-                        : goalsInfo.activityLevel === "light"
-                          ? "Lightly active"
-                          : goalsInfo.activityLevel === "moderate"
-                            ? "Moderately active"
-                            : "Very active"}
-                    </span>
+                    <span className={styles.value}>{goalsInfo.activityLevel}</span>
                   </span>
                 )}
               </div>
@@ -567,44 +440,57 @@ export function ProfilePage() {
 
       <div className={styles.activityContentWrapper}>
         <div className={styles.activityContent}>
-          {activeTab === "meals" && mealsData && mealsData.length > 0 && (
+          {activeTab === "meals" && nutritionPlan?.days && (
             <div className={styles.mealsContentWrapper}>
               <div className={styles.mealsContent} id="mealsScroll">
-                {mealsData.map((dayData) => (
-                  <div key={dayData.day} className={styles.dayColumn}>
-                    <h3 className={styles.dayTitle}>{dayData.day}</h3>
-                    {dayData.macros && (
+                {nutritionPlan.days.map((dayData) => {
+                  const dayNames = [
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday",
+                    "Saturday",
+                    "Sunday",
+                  ];
+                  const displayName = dayNames[dayData.day_number - 1] || dayData.name;
+                  const totals = dayData.entries.reduce(
+                    (acc, e) => ({
+                      calories: acc.calories + e.calories,
+                      protein: acc.protein + e.protein,
+                      carbs: acc.carbs + e.carbs,
+                      fat: acc.fat + e.fat,
+                    }),
+                    { calories: 0, protein: 0, carbs: 0, fat: 0 }
+                  );
+
+                  return (
+                    <div key={dayData.id} className={styles.dayColumn}>
+                      <h3 className={styles.dayTitle}>{displayName}</h3>
                       <ul className={styles.macrosList}>
-                        {Object.entries(dayData.macros).map(([k, v]) => {
-                          const units: Record<string, string> = {
-                            calories: "",
-                            carbs: "g",
-                            protein: "g",
-                            fats: "g",
-                          };
-                          const displayName = k.charAt(0).toUpperCase() + k.slice(1);
-                          const unit = units[k as keyof typeof units] || "";
-                          return (
-                            <li key={k} className={styles.macroRow}>
-                              <span className={styles.macroName}>
-                                ✦ {displayName}
-                                {unit ? ` (${unit})` : ""}:
-                              </span>
-                              <span className={styles.macroValue}>{v}</span>
-                            </li>
-                          );
-                        })}
+                        <li className={styles.macroRow}>
+                          <span className={styles.macroName}>✦ Calories:</span>
+                          <span className={styles.macroValue}>{totals.calories.toFixed(0)}</span>
+                        </li>
+                        <li className={styles.macroRow}>
+                          <span className={styles.macroName}>✦ Protein:</span>
+                          <span className={styles.macroValue}>{totals.protein.toFixed(1)}g</span>
+                        </li>
+                        <li className={styles.macroRow}>
+                          <span className={styles.macroName}>✦ Carbs:</span>
+                          <span className={styles.macroValue}>{totals.carbs.toFixed(1)}g</span>
+                        </li>
+                        <li className={styles.macroRow}>
+                          <span className={styles.macroName}>✦ Fat:</span>
+                          <span className={styles.macroValue}>{totals.fat.toFixed(1)}g</span>
+                        </li>
                       </ul>
-                    )}
-                    {dayData.totalMeals && (
                       <p className={styles.totalMeals}>
-                        <strong>{dayData.totalMeals}</strong> meals logged
+                        <strong>{dayData.entries.length}</strong> meals planned
                       </p>
-                    )}
-                    {dayData.meals && dayData.meals.length > 0 && (
                       <div className={styles.mealsList}>
-                        {dayData.meals.map((meal, idx) => {
-                          const id = `${dayData.day}-${idx}`;
+                        {dayData.entries.map((meal, idx: number) => {
+                          const id = `meal-${dayData.id}-${idx}`;
 
                           return (
                             <div key={id} className={styles.mealCard}>
@@ -613,18 +499,22 @@ export function ProfilePage() {
                                   openMeal === id ? styles.activeMeal : ""
                                 }`}
                               >
-                                {meal.image && (
-                                  <Image
-                                    src={meal.image.src}
-                                    alt={meal.name}
-                                    width={200}
-                                    height={200}
-                                    className={styles.mealImg}
-                                    onClick={() => setOpenMeal(openMeal === id ? null : id)}
-                                  />
-                                )}
-
-                                <div className={styles.mealLabel}>{meal.name}</div>
+                                <Image
+                                  src={meal.image_url || workoutDefaultImg}
+                                  alt={meal.food_name}
+                                  width={200}
+                                  height={200}
+                                  className={styles.mealImg}
+                                  onClick={() => setOpenMeal(openMeal === id ? null : id)}
+                                  onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                                    const target = e.currentTarget;
+                                    target.src =
+                                      typeof workoutDefaultImg === "string"
+                                        ? workoutDefaultImg
+                                        : workoutDefaultImg.src;
+                                  }}
+                                />
+                                <div className={styles.mealLabel}>{meal.food_name}</div>
                               </div>
 
                               <div
@@ -632,37 +522,34 @@ export function ProfilePage() {
                                   openMeal === id ? styles.mealInfoOpen : ""
                                 }`}
                               >
-                                {meal.kcal && <p>{meal.kcal}</p>}
-                                {meal.carbs && <p>Carbs {meal.carbs}g</p>}
-                                {meal.protein && <p>Protein {meal.protein}g</p>}
-                                {meal.fat && <p>Fat {meal.fat}g</p>}
+                                <p>{meal.calories} kcal</p>
+                                <p>Status: {meal.is_eaten ? "✅ Eaten" : "⏳ Planned"}</p>
                               </div>
                             </div>
                           );
                         })}
                       </div>
-                    )}
-                  </div>
-                ))}
+                    </div>
+                  );
+                })}
               </div>
-              <button
-                className={styles.scrollBtn}
-                onClick={() => {
-                  const container = document.getElementById("mealsScroll");
-                  if (container) {
-                    container.scrollBy({ left: 250, behavior: "smooth" });
-                  }
-                }}
-              >
-                →
-              </button>
             </div>
           )}
 
-          {activeTab === "workouts" && activePlan?.days && activePlan.days.length > 0 && (
+          {activeTab === "workouts" && activePlan?.days && (
             <div className={styles.workoutsContentWrapper}>
               <div className={styles.workoutsContent} id="workoutsScroll">
                 {activePlan.days.map((dayData) => {
+                  const dayNames = [
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday",
+                    "Saturday",
+                    "Sunday",
+                  ];
+                  const displayName = dayNames[dayData.day_number - 1] || dayData.name;
                   const totalDayCalories = dayData.exercises.reduce(
                     (sum, ex) => sum + Number(ex.total_calories || 0),
                     0
@@ -674,17 +561,6 @@ export function ProfilePage() {
                   const completedWorkouts = dayData.exercises.filter(
                     (ex) => ex.is_completed
                   ).length;
-
-                  const dayNames = [
-                    "Monday",
-                    "Tuesday",
-                    "Wednesday",
-                    "Thursday",
-                    "Friday",
-                    "Saturday",
-                    "Sunday",
-                  ];
-                  const displayName = dayNames[dayData.day_number - 1] || dayData.name;
 
                   return (
                     <div key={dayData.id} className={styles.dayColumn}>
@@ -710,7 +586,7 @@ export function ProfilePage() {
                       </p>
                       <div className={styles.workoutsList}>
                         {dayData.exercises.map((ex, idx) => {
-                          const id = `${dayData.id}-${idx}`;
+                          const id = `workout-${dayData.id}-${idx}`;
 
                           return (
                             <div key={id} className={styles.workoutCard}>
@@ -726,8 +602,8 @@ export function ProfilePage() {
                                   height={200}
                                   className={styles.workoutImg}
                                   onClick={() => setOpenWorkout(openWorkout === id ? null : id)}
-                                  onError={(e) => {
-                                    const target = e.target as HTMLImageElement;
+                                  onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                                    const target = e.currentTarget;
                                     target.src =
                                       typeof workoutDefaultImg === "string"
                                         ? workoutDefaultImg
@@ -759,23 +635,6 @@ export function ProfilePage() {
                   );
                 })}
               </div>
-              <button
-                className={styles.scrollBtn}
-                onClick={() => {
-                  const container = document.getElementById("workoutsScroll");
-                  if (container) {
-                    container.scrollBy({ left: 250, behavior: "smooth" });
-                  }
-                }}
-              >
-                →
-              </button>
-            </div>
-          )}
-
-          {activeTab === "workouts" && (!activePlan?.days || activePlan.days.length === 0) && (
-            <div className={styles.emptyState}>
-              <p>No workout plan assigned yet. Start a workout plan to see your progress!</p>
             </div>
           )}
 

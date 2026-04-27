@@ -26,6 +26,16 @@ export interface NutritionPlan {
   days: NutritionDay[];
 }
 
+export interface FoodSearchResult {
+  id: number;
+  food_name: string;
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+  image_url?: string;
+}
+
 export const nutritionService = {
   getActivePlan: async (): Promise<NutritionPlan> => {
     const response = await api.get("/food-diary/plans/active/");
@@ -53,5 +63,10 @@ export const nutritionService = {
 
   deleteNutritionEntry: async (id: number) => {
     await api.delete(`/food-diary/nutrition-entries/${id}/`);
+  },
+
+  searchFood: async (query: string): Promise<FoodSearchResult[]> => {
+    const response = await api.get(`/food-diary/search/?q=${encodeURIComponent(query)}`);
+    return response.data;
   },
 };
