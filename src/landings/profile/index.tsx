@@ -73,7 +73,7 @@ export function ProfilePage() {
             ? user.avatar.startsWith("http")
               ? user.avatar
               : `https://xn--80abcyabjk1czh.xn--p1ai${user.avatar}`
-            : (profileData.avatar as string),
+            : (profileData.avatar as unknown as string),
           memberSince: user.created_at
             ? new Date(user.created_at).toLocaleDateString("en-US", {
                 year: "numeric",
@@ -717,7 +717,10 @@ export function ProfilePage() {
                                   onClick={() => setOpenWorkout(openWorkout === id ? null : id)}
                                   onError={(e) => {
                                     const target = e.target as HTMLImageElement;
-                                    target.src = workoutDefaultImg;
+                                    target.src =
+                                      typeof workoutDefaultImg === "string"
+                                        ? workoutDefaultImg
+                                        : workoutDefaultImg.src;
                                   }}
                                 />
 
