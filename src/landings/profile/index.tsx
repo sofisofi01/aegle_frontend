@@ -10,12 +10,15 @@ import decorGoals from "./assets/decor-goals.png";
 import food1 from "./assets/food 1.png";
 import food2 from "./assets/food 2.png";
 
-import { profileData, goalsData, mealsData, workoutsData } from "./const";
+import { profileData, goalsData, mealsData } from "./const";
 import { profileService } from "@/services/profileService";
+import { exerciseService, WorkoutPlan } from "@/services/exerciseService";
+import workoutDefaultImg from "@/landings/workout/assets/workout.png";
 
 export function ProfilePage() {
   const [activeTab, setActiveTab] = useState<"meals" | "workouts" | "analytics">("meals");
   const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [activePlan, setActivePlan] = useState<WorkoutPlan | null>(null);
   const [profileInfo, setProfileInfo] = useState({
     email: profileData.email,
     sex: profileData.sex,
@@ -40,43 +43,58 @@ export function ProfilePage() {
     activityLevel: "moderate",
   });
 
+  const [openMeal, setOpenMeal] = useState<string | null>(null);
+  const [openWorkout, setOpenWorkout] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [user, profile] = await Promise.all([
+        setIsLoading(true);
+        setError(null);
+
+        const [user, profile, plan] = await Promise.all([
           profileService.getUser(),
           profileService.getProfile(),
+          exerciseService.getActivePlan().catch(() => null),
         ]);
 
+        setActivePlan(plan);
         setProfileInfo({
-          email: user.email,
-          sex: profile.gender || "male",
-          age: String(profile.age || 0),
-          height: String(profile.height || 0),
-          weight: String(profile.current_weight || 0),
-          firstName: user.first_name,
-          lastName: user.last_name,
+          email: user.email || profileData.email,
+          sex: profile.gender || profileData.sex || "male",
+          age: String(profile.age || profileData.age || 0),
+          height: String(profile.height || profileData.height || 0),
+          weight: String(profile.current_weight || profileData.weight || 0),
+          firstName: user.first_name || "",
+          lastName: user.last_name || "",
           avatar: user.avatar
             ? user.avatar.startsWith("http")
               ? user.avatar
               : `https://xn--80abcyabjk1czh.xn--p1ai${user.avatar}`
-            : (profileData.avatar as unknown as string),
-          memberSince: new Date(user.created_at).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          }),
+            : (profileData.avatar as string),
+          memberSince: user.created_at
+            ? new Date(user.created_at).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            : "Unknown",
         });
 
         setGoalsInfo((prev) => ({
           ...prev,
-          dailyCalories: String(profile.daily_calories || 0),
-          targetWeight: String(profile.target_weight || 0),
+          dailyCalories: String(profile.daily_calories || goalsData.dailyCalories || 0),
+          targetWeight: String(profile.target_weight || profileData.weight || 0),
           goal: profile.goal || "maintain",
           activityLevel: profile.activity_level || "moderate",
         }));
       } catch (error) {
         console.error("Failed to fetch profile data:", error);
+        setError("Failed to load profile data. Please try again later.");
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -87,10 +105,32 @@ export function ProfilePage() {
 
   const handleProfileEditToggle = async () => {
     if (isEditingProfile) {
+      // Валидация
+      if (!profileInfo.email.trim()) {
+        setEmailError("Email is required");
+        return;
+      }
+
       if (!isValidEmail(profileInfo.email)) {
         setEmailError("Invalid email format");
         return;
       }
+
+      if (!profileInfo.age || Number(profileInfo.age) <= 0) {
+        setEmailError("Valid age is required");
+        return;
+      }
+
+      if (!profileInfo.height || Number(profileInfo.height) <= 0) {
+        setEmailError("Valid height is required");
+        return;
+      }
+
+      if (!profileInfo.weight || Number(profileInfo.weight) <= 0) {
+        setEmailError("Valid weight is required");
+        return;
+      }
+
       setEmailError("");
 
       try {
@@ -120,11 +160,12 @@ export function ProfilePage() {
         }));
         setGoalsInfo((prev) => ({
           ...prev,
-          dailyCalories: String(updatedProfile.daily_calories),
+          dailyCalories: String(updatedProfile.daily_calories || prev.dailyCalories),
         }));
         setAvatarFile(null);
       } catch (error) {
         console.error("Failed to update profile:", error);
+        setEmailError("Failed to update profile. Please try again.");
         return;
       }
     }
@@ -138,6 +179,14 @@ export function ProfilePage() {
     if (field === "email") {
       setEmailError("");
     }
+
+    // Валидация числовых полей
+    if (["age", "height", "weight"].includes(field)) {
+      if (value !== "" && (isNaN(Number(value)) || Number(value) < 0)) {
+        return; // Не обновляем если значение некорректное
+      }
+    }
+
     setProfileInfo((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -152,7 +201,7 @@ export function ProfilePage() {
 
         setGoalsInfo((prev) => ({
           ...prev,
-          dailyCalories: String(updatedProfile.daily_calories),
+          dailyCalories: String(updatedProfile.daily_calories || prev.dailyCalories),
         }));
       } catch (error) {
         console.error("Failed to update goals:", error);
@@ -173,23 +222,66 @@ export function ProfilePage() {
       | "activityLevel",
     value: string
   ) => {
+    // Валидация числовых полей
+    if (
+      [
+        "dailyCalories",
+        "workoutSessions",
+        "workoutMinutes",
+        "stepsPerDay",
+        "targetWeight",
+      ].includes(field)
+    ) {
+      if (value !== "" && (isNaN(Number(value)) || Number(value) < 0)) {
+        return;
+      }
+    }
+
     setGoalsInfo((prev) => ({ ...prev, [field]: value }));
   };
 
-  const [openMeal, setOpenMeal] = useState<string | null>(null);
-  const [openWorkout, setOpenWorkout] = useState<string | null>(null);
+  // Loading state
+  if (isLoading) {
+    return (
+      <Page>
+        <div className={styles.profilePage}>
+          <div className={styles.loadingState}>Loading profile...</div>
+        </div>
+      </Page>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <Page>
+        <div className={styles.profilePage}>
+          <div className={styles.errorState}>
+            <p>{error}</p>
+            <button onClick={() => window.location.reload()}>Retry</button>
+          </div>
+        </div>
+      </Page>
+    );
+  }
+
   return (
     <Page>
       <div className={styles.profilePage}>
         <div className={styles.profileLeft}>
           <div className={styles.avatarWrapper} style={{ position: "relative" }}>
             <Image
-              src={profileInfo.avatar}
+              src={profileInfo.avatar || "/default-avatar.png"}
               alt="Avatar"
               className={styles.avatar}
               width={150}
               height={150}
               style={{ objectFit: "cover", borderRadius: "50%" }}
+              onError={(e) => {
+                // Fallback для битых изображений
+                const target = e.target as HTMLImageElement;
+                target.src = "/default-avatar.png";
+              }}
             />
             {isEditingProfile && (
               <label
@@ -211,7 +303,13 @@ export function ProfilePage() {
                   accept="image/*"
                   onChange={(e) => {
                     if (e.target.files?.[0]) {
-                      setAvatarFile(e.target.files[0]);
+                      const file = e.target.files[0];
+                      // Проверка размера файла (например, максимум 5MB)
+                      if (file.size > 5 * 1024 * 1024) {
+                        setEmailError("File size should be less than 5MB");
+                        return;
+                      }
+                      setAvatarFile(file);
                       const reader = new FileReader();
                       reader.onload = (event) => {
                         setProfileInfo((prev) => ({
@@ -219,7 +317,7 @@ export function ProfilePage() {
                           avatar: event.target?.result as string,
                         }));
                       };
-                      reader.readAsDataURL(e.target.files[0]);
+                      reader.readAsDataURL(file);
                     }
                   }}
                 />
@@ -231,9 +329,11 @@ export function ProfilePage() {
             {profileInfo.firstName} {profileInfo.lastName}
           </h1>
 
-          <div className={styles.memberInfo}>
-            <p>Member since: {profileInfo.memberSince}</p>
-          </div>
+          {profileInfo.memberSince && (
+            <div className={styles.memberInfo}>
+              <p>Member since: {profileInfo.memberSince}</p>
+            </div>
+          )}
 
           <div className={styles.infoCard}>
             <div className={styles.content}>
@@ -246,6 +346,7 @@ export function ProfilePage() {
                       type="email"
                       value={profileInfo.email}
                       onChange={(e) => handleProfileFieldChange("email", e.target.value)}
+                      placeholder="Enter your email"
                     />
                     {emailError && <span className={styles.profileError}>{emailError}</span>}
                   </label>
@@ -256,8 +357,8 @@ export function ProfilePage() {
                       value={profileInfo.sex}
                       onChange={(e) => handleProfileFieldChange("sex", e.target.value)}
                     >
-                      <option value="male">male</option>
-                      <option value="female">female</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
                     </select>
                   </label>
                   <label className={styles.profileField}>
@@ -265,29 +366,35 @@ export function ProfilePage() {
                     <input
                       className={styles.profileInput}
                       type="number"
-                      min="0"
+                      min="1"
+                      max="120"
                       value={profileInfo.age}
                       onChange={(e) => handleProfileFieldChange("age", e.target.value)}
+                      placeholder="Enter your age"
                     />
                   </label>
                   <label className={styles.profileField}>
-                    <span>Height</span>
+                    <span>Height (cm)</span>
                     <input
                       className={styles.profileInput}
                       type="number"
                       min="0"
+                      max="300"
                       value={profileInfo.height}
                       onChange={(e) => handleProfileFieldChange("height", e.target.value)}
+                      placeholder="Enter your height"
                     />
                   </label>
                   <label className={styles.profileField}>
-                    <span>Weight</span>
+                    <span>Weight (kg)</span>
                     <input
                       className={styles.profileInput}
                       type="number"
                       min="0"
+                      max="700"
                       value={profileInfo.weight}
                       onChange={(e) => handleProfileFieldChange("weight", e.target.value)}
+                      placeholder="Enter your weight"
                     />
                   </label>
                 </>
@@ -306,6 +413,7 @@ export function ProfilePage() {
                 type="button"
                 className={styles.editProfile}
                 onClick={handleProfileEditToggle}
+                disabled={isEditingProfile && !!emailError}
               >
                 {isEditingProfile ? "Save profile" : "Edit profile"}
               </button>
@@ -345,6 +453,7 @@ export function ProfilePage() {
                     className={styles.profileInput}
                     type="number"
                     min="0"
+                    max="700"
                     value={goalsInfo.targetWeight}
                     onChange={(e) => handleGoalsFieldChange("targetWeight", e.target.value)}
                   />
@@ -372,7 +481,13 @@ export function ProfilePage() {
                   </select>
                 ) : (
                   <span>
-                    <span className={styles.value}>{goalsInfo.goal}</span>
+                    <span className={styles.value}>
+                      {goalsInfo.goal === "lose"
+                        ? "Lose"
+                        : goalsInfo.goal === "gain"
+                          ? "Gain"
+                          : "Maintain"}
+                    </span>
                   </span>
                 )}
               </div>
@@ -395,7 +510,15 @@ export function ProfilePage() {
                   </select>
                 ) : (
                   <span>
-                    <span className={styles.value}>{goalsInfo.activityLevel}</span>
+                    <span className={styles.value}>
+                      {goalsInfo.activityLevel === "sedentary"
+                        ? "Sedentary"
+                        : goalsInfo.activityLevel === "light"
+                          ? "Lightly active"
+                          : goalsInfo.activityLevel === "moderate"
+                            ? "Moderately active"
+                            : "Very active"}
+                    </span>
                   </span>
                 )}
               </div>
@@ -441,75 +564,84 @@ export function ProfilePage() {
           </div>
         </div>
       </div>
+
       <div className={styles.activityContentWrapper}>
         <div className={styles.activityContent}>
-          {activeTab === "meals" && (
+          {activeTab === "meals" && mealsData && mealsData.length > 0 && (
             <div className={styles.mealsContentWrapper}>
               <div className={styles.mealsContent} id="mealsScroll">
                 {mealsData.map((dayData) => (
                   <div key={dayData.day} className={styles.dayColumn}>
                     <h3 className={styles.dayTitle}>{dayData.day}</h3>
-                    <ul className={styles.macrosList}>
-                      {Object.entries(dayData.macros).map(([k, v]) => {
-                        const units: Record<string, string> = {
-                          calories: "",
-                          carbs: "g",
-                          protein: "g",
-                          fats: "g",
-                        };
-                        const displayName = k.charAt(0).toUpperCase() + k.slice(1);
-                        const unit = units[k as keyof typeof units] || "";
-                        return (
-                          <li key={k} className={styles.macroRow}>
-                            <span className={styles.macroName}>
-                              ✦ {displayName}
-                              {unit ? ` (${unit})` : ""}:
-                            </span>
-                            <span className={styles.macroValue}>{v}</span>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                    <p className={styles.totalMeals}>
-                      <strong>{dayData.totalMeals}</strong> meals logged
-                    </p>
-                    <div className={styles.mealsList}>
-                      {dayData.meals.map((meal, idx) => {
-                        const id = `${dayData.day}-${idx}`;
+                    {dayData.macros && (
+                      <ul className={styles.macrosList}>
+                        {Object.entries(dayData.macros).map(([k, v]) => {
+                          const units: Record<string, string> = {
+                            calories: "",
+                            carbs: "g",
+                            protein: "g",
+                            fats: "g",
+                          };
+                          const displayName = k.charAt(0).toUpperCase() + k.slice(1);
+                          const unit = units[k as keyof typeof units] || "";
+                          return (
+                            <li key={k} className={styles.macroRow}>
+                              <span className={styles.macroName}>
+                                ✦ {displayName}
+                                {unit ? ` (${unit})` : ""}:
+                              </span>
+                              <span className={styles.macroValue}>{v}</span>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
+                    {dayData.totalMeals && (
+                      <p className={styles.totalMeals}>
+                        <strong>{dayData.totalMeals}</strong> meals logged
+                      </p>
+                    )}
+                    {dayData.meals && dayData.meals.length > 0 && (
+                      <div className={styles.mealsList}>
+                        {dayData.meals.map((meal, idx) => {
+                          const id = `${dayData.day}-${idx}`;
 
-                        return (
-                          <div key={id} className={styles.mealCard}>
-                            <div
-                              className={`${styles.mealImageWrapper} ${
-                                openMeal === id ? styles.activeMeal : ""
-                              }`}
-                            >
-                              <Image
-                                src={meal.image.src}
-                                alt={meal.name}
-                                width={200}
-                                height={200}
-                                className={styles.mealImg}
-                                onClick={() => setOpenMeal(openMeal === id ? null : id)}
-                              />
+                          return (
+                            <div key={id} className={styles.mealCard}>
+                              <div
+                                className={`${styles.mealImageWrapper} ${
+                                  openMeal === id ? styles.activeMeal : ""
+                                }`}
+                              >
+                                {meal.image && (
+                                  <Image
+                                    src={meal.image.src}
+                                    alt={meal.name}
+                                    width={200}
+                                    height={200}
+                                    className={styles.mealImg}
+                                    onClick={() => setOpenMeal(openMeal === id ? null : id)}
+                                  />
+                                )}
 
-                              <div className={styles.mealLabel}>{meal.name}</div>
+                                <div className={styles.mealLabel}>{meal.name}</div>
+                              </div>
+
+                              <div
+                                className={`${styles.mealInfo} ${
+                                  openMeal === id ? styles.mealInfoOpen : ""
+                                }`}
+                              >
+                                {meal.kcal && <p>{meal.kcal}</p>}
+                                {meal.carbs && <p>Carbs {meal.carbs}g</p>}
+                                {meal.protein && <p>Protein {meal.protein}g</p>}
+                                {meal.fat && <p>Fat {meal.fat}g</p>}
+                              </div>
                             </div>
-
-                            <div
-                              className={`${styles.mealInfo} ${
-                                openMeal === id ? styles.mealInfoOpen : ""
-                              }`}
-                            >
-                              <p>{meal.kcal}</p>
-                              <p>Carbs {meal.carbs}g</p>
-                              <p>Protein {meal.protein}g</p>
-                              <p>Fat {meal.fat}g</p>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -527,71 +659,91 @@ export function ProfilePage() {
             </div>
           )}
 
-          {activeTab === "workouts" && (
+          {activeTab === "workouts" && activePlan?.days && activePlan.days.length > 0 && (
             <div className={styles.workoutsContentWrapper}>
               <div className={styles.workoutsContent} id="workoutsScroll">
-                {workoutsData.map((dayData) => (
-                  <div key={dayData.day} className={styles.dayColumn}>
-                    <h3 className={styles.dayTitle}>{dayData.day}</h3>
-                    <ul className={styles.workoutStats}>
-                      <li className={styles.statRow}>
-                        <span className={styles.statLabel}>✦ Total workouts:</span>
-                        <span className={styles.statValue}>{dayData.stats.totalWorkouts}</span>
-                      </li>
-                      <li className={styles.statRow}>
-                        <span className={styles.statLabel}>✦ Total time:</span>
-                        <span className={styles.statValue}>{dayData.stats.totalTime}</span>
-                      </li>
-                      <li className={styles.statRow}>
-                        <span className={styles.statLabel}>✦ Kcal burned:</span>
-                        <span className={styles.statValue}>{dayData.stats.caloriesBurned}</span>
-                      </li>
-                      <li className={styles.statRow}>
-                        <span className={styles.statLabel}>✦ Steps:</span>
-                        <span className={styles.statValue}>{dayData.stats.steps}</span>
-                      </li>
-                    </ul>
-                    <p className={styles.totalWorkouts}>
-                      <strong>{dayData.totalWorkouts}</strong> workouts logged
-                    </p>
-                    <div className={styles.workoutsList}>
-                      {dayData.workouts.map((workout, idx) => {
-                        const id = `${dayData.day}-${idx}`;
+                {activePlan.days.map((dayData) => {
+                  const totalDayCalories = dayData.exercises.reduce(
+                    (sum, ex) => sum + Number(ex.total_calories || 0),
+                    0
+                  );
+                  const totalDayTime = dayData.exercises.reduce(
+                    (sum, ex) => sum + ex.sets * 2 + (ex.sets * (ex.rest_seconds || 0)) / 60,
+                    0
+                  );
+                  const completedWorkouts = dayData.exercises.filter(
+                    (ex) => ex.is_completed
+                  ).length;
 
-                        return (
-                          <div key={id} className={styles.workoutCard}>
-                            <div
-                              className={`${styles.workoutImageWrapper} ${
-                                openWorkout === id ? styles.activeWorkout : ""
-                              }`}
-                            >
-                              <Image
-                                src={workout.image.src}
-                                alt={workout.name}
-                                width={200}
-                                height={200}
-                                className={styles.workoutImg}
-                                onClick={() => setOpenWorkout(openWorkout === id ? null : id)}
-                              />
+                  return (
+                    <div key={dayData.id} className={styles.dayColumn}>
+                      <h3 className={styles.dayTitle}>{dayData.name}</h3>
+                      <ul className={styles.workoutStats}>
+                        <li className={styles.statRow}>
+                          <span className={styles.statLabel}>✦ Completed:</span>
+                          <span className={styles.statValue}>
+                            {completedWorkouts}/{dayData.exercises.length}
+                          </span>
+                        </li>
+                        <li className={styles.statRow}>
+                          <span className={styles.statLabel}>✦ Total time:</span>
+                          <span className={styles.statValue}>{totalDayTime.toFixed(0)} min</span>
+                        </li>
+                        <li className={styles.statRow}>
+                          <span className={styles.statLabel}>✦ Kcal burned:</span>
+                          <span className={styles.statValue}>{totalDayCalories.toFixed(0)}</span>
+                        </li>
+                      </ul>
+                      <p className={styles.totalWorkouts}>
+                        <strong>{dayData.exercises.length}</strong> exercises planned
+                      </p>
+                      <div className={styles.workoutsList}>
+                        {dayData.exercises.map((ex, idx) => {
+                          const id = `${dayData.id}-${idx}`;
 
-                              <div className={styles.workoutLabel}>{workout.name}</div>
+                          return (
+                            <div key={id} className={styles.workoutCard}>
+                              <div
+                                className={`${styles.workoutImageWrapper} ${
+                                  openWorkout === id ? styles.activeWorkout : ""
+                                }`}
+                              >
+                                <Image
+                                  src={ex.exercise?.image || workoutDefaultImg}
+                                  alt={ex.exercise?.name || "Workout"}
+                                  width={200}
+                                  height={200}
+                                  className={styles.workoutImg}
+                                  onClick={() => setOpenWorkout(openWorkout === id ? null : id)}
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.src = workoutDefaultImg;
+                                  }}
+                                />
+
+                                <div className={styles.workoutLabel}>
+                                  {ex.exercise?.name || "Exercise"}
+                                </div>
+                              </div>
+
+                              <div
+                                className={`${styles.workoutInfo} ${
+                                  openWorkout === id ? styles.workoutInfoOpen : ""
+                                }`}
+                              >
+                                <p>
+                                  {ex.reps}x{ex.sets}
+                                </p>
+                                <p>Calories: {Number(ex.total_calories || 0).toFixed(0)}</p>
+                                <p>Status: {ex.is_completed ? "✅ Done" : "⏳ Pending"}</p>
+                              </div>
                             </div>
-
-                            <div
-                              className={`${styles.workoutInfo} ${
-                                openWorkout === id ? styles.workoutInfoOpen : ""
-                              }`}
-                            >
-                              <p>{workout.type}</p>
-                              <p>Duration: {workout.duration} minutes</p>
-                              <p>Calories: {workout.calories}</p>
-                            </div>
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
               <button
                 className={styles.scrollBtn}
@@ -604,6 +756,12 @@ export function ProfilePage() {
               >
                 →
               </button>
+            </div>
+          )}
+
+          {activeTab === "workouts" && (!activePlan?.days || activePlan.days.length === 0) && (
+            <div className={styles.emptyState}>
+              <p>No workout plan assigned yet. Start a workout plan to see your progress!</p>
             </div>
           )}
 

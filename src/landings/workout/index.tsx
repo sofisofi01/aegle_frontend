@@ -35,22 +35,22 @@ export function WorkoutPage() {
     { id: 7, name: "Sun" },
   ];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [exercisesData, planData] = await Promise.all([
-          exerciseService.getExercises(),
-          exerciseService.getActivePlan().catch(() => null),
-        ]);
-        setExercises(exercisesData);
-        setActivePlan(planData);
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      const [exercisesData, planData] = await Promise.all([
+        exerciseService.getExercises(),
+        exerciseService.getActivePlan().catch(() => null),
+      ]);
+      setExercises(exercisesData);
+      setActivePlan(planData);
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -64,6 +64,11 @@ export function WorkoutPage() {
     setSelectedEquipment((prev) =>
       prev.includes(equipment) ? prev.filter((e) => e !== equipment) : [...prev, equipment]
     );
+  };
+
+  const handleResetFilters = () => {
+    setSelectedMuscles([]);
+    setSelectedEquipment([]);
   };
 
   const filteredExercises = exercises.filter((exercise) => {
@@ -80,6 +85,7 @@ export function WorkoutPage() {
 
   const totalCalories =
     currentDayPlan?.exercises.reduce((sum, ex) => sum + Number(ex.total_calories), 0) || 0;
+
   const totalTime =
     currentDayPlan?.exercises.reduce(
       (sum, ex) => sum + ex.sets * 2 + (ex.sets * ex.rest_seconds) / 60,
@@ -89,8 +95,7 @@ export function WorkoutPage() {
   const handleAddToWorkout = async (exercise: Exercise) => {
     try {
       await exerciseService.addExerciseToPlan(selectedDay, exercise.id, { sets: 3, reps: 10 });
-      const updatedPlan = await exerciseService.getActivePlan();
-      setActivePlan(updatedPlan);
+      await fetchData();
     } catch (error) {
       console.error("Failed to add exercise:", error);
     }
@@ -99,10 +104,38 @@ export function WorkoutPage() {
   const handleDeleteExercise = async (workoutExerciseId: number) => {
     try {
       await exerciseService.removeExerciseFromPlan(workoutExerciseId);
-      const updatedPlan = await exerciseService.getActivePlan();
-      setActivePlan(updatedPlan);
+      await fetchData();
     } catch (error) {
       console.error("Failed to delete exercise:", error);
+    }
+  };
+
+  const handleUpdateSets = async (workoutExerciseId: number, newSetsString: string) => {
+    try {
+      const [reps, sets] = newSetsString
+        .toLowerCase()
+        .split("x")
+        .map((n) => parseInt(n.trim()));
+      if (!isNaN(reps) && !isNaN(sets)) {
+        await exerciseService.updateWorkoutExercise(workoutExerciseId, { reps, sets });
+        await fetchData();
+      }
+    } catch (error) {
+      console.error("Failed to update sets:", error);
+    }
+  };
+
+  const handleToggleComplete = async (workoutExerciseId: number) => {
+    try {
+      const exercise = currentDayPlan?.exercises.find((ex) => ex.id === workoutExerciseId);
+      if (exercise) {
+        await exerciseService.updateWorkoutExercise(workoutExerciseId, {
+          is_completed: !exercise.is_completed,
+        });
+        await fetchData();
+      }
+    } catch (error) {
+      console.error("Failed to toggle complete:", error);
     }
   };
 
@@ -141,13 +174,15 @@ export function WorkoutPage() {
               title={ex.exercise.name}
               sets={`${ex.reps}x${ex.sets}`}
               image={ex.exercise.image || workoutDefaultImg}
+              isCompleted={ex.is_completed}
               onDelete={() => handleDeleteExercise(ex.id)}
+              onUpdateSets={handleUpdateSets}
+              onToggleComplete={handleToggleComplete}
             />
           ))}
         </div>
 
         <div className={styles.container}>
-          {/* Оборачиваем фильтры и картинки в один div с position relative */}
           <div className={styles.filtersWrapper}>
             <WorkoutFilterSidebar
               isOpen={isFiltersOpen}
@@ -156,6 +191,7 @@ export function WorkoutPage() {
               selectedEquipment={selectedEquipment}
               onMuscleToggle={handleMuscleToggle}
               onEquipmentToggle={handleEquipmentToggle}
+              onResetFilters={handleResetFilters}
             />
             <div className={styles.peekingImages}>
               <div className={`${styles.imageContainer} ${styles.racket}`}>

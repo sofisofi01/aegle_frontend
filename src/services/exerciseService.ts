@@ -21,6 +21,7 @@ export interface WorkoutExercise {
   rest_seconds: number;
   order: number;
   total_calories: number;
+  is_completed: boolean;
 }
 
 export interface WorkoutDay {
@@ -64,5 +65,10 @@ export const exerciseService = {
 
   removeExerciseFromPlan: async (workoutExerciseId: number) => {
     await api.delete(`/exercises/workout-exercises/${workoutExerciseId}/`);
+  },
+
+  updateWorkoutExercise: async (workoutExerciseId: number, data: Partial<WorkoutExercise>) => {
+    const response = await api.patch(`/exercises/workout-exercises/${workoutExerciseId}/`, data);
+    return response.data;
   },
 };

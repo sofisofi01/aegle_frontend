@@ -5,4 +5,5 @@ export type WorkoutFilterSidebarProps = {
   selectedEquipment: string[];
   onMuscleToggle: (muscle: string) => void;
   onEquipmentToggle: (equipment: string) => void;
+  onResetFilters: () => void;
 };

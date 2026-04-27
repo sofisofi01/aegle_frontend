@@ -3,120 +3,114 @@
 @import "../../styles/variables/colors.scss";
 
 .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 300px;
-    height: auto;
-    z-index: 1000;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    
-    &.open {
-        transform: translateX(0);
-    }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 100vh;
+  background: white;
+  z-index: 1000;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+
+  &.open {
+    transform: translateX(0);
+  }
 }
 
-.filterGroup h3 {
-    margin: 10px 0 10px 0;
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+
+  &.open {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.resetButton {
+  padding: 10px;
+  background-color: $color-light-green;
+  color: $color-text-green-dark;
+  border: 1px solid $color-mid-green;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: $font-family-secondary;
+  font-weight: bold;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: $color-mid-green;
+    color: white;
+  }
+}
+
+.filterGroup {
+  h3 {
+    margin: 10px 0;
     font-size: $font-size-title;
     font-weight: bold;
     color: $color-text-green-dark;
     font-family: $font-family-secondary;
-}
+  }
 
-.filterGroup {
-    background: rgba($color-white, 0.6);
-    border-radius: 30px;
-    border-top: 3px solid $color-mid-green;
-    backdrop-filter: blur(10px);
-    margin-bottom: 3px;
-}
-
-
-
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    
-    &.open {
-        opacity: 1;
-        visibility: visible;
-    }
-}
-
-.content {
-    padding: 20px;
-    text-align: center;
-    font-weight: bold;
-}
-
-.options {
+  .options {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    font-size: $font-size-base;
-    font-family: $font-family-secondary;
-    color: $color-text-black;
-}
+    flex-wrap: wrap;
+    gap: 10px;
+  }
 
-.options div {
+  .option {
+    padding: 5px 15px;
+    border: 1px solid $color-mid-green;
+    border-radius: 15px;
     cursor: pointer;
-    text-align: left;
-    position: relative;
-    margin-left: 35px;
+    font-size: 14px;
+    transition: all 0.2s;
 
-    &:last-child {
-        padding-bottom: 10px;
+    &:hover {
+      background: $color-light-green;
     }
 
-    &::after {
-        content: '';
-        position: absolute;
-        bottom: -5px;
-        left: 0;
-        right: 0;
-        width: 90%;
-        height: 1px;
-        background: $color-text-green-dark;
-        margin-left: -13px;
+    &.active {
+      background: $color-mid-green;
+      color: white;
     }
-    
-    &:last-child::after {
-        display: none;
-    }
+  }
 }
 
 @include breakpoints(sm) {
-    .sidebar {
-        position: sticky;
-        top: 20px;
-        width: 250px;
-        height: auto;
-        transform: translateX(0);
-        
-        &.open {
-            transform: translateX(0);
-        }
-    }
-    
-    .filterGroup {
-        margin-bottom: 30px; 
-        backdrop-filter: none;
-    }
-    
-    .overlay {
-        display: none;
-    }
+  .sidebar {
+    position: relative;
+    transform: none;
+    width: 100%;
+    height: auto;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .overlay {
+    display: none;
+  }
 }

@@ -5,11 +5,12 @@ import { WorkoutFilterSidebarProps } from "./types";
 
 export function WorkoutFilterSidebar({
   isOpen,
+  selectedMuscles = [],
+  selectedEquipment = [],
   onClose,
-  selectedMuscles,
-  selectedEquipment,
   onMuscleToggle,
   onEquipmentToggle,
+  onResetFilters,
 }: WorkoutFilterSidebarProps) {
   const muscles = [
     "Deltoid",
@@ -39,13 +40,18 @@ export function WorkoutFilterSidebar({
 
       <aside className={`${styles.sidebar} ${isOpen ? styles.open : ""}`}>
         <div className={styles.content}>
+          <button className={styles.resetButton} onClick={onResetFilters}>
+            Reset Filters
+          </button>
           <div className={styles.filterGroup}>
             <h3>Muscles</h3>
             <div className={styles.options}>
               {muscles.map((m) => (
                 <div
                   key={m}
-                  className={`${styles.option} ${selectedMuscles.includes(m.toLowerCase()) ? styles.active : ""}`}
+                  className={`${styles.option} ${
+                    selectedMuscles.includes(m.toLowerCase()) ? styles.active : ""
+                  }`}
                   onClick={() => onMuscleToggle(m.toLowerCase())}
                 >
                   {m}
@@ -60,7 +66,9 @@ export function WorkoutFilterSidebar({
               {equipment.map((e) => (
                 <div
                   key={e}
-                  className={`${styles.option} ${selectedEquipment.includes(e.toLowerCase()) ? styles.active : ""}`}
+                  className={`${styles.option} ${
+                    selectedEquipment.includes(e.toLowerCase()) ? styles.active : ""
+                  }`}
                   onClick={() => onEquipmentToggle(e.toLowerCase())}
                 >
                   {e}

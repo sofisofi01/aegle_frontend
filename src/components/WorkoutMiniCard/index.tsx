@@ -10,19 +10,21 @@ export function WorkoutMiniCard({
   title,
   sets,
   image,
+  isCompleted: initialIsCompleted,
   onDelete,
   onUpdateSets,
+  onToggleComplete,
 }: WorkoutMiniCardProps) {
   const [showDone, setShowDone] = useState(false);
-  const [isCompleted, setIsCompleted] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedSets, setEditedSets] = useState(sets);
 
   const handleComplete = () => {
-    const newStatus = !isCompleted;
-    setIsCompleted(newStatus);
+    if (onToggleComplete) {
+      onToggleComplete(id);
+    }
 
-    if (newStatus) {
+    if (!initialIsCompleted) {
       setShowDone(true);
       setTimeout(() => {
         setShowDone(false);
@@ -74,8 +76,8 @@ export function WorkoutMiniCard({
           <div className={styles.buttonGroup}>
             <button className={styles.doneButton} onClick={handleComplete}>
               <Image
-                src={isCompleted ? doneIcon : nodoneIcon}
-                alt={isCompleted ? "done" : "no done"}
+                src={initialIsCompleted ? doneIcon : nodoneIcon}
+                alt={initialIsCompleted ? "done" : "no done"}
                 width={20}
                 height={20}
                 className={styles.doneIcon}
