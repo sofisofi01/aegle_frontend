@@ -7,7 +7,14 @@ import { WorkoutCardProps } from "./types";
 import { useState, useEffect } from "react";
 import { breakpoints } from "@/styles/variables/breakpoints";
 
-export function WorkoutCard({ title, muscles, text, image, onAddToWorkout }: WorkoutCardProps) {
+export function WorkoutCard({
+  title,
+  muscles,
+  text,
+  image,
+  videoUrl,
+  onAddToWorkout,
+}: WorkoutCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [maxLength, setMaxLength] = useState(100);
 
@@ -59,6 +66,16 @@ export function WorkoutCard({ title, muscles, text, image, onAddToWorkout }: Wor
               </button>
             )}
           </p>
+          {videoUrl && (
+            <a
+              href={videoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.videoLink}
+            >
+              Watch Video
+            </a>
+          )}
         </div>
       </div>
       <div className={styles.addButtonContainer}>
