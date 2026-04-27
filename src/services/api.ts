@@ -27,6 +27,7 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     if (error.response?.status === 401 && !originalRequest._retry) {
+      console.log("401 error detected, attempting refresh...");
       originalRequest._retry = true;
       const refreshToken = useAuthStore.getState().refreshToken;
       if (refreshToken) {
@@ -35,14 +36,17 @@ api.interceptors.response.use(
             refresh: refreshToken,
           });
           const { access } = response.data;
+          console.log("Token refreshed successfully");
           useAuthStore.getState().setAccessToken(access);
           originalRequest.headers.Authorization = `Bearer ${access}`;
           return api(originalRequest);
         } catch (refreshError) {
+          console.error("Refresh token failed", refreshError);
           useAuthStore.getState().logout();
           return Promise.reject(refreshError);
         }
       } else {
+        console.warn("No refresh token available");
         useAuthStore.getState().logout();
       }
     }
