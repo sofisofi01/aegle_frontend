@@ -27,8 +27,13 @@ export const profileService = {
     return response.data;
   },
 
-  updateUser: async (data: Partial<BackendUser>): Promise<BackendUser> => {
-    const response = await api.patch("/users/me/", data);
+  updateUser: async (data: Partial<BackendUser> | FormData): Promise<BackendUser> => {
+    const isFormData = data instanceof FormData;
+    const response = await api.patch("/users/me/", data, {
+      headers: {
+        "Content-Type": isFormData ? "multipart/form-data" : "application/json",
+      },
+    });
     return response.data;
   },
 

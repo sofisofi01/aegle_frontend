@@ -151,13 +151,50 @@ export function ProfilePage() {
     <Page>
       <div className={styles.profilePage}>
         <div className={styles.profileLeft}>
-          <Image
-            src={profileData.avatar}
-            alt="Avatar"
-            className={styles.avatar}
-            width={150}
-            height={150}
-          />
+          <div className={styles.avatarWrapper} style={{ position: "relative" }}>
+            <Image
+              src={profileInfo.avatar}
+              alt="Avatar"
+              className={styles.avatar}
+              width={150}
+              height={150}
+              style={{ objectFit: "cover", borderRadius: "50%" }}
+            />
+            {isEditingProfile && (
+              <label
+                className={styles.avatarUploadLabel}
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  right: 0,
+                  background: "rgba(0,0,0,0.5)",
+                  borderRadius: "50%",
+                  padding: "5px",
+                  cursor: "pointer",
+                }}
+              >
+                📸
+                <input
+                  type="file"
+                  hidden
+                  accept="image/*"
+                  onChange={(e) => {
+                    if (e.target.files?.[0]) {
+                      setAvatarFile(e.target.files[0]);
+                      const reader = new FileReader();
+                      reader.onload = (event) => {
+                        setProfileInfo((prev) => ({
+                          ...prev,
+                          avatar: event.target?.result as string,
+                        }));
+                      };
+                      reader.readAsDataURL(e.target.files[0]);
+                    }
+                  }}
+                />
+              </label>
+            )}
+          </div>
 
           <h1 className={styles.name}>
             {profileInfo.firstName} {profileInfo.lastName}
