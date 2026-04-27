@@ -19,9 +19,11 @@ export interface RegisterData {
   last_name?: string;
   height?: number;
   weight?: number;
+  target_weight?: number;
   gender?: string;
-  birth_date?: string;
-  activity_level?: number;
+  age?: number;
+  activity_level?: string;
+  goal?: string;
 }
 
 export const authService = {

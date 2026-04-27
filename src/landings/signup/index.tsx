@@ -3,7 +3,6 @@ import { Page } from "@/containers/Page";
 import styles from "./signup.module.scss";
 import { data } from "./const";
 import { useState } from "react";
-import DatePicker from "react-datepicker";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -12,14 +11,16 @@ import { useAuthStore } from "@/store/useAuthStore";
 import "react-datepicker/dist/react-datepicker.css";
 
 export function SignUpPage() {
-  const [gender, setGender] = useState<"male" | "female" | null>(null);
-  const [activity, setActivity] = useState<number | null>(null);
-  const [birthDate, setBirthDate] = useState<Date | null>(null);
+  const [gender, setGender] = useState<"M" | "F" | null>(null);
+  const [activityLevel, setActivityLevel] = useState<string | null>(null);
+  const [goal, setGoal] = useState<string | null>(null);
 
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
+  const [targetWeight, setTargetWeight] = useState("");
+  const [age, setAge] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -48,7 +49,19 @@ export function SignUpPage() {
   };
 
   const handleSubmit = async () => {
-    if (!name || !surname || !height || !weight || !isValidEmail(email) || !password) {
+    if (
+      !name ||
+      !surname ||
+      !height ||
+      !weight ||
+      !targetWeight ||
+      !age ||
+      !isValidEmail(email) ||
+      !password ||
+      !gender ||
+      !activityLevel ||
+      !goal
+    ) {
       setError("Please fill all fields correctly!");
       return;
     }
@@ -64,9 +77,11 @@ export function SignUpPage() {
         last_name: surname,
         height: parseInt(height),
         weight: parseInt(weight),
-        gender: gender || undefined,
-        birth_date: birthDate ? birthDate.toISOString().split("T")[0] : undefined,
-        activity_level: activity !== null ? activity + 1 : undefined,
+        target_weight: parseInt(targetWeight),
+        gender: gender,
+        age: parseInt(age),
+        activity_level: activityLevel,
+        goal: goal,
       });
 
       setAuth(data.user, data.access, data.refresh);
@@ -115,14 +130,14 @@ export function SignUpPage() {
               <p className={styles.label}>Select your sex</p>
               <div className={styles.rowOptions}>
                 <button
-                  className={`${styles.option} ${styles.genderOption} ${gender === "male" ? styles.active : ""}`}
-                  onClick={() => setGender("male")}
+                  className={`${styles.option} ${styles.genderOption} ${gender === "M" ? styles.active : ""}`}
+                  onClick={() => setGender("M")}
                 >
                   ♂
                 </button>
                 <button
-                  className={`${styles.option} ${styles.genderOption} ${gender === "female" ? styles.active : ""}`}
-                  onClick={() => setGender("female")}
+                  className={`${styles.option} ${styles.genderOption} ${gender === "F" ? styles.active : ""}`}
+                  onClick={() => setGender("F")}
                 >
                   ♀
                 </button>
@@ -130,16 +145,12 @@ export function SignUpPage() {
             </div>
 
             <div className={styles.labelRow}>
-              <p className={styles.label}>Enter your date of birth</p>
-              <DatePicker
-                selected={birthDate}
-                onChange={(date: Date | null) => setBirthDate(date)}
-                placeholderText="DD/MM/YYYY"
-                className={styles.inputDate}
-                calendarClassName={styles.datepickerCalendar}
-                dateFormat="dd/MM/yyyy"
-                popperPlacement="bottom-start"
-                portalId="root-portal"
+              <p className={styles.label}>Enter your age</p>
+              <input
+                placeholder="Age"
+                className={styles.input}
+                value={age}
+                onChange={(e) => handleNumbersOnly(e, setAge)}
               />
             </div>
           </div>
@@ -159,19 +170,40 @@ export function SignUpPage() {
               value={weight}
               onChange={(e) => handleNumbersOnly(e, setWeight)}
             />
+            <input
+              placeholder={data.fields.targetWeight}
+              className={styles.input}
+              value={targetWeight}
+              onChange={(e) => handleNumbersOnly(e, setTargetWeight)}
+            />
 
             <div className={styles.labelRow}>
-              <p className={styles.label}>
-                Enter your activity level from low (sedentary lifestyle) to high (regular exercise)
-              </p>
-              <div className={styles.rowOptions}>
-                {data.activity.map((_, i) => (
+              <p className={styles.label}>Select your activity level</p>
+              <div className={styles.rowOptions} style={{ flexWrap: "wrap", gap: "10px" }}>
+                {data.activity.map((act) => (
                   <button
-                    key={i}
-                    className={`${styles.option} ${activity === i ? styles.active : ""}`}
-                    onClick={() => setActivity(i)}
+                    key={act.id}
+                    className={`${styles.option} ${activityLevel === act.id ? styles.active : ""}`}
+                    onClick={() => setActivityLevel(act.id)}
+                    style={{ padding: "5px 15px", fontSize: "14px" }}
                   >
-                    {i + 1}
+                    {act.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className={styles.labelRow}>
+              <p className={styles.label}>Select your goal</p>
+              <div className={styles.rowOptions}>
+                {data.goals.map((g) => (
+                  <button
+                    key={g.id}
+                    className={`${styles.option} ${goal === g.id ? styles.active : ""}`}
+                    onClick={() => setGoal(g.id)}
+                    style={{ padding: "5px 15px", fontSize: "14px" }}
+                  >
+                    {g.label}
                   </button>
                 ))}
               </div>

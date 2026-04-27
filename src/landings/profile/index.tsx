@@ -4,8 +4,6 @@ import styles from "./profile.module.scss";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import caloriesIcon from "./assets/calories.svg";
-import workoutIcon from "./assets/workout.svg";
-import timeIcon from "./assets/time.svg";
 import stepsIcon from "./assets/steps.svg";
 import decorProfile from "./assets/decor-profile.png";
 import decorGoals from "./assets/decor-goals.png";
@@ -333,66 +331,6 @@ export function ProfilePage() {
                 ) : (
                   <span>
                     <span className={styles.value}>{goalsInfo.activityLevel}</span>
-                  </span>
-                )}
-              </div>
-
-              <div className={styles.goalRow}>
-                <div className={styles.left}>
-                  <Image src={workoutIcon} alt="" width={30} height={30} />
-                  <span className={styles.label}>Workout:</span>
-                </div>
-                {isEditingGoals ? (
-                  <input
-                    className={styles.profileInput}
-                    type="number"
-                    min="0"
-                    value={goalsInfo.workoutSessions}
-                    onChange={(e) => handleGoalsFieldChange("workoutSessions", e.target.value)}
-                  />
-                ) : (
-                  <span>
-                    <span className={styles.value}>{goalsInfo.workoutSessions}</span> sessions/week
-                  </span>
-                )}
-              </div>
-
-              <div className={styles.goalRow}>
-                <div className={styles.left}>
-                  <Image src={timeIcon} alt="" width={30} height={30} />
-                  <span className={styles.label}>Workout time:</span>
-                </div>
-                {isEditingGoals ? (
-                  <input
-                    className={styles.profileInput}
-                    type="number"
-                    min="0"
-                    value={goalsInfo.workoutMinutes}
-                    onChange={(e) => handleGoalsFieldChange("workoutMinutes", e.target.value)}
-                  />
-                ) : (
-                  <span>
-                    <span className={styles.value}>{goalsInfo.workoutMinutes}</span> min/week
-                  </span>
-                )}
-              </div>
-
-              <div className={styles.goalRow}>
-                <div className={styles.left}>
-                  <Image src={stepsIcon} alt="" width={30} height={30} />
-                  <span className={styles.label}>Steps:</span>
-                </div>
-                {isEditingGoals ? (
-                  <input
-                    className={styles.profileInput}
-                    type="number"
-                    min="0"
-                    value={goalsInfo.stepsPerDay}
-                    onChange={(e) => handleGoalsFieldChange("stepsPerDay", e.target.value)}
-                  />
-                ) : (
-                  <span>
-                    <span className={styles.value}>{goalsInfo.stepsPerDay}</span> steps/day
                   </span>
                 )}
               </div>
