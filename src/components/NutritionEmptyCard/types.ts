@@ -1,4 +1,4 @@
 export type NutritionEmptyCardProps = {
-    day?: string;
-    mealType?: string;
-}
+  day: string;
+  mealType: string;
+};
