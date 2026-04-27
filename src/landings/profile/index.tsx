@@ -20,9 +20,12 @@ import {
   NutritionEntry,
 } from "@/services/nutritionService";
 import workoutDefaultImg from "@/landings/workout/assets/workout.png";
+import { useRouter } from "next/navigation";
 
 export function ProfilePage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<"meals" | "workouts" | "analytics">("meals");
+
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [activePlan, setActivePlan] = useState<WorkoutPlan | null>(null);
   const [nutritionPlan, setNutritionPlan] = useState<NutritionPlan | null>(null);
@@ -448,95 +451,106 @@ export function ProfilePage() {
           {activeTab === "meals" && nutritionPlan?.days && (
             <div className={styles.mealsContentWrapper}>
               <div className={styles.mealsContent} id="mealsScroll">
-                {nutritionPlan.days.map((dayData: NutritionDay) => {
-                  const dayNames = [
-                    "Monday",
-                    "Tuesday",
-                    "Wednesday",
-                    "Thursday",
-                    "Friday",
-                    "Saturday",
-                    "Sunday",
-                  ];
-                  const displayName = dayNames[dayData.day_number - 1] || dayData.name;
-                  const totals = dayData.entries.reduce(
-                    (acc, e: NutritionEntry) => ({
-                      calories: acc.calories + e.calories,
-                      protein: acc.protein + e.protein,
-                      carbs: acc.carbs + e.carbs,
-                      fat: acc.fat + e.fat,
-                    }),
-                    { calories: 0, protein: 0, carbs: 0, fat: 0 }
-                  );
+                {nutritionPlan.days.every((d) => d.entries.length === 0) ? (
+                  <div className={styles.noDataMessage}>
+                    <p>
+                      You haven&apos;t planned any meals yet. Go to the Nutrition page to start!
+                    </p>
+                    <button onClick={() => router.push("/nutrition")} className={styles.goToButton}>
+                      Go to Nutrition
+                    </button>
+                  </div>
+                ) : (
+                  nutritionPlan.days.map((dayData: NutritionDay) => {
+                    const dayNames = [
+                      "Monday",
+                      "Tuesday",
+                      "Wednesday",
+                      "Thursday",
+                      "Friday",
+                      "Saturday",
+                      "Sunday",
+                    ];
+                    const displayName = dayNames[dayData.day_number - 1] || dayData.name;
+                    const totals = dayData.entries.reduce(
+                      (acc, e: NutritionEntry) => ({
+                        calories: acc.calories + e.calories,
+                        protein: acc.protein + e.protein,
+                        carbs: acc.carbs + e.carbs,
+                        fat: acc.fat + e.fat,
+                      }),
+                      { calories: 0, protein: 0, carbs: 0, fat: 0 }
+                    );
 
-                  return (
-                    <div key={dayData.id} className={styles.dayColumn}>
-                      <h3 className={styles.dayTitle}>{displayName}</h3>
-                      <ul className={styles.macrosList}>
-                        <li className={styles.macroRow}>
-                          <span className={styles.macroName}>✦ Calories:</span>
-                          <span className={styles.macroValue}>{totals.calories.toFixed(0)}</span>
-                        </li>
-                        <li className={styles.macroRow}>
-                          <span className={styles.macroName}>✦ Protein:</span>
-                          <span className={styles.macroValue}>{totals.protein.toFixed(1)}g</span>
-                        </li>
-                        <li className={styles.macroRow}>
-                          <span className={styles.macroName}>✦ Carbs:</span>
-                          <span className={styles.macroValue}>{totals.carbs.toFixed(1)}g</span>
-                        </li>
-                        <li className={styles.macroRow}>
-                          <span className={styles.macroName}>✦ Fat:</span>
-                          <span className={styles.macroValue}>{totals.fat.toFixed(1)}g</span>
-                        </li>
-                      </ul>
-                      <p className={styles.totalMeals}>
-                        <strong>{dayData.entries.length}</strong> meals planned
-                      </p>
-                      <div className={styles.mealsList}>
-                        {dayData.entries.map((meal: NutritionEntry, idx: number) => {
-                          const id = `meal-${dayData.id}-${idx}`;
+                    return (
+                      <div key={dayData.id} className={styles.dayColumn}>
+                        <h3 className={styles.dayTitle}>{displayName}</h3>
+                        <ul className={styles.macrosList}>
+                          <li className={styles.macroRow}>
+                            <span className={styles.macroName}>✦ Calories:</span>
+                            <span className={styles.macroValue}>{totals.calories.toFixed(0)}</span>
+                          </li>
+                          <li className={styles.macroRow}>
+                            <span className={styles.macroName}>✦ Protein:</span>
+                            <span className={styles.macroValue}>{totals.protein.toFixed(1)}g</span>
+                          </li>
+                          <li className={styles.macroRow}>
+                            <span className={styles.macroName}>✦ Carbs:</span>
+                            <span className={styles.macroValue}>{totals.carbs.toFixed(1)}g</span>
+                          </li>
+                          <li className={styles.macroRow}>
+                            <span className={styles.macroName}>✦ Fat:</span>
+                            <span className={styles.macroValue}>{totals.fat.toFixed(1)}g</span>
+                          </li>
+                        </ul>
+                        <p className={styles.totalMeals}>
+                          <strong>{dayData.entries.length}</strong> meals planned
+                        </p>
+                        <div className={styles.mealsList}>
+                          {dayData.entries.map((meal: NutritionEntry, idx: number) => {
+                            const id = `meal-${dayData.id}-${idx}`;
 
-                          return (
-                            <div key={id} className={styles.mealCard}>
-                              <div
-                                className={`${styles.mealImageWrapper} ${
-                                  openMeal === id ? styles.activeMeal : ""
-                                }`}
-                              >
-                                <Image
-                                  src={meal.image_url || workoutDefaultImg}
-                                  alt={meal.food_name}
-                                  width={200}
-                                  height={200}
-                                  className={styles.mealImg}
-                                  onClick={() => setOpenMeal(openMeal === id ? null : id)}
-                                  onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-                                    const target = e.currentTarget;
-                                    target.src =
-                                      typeof workoutDefaultImg === "string"
-                                        ? workoutDefaultImg
-                                        : workoutDefaultImg.src;
-                                  }}
-                                />
-                                <div className={styles.mealLabel}>{meal.food_name}</div>
+                            return (
+                              <div key={id} className={styles.mealCard}>
+                                <div
+                                  className={`${styles.mealImageWrapper} ${
+                                    openMeal === id ? styles.activeMeal : ""
+                                  }`}
+                                >
+                                  <Image
+                                    src={meal.image_url || workoutDefaultImg}
+                                    alt={meal.food_name}
+                                    width={200}
+                                    height={200}
+                                    className={styles.mealImg}
+                                    onClick={() => setOpenMeal(openMeal === id ? null : id)}
+                                    onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                                      const target = e.currentTarget;
+                                      target.src =
+                                        typeof workoutDefaultImg === "string"
+                                          ? workoutDefaultImg
+                                          : workoutDefaultImg.src;
+                                    }}
+                                  />
+                                  <div className={styles.mealLabel}>{meal.food_name}</div>
+                                </div>
+
+                                <div
+                                  className={`${styles.mealInfo} ${
+                                    openMeal === id ? styles.mealInfoOpen : ""
+                                  }`}
+                                >
+                                  <p>{meal.calories} kcal</p>
+                                  <p>Status: {meal.is_eaten ? "✅ Eaten" : "⏳ Planned"}</p>
+                                </div>
                               </div>
-
-                              <div
-                                className={`${styles.mealInfo} ${
-                                  openMeal === id ? styles.mealInfoOpen : ""
-                                }`}
-                              >
-                                <p>{meal.calories} kcal</p>
-                                <p>Status: {meal.is_eaten ? "✅ Eaten" : "⏳ Planned"}</p>
-                              </div>
-                            </div>
-                          );
-                        })}
+                            );
+                          })}
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })
+                )}
               </div>
             </div>
           )}
@@ -544,101 +558,112 @@ export function ProfilePage() {
           {activeTab === "workouts" && activePlan?.days && (
             <div className={styles.workoutsContentWrapper}>
               <div className={styles.workoutsContent} id="workoutsScroll">
-                {activePlan.days.map((dayData) => {
-                  const dayNames = [
-                    "Monday",
-                    "Tuesday",
-                    "Wednesday",
-                    "Thursday",
-                    "Friday",
-                    "Saturday",
-                    "Sunday",
-                  ];
-                  const displayName = dayNames[dayData.day_number - 1] || dayData.name;
-                  const totalDayCalories = dayData.exercises.reduce(
-                    (sum, ex) => sum + Number(ex.total_calories || 0),
-                    0
-                  );
-                  const totalDayTime = dayData.exercises.reduce(
-                    (sum, ex) => sum + ex.sets * 2 + (ex.sets * (ex.rest_seconds || 0)) / 60,
-                    0
-                  );
-                  const completedWorkouts = dayData.exercises.filter(
-                    (ex) => ex.is_completed
-                  ).length;
+                {activePlan.days.every((d) => d.exercises.length === 0) ? (
+                  <div className={styles.noDataMessage}>
+                    <p>
+                      You haven&apos;t planned any workouts yet. Go to the Workout page to start!
+                    </p>
+                    <button onClick={() => router.push("/workout")} className={styles.goToButton}>
+                      Go to Workout
+                    </button>
+                  </div>
+                ) : (
+                  activePlan.days.map((dayData) => {
+                    const dayNames = [
+                      "Monday",
+                      "Tuesday",
+                      "Wednesday",
+                      "Thursday",
+                      "Friday",
+                      "Saturday",
+                      "Sunday",
+                    ];
+                    const displayName = dayNames[dayData.day_number - 1] || dayData.name;
+                    const totalDayCalories = dayData.exercises.reduce(
+                      (sum, ex) => sum + Number(ex.total_calories || 0),
+                      0
+                    );
+                    const totalDayTime = dayData.exercises.reduce(
+                      (sum, ex) => sum + ex.sets * 2 + (ex.sets * (ex.rest_seconds || 0)) / 60,
+                      0
+                    );
+                    const completedWorkouts = dayData.exercises.filter(
+                      (ex) => ex.is_completed
+                    ).length;
 
-                  return (
-                    <div key={dayData.id} className={styles.dayColumn}>
-                      <h3 className={styles.dayTitle}>{displayName}</h3>
-                      <ul className={styles.workoutStats}>
-                        <li className={styles.statRow}>
-                          <span className={styles.statLabel}>✦ Completed:</span>
-                          <span className={styles.statValue}>
-                            {completedWorkouts}/{dayData.exercises.length}
-                          </span>
-                        </li>
-                        <li className={styles.statRow}>
-                          <span className={styles.statLabel}>✦ Total time:</span>
-                          <span className={styles.statValue}>{totalDayTime.toFixed(0)} min</span>
-                        </li>
-                        <li className={styles.statRow}>
-                          <span className={styles.statLabel}>✦ Kcal burned:</span>
-                          <span className={styles.statValue}>{totalDayCalories.toFixed(0)}</span>
-                        </li>
-                      </ul>
-                      <p className={styles.totalWorkouts}>
-                        <strong>{dayData.exercises.length}</strong> exercises planned
-                      </p>
-                      <div className={styles.workoutsList}>
-                        {dayData.exercises.map((ex, idx) => {
-                          const id = `workout-${dayData.id}-${idx}`;
+                    return (
+                      <div key={dayData.id} className={styles.dayColumn}>
+                        <h3 className={styles.dayTitle}>{displayName}</h3>
+                        <ul className={styles.workoutStats}>
+                          <li className={styles.statRow}>
+                            <span className={styles.statLabel}>✦ Completed:</span>
+                            <span className={styles.statValue}>
+                              {completedWorkouts}/{dayData.exercises.length}
+                            </span>
+                          </li>
+                          <li className={styles.statRow}>
+                            <span className={styles.statLabel}>✦ Total time:</span>
+                            <span className={styles.statValue}>{totalDayTime.toFixed(0)} min</span>
+                          </li>
+                          <li className={styles.statRow}>
+                            <span className={styles.statLabel}>✦ Kcal burned:</span>
+                            <span className={styles.statValue}>{totalDayCalories.toFixed(0)}</span>
+                          </li>
+                        </ul>
+                        <p className={styles.totalWorkouts}>
+                          <strong>{dayData.exercises.length}</strong> exercises planned
+                        </p>
+                        <div className={styles.workoutsList}>
+                          {dayData.exercises.map((ex, idx) => {
+                            const id = `workout-${dayData.id}-${idx}`;
 
-                          return (
-                            <div key={id} className={styles.workoutCard}>
-                              <div
-                                className={`${styles.workoutImageWrapper} ${
-                                  openWorkout === id ? styles.activeWorkout : ""
-                                }`}
-                              >
-                                <Image
-                                  src={ex.exercise?.image || workoutDefaultImg}
-                                  alt={ex.exercise?.name || "Workout"}
-                                  width={200}
-                                  height={200}
-                                  className={styles.workoutImg}
-                                  onClick={() => setOpenWorkout(openWorkout === id ? null : id)}
-                                  onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-                                    const target = e.currentTarget;
-                                    target.src =
-                                      typeof workoutDefaultImg === "string"
-                                        ? workoutDefaultImg
-                                        : workoutDefaultImg.src;
-                                  }}
-                                />
+                            return (
+                              <div key={id} className={styles.workoutCard}>
+                                <div
+                                  className={`${styles.workoutImageWrapper} ${
+                                    openWorkout === id ? styles.activeWorkout : ""
+                                  }`}
+                                >
+                                  <Image
+                                    src={ex.exercise?.image || workoutDefaultImg}
+                                    alt={ex.exercise?.name || "Workout"}
+                                    width={200}
+                                    height={200}
+                                    className={styles.workoutImg}
+                                    onClick={() => setOpenWorkout(openWorkout === id ? null : id)}
+                                    onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                                      const target = e.currentTarget;
+                                      target.src =
+                                        typeof workoutDefaultImg === "string"
+                                          ? workoutDefaultImg
+                                          : workoutDefaultImg.src;
+                                    }}
+                                  />
 
-                                <div className={styles.workoutLabel}>
-                                  {ex.exercise?.name || "Exercise"}
+                                  <div className={styles.workoutLabel}>
+                                    {ex.exercise?.name || "Exercise"}
+                                  </div>
+                                </div>
+
+                                <div
+                                  className={`${styles.workoutInfo} ${
+                                    openWorkout === id ? styles.workoutInfoOpen : ""
+                                  }`}
+                                >
+                                  <p>
+                                    {ex.reps}x{ex.sets}
+                                  </p>
+                                  <p>Calories: {Number(ex.total_calories || 0).toFixed(0)}</p>
+                                  <p>Status: {ex.is_completed ? "✅ Done" : "⏳ Pending"}</p>
                                 </div>
                               </div>
-
-                              <div
-                                className={`${styles.workoutInfo} ${
-                                  openWorkout === id ? styles.workoutInfoOpen : ""
-                                }`}
-                              >
-                                <p>
-                                  {ex.reps}x{ex.sets}
-                                </p>
-                                <p>Calories: {Number(ex.total_calories || 0).toFixed(0)}</p>
-                                <p>Status: {ex.is_completed ? "✅ Done" : "⏳ Pending"}</p>
-                              </div>
-                            </div>
-                          );
-                        })}
+                            );
+                          })}
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })
+                )}
               </div>
             </div>
           )}

@@ -31,7 +31,7 @@ export function RecipesPage() {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<FoodSearchResult[]>([]);
-  const [, setIsSearching] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
 
   const handleSearch = async () => {
     if (!searchQuery.trim()) return;
@@ -108,7 +108,6 @@ export function RecipesPage() {
   return (
     <Page>
       <div className={styles.page}>
-        {/* Попап с CreateRecipesCard */}
         {isCreatePopupOpen && (
           <div className={styles.popupOverlay} onClick={handleClosePopup}>
             <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
@@ -169,6 +168,20 @@ export function RecipesPage() {
           </button>
 
           <div className={styles.mainContent}>
+            {isSearching && <p className={styles.loadingText}>Searching in FatSecret...</p>}
+
+            {!isSearching && searchQuery && searchResults.length === 0 && (
+              <div className={styles.noResults}>
+                <p>Didn&apos;t find what you were looking for in our database?</p>
+                <button
+                  className={styles.createCustomButton}
+                  onClick={() => setIsCreatePopupOpen(true)}
+                >
+                  Create custom food entry
+                </button>
+              </div>
+            )}
+
             {searchResults.length > 0 && (
               <div className={styles.searchResults}>
                 <h2>Search Results</h2>
@@ -192,6 +205,7 @@ export function RecipesPage() {
                 </div>
               </div>
             )}
+
             <div className={styles.cardsContainer}>
               <RecipesCard
                 selectedType={selectedType}
