@@ -24,7 +24,9 @@ export function ProfilePage() {
     weight: String(profileData.weight),
     firstName: "",
     lastName: "",
+    avatar: "" as string,
   });
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [emailError, setEmailError] = useState("");
   const [isEditingGoals, setIsEditingGoals] = useState(false);
   const [goalsInfo, setGoalsInfo] = useState({
@@ -53,6 +55,11 @@ export function ProfilePage() {
           weight: String(profile.current_weight || 0),
           firstName: user.first_name,
           lastName: user.last_name,
+          avatar: user.avatar
+            ? user.avatar.startsWith("http")
+              ? user.avatar
+              : `https://xn--80abcyabjk1czh.xn--p1ai${user.avatar}`
+            : (profileData.avatar as unknown as string),
         });
 
         setGoalsInfo((prev) => ({
@@ -81,10 +88,14 @@ export function ProfilePage() {
       setEmailError("");
 
       try {
-        await Promise.all([
-          profileService.updateUser({
-            email: profileInfo.email,
-          }),
+        const userFormData = new FormData();
+        userFormData.append("email", profileInfo.email);
+        if (avatarFile) {
+          userFormData.append("avatar", avatarFile);
+        }
+
+        const [updatedUser] = await Promise.all([
+          profileService.updateUser(userFormData),
           profileService.updateProfile({
             gender: profileInfo.sex,
             age: Number(profileInfo.age),
@@ -92,6 +103,16 @@ export function ProfilePage() {
             current_weight: Number(profileInfo.weight),
           }),
         ]);
+
+        setProfileInfo((prev) => ({
+          ...prev,
+          avatar: updatedUser.avatar
+            ? updatedUser.avatar.startsWith("http")
+              ? updatedUser.avatar
+              : `https://xn--80abcyabjk1czh.xn--p1ai${updatedUser.avatar}`
+            : prev.avatar,
+        }));
+        setAvatarFile(null);
       } catch (error) {
         console.error("Failed to update profile:", error);
         return;
