@@ -13,7 +13,12 @@ import food2 from "./assets/food 2.png";
 import { profileData, goalsData } from "./const";
 import { profileService } from "@/services/profileService";
 import { exerciseService, WorkoutPlan } from "@/services/exerciseService";
-import { nutritionService, NutritionPlan } from "@/services/nutritionService";
+import {
+  nutritionService,
+  NutritionPlan,
+  NutritionDay,
+  NutritionEntry,
+} from "@/services/nutritionService";
 import workoutDefaultImg from "@/landings/workout/assets/workout.png";
 
 export function ProfilePage() {
@@ -443,7 +448,7 @@ export function ProfilePage() {
           {activeTab === "meals" && nutritionPlan?.days && (
             <div className={styles.mealsContentWrapper}>
               <div className={styles.mealsContent} id="mealsScroll">
-                {nutritionPlan.days.map((dayData) => {
+                {nutritionPlan.days.map((dayData: NutritionDay) => {
                   const dayNames = [
                     "Monday",
                     "Tuesday",
@@ -455,7 +460,7 @@ export function ProfilePage() {
                   ];
                   const displayName = dayNames[dayData.day_number - 1] || dayData.name;
                   const totals = dayData.entries.reduce(
-                    (acc, e) => ({
+                    (acc, e: NutritionEntry) => ({
                       calories: acc.calories + e.calories,
                       protein: acc.protein + e.protein,
                       carbs: acc.carbs + e.carbs,
@@ -489,7 +494,7 @@ export function ProfilePage() {
                         <strong>{dayData.entries.length}</strong> meals planned
                       </p>
                       <div className={styles.mealsList}>
-                        {dayData.entries.map((meal, idx: number) => {
+                        {dayData.entries.map((meal: NutritionEntry, idx: number) => {
                           const id = `meal-${dayData.id}-${idx}`;
 
                           return (

@@ -11,7 +11,7 @@ import searchIcon from "./assets/searchIcon.svg";
 import plusIcon from "./assets/plusIcon.svg";
 import filterIcon from "./assets/filterIcon.svg";
 import { useSearchParams, useRouter } from "next/navigation";
-import { nutritionService } from "@/services/nutritionService";
+import { nutritionService, FoodSearchResult } from "@/services/nutritionService";
 
 export function RecipesPage() {
   const searchParams = useSearchParams();
@@ -30,7 +30,7 @@ export function RecipesPage() {
   const [fatsRange, setFatsRange] = useState<{ min: number; max: number }>();
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<[]>([]);
+  const [searchResults, setSearchResults] = useState<FoodSearchResult[]>([]);
   const [, setIsSearching] = useState(false);
 
   const handleSearch = async () => {
@@ -46,7 +46,7 @@ export function RecipesPage() {
     }
   };
 
-  const handleAddToPlan = async (food) => {
+  const handleAddToPlan = async (food: FoodSearchResult) => {
     if (!day || !mealType) return;
 
     const dayMap: Record<string, number> = {

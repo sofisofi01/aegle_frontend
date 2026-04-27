@@ -66,7 +66,17 @@ export const nutritionService = {
   },
 
   searchFood: async (query: string): Promise<FoodSearchResult[]> => {
-    const response = await api.get(`/food-diary/search/?q=${encodeURIComponent(query)}`);
+    const response = await api.get(`/food-diary/search/?q=${query}`);
     return response.data;
   },
 };
+
+export interface FoodSearchResult {
+  name: string;
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+  external_id: string;
+  image_url?: string;
+}
