@@ -6,6 +6,7 @@ export interface BackendUser {
   first_name: string;
   last_name: string;
   avatar?: string;
+  created_at: string;
 }
 
 export interface BackendProfile {

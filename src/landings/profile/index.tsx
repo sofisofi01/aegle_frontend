@@ -24,7 +24,8 @@ export function ProfilePage() {
     weight: String(profileData.weight),
     firstName: "",
     lastName: "",
-    avatar: "" as string,
+    avatar: "",
+    memberSince: "",
   });
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [emailError, setEmailError] = useState("");
@@ -60,6 +61,11 @@ export function ProfilePage() {
               ? user.avatar
               : `https://xn--80abcyabjk1czh.xn--p1ai${user.avatar}`
             : (profileData.avatar as unknown as string),
+          memberSince: new Date(user.created_at).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }),
         });
 
         setGoalsInfo((prev) => ({
@@ -94,7 +100,7 @@ export function ProfilePage() {
           userFormData.append("avatar", avatarFile);
         }
 
-        const [updatedUser] = await Promise.all([
+        const [updatedUser, updatedProfile] = await Promise.all([
           profileService.updateUser(userFormData),
           profileService.updateProfile({
             gender: profileInfo.sex,
@@ -111,6 +117,10 @@ export function ProfilePage() {
               ? updatedUser.avatar
               : `https://xn--80abcyabjk1czh.xn--p1ai${updatedUser.avatar}`
             : prev.avatar,
+        }));
+        setGoalsInfo((prev) => ({
+          ...prev,
+          dailyCalories: String(updatedProfile.daily_calories),
         }));
         setAvatarFile(null);
       } catch (error) {
@@ -222,9 +232,7 @@ export function ProfilePage() {
           </h1>
 
           <div className={styles.memberInfo}>
-            <p>Member since: {profileData.memberSince}</p>
-            <p>Your current level: {profileData.level}</p>
-            <p>Streak: {profileData.strikeDays} days</p>
+            <p>Member since: {profileInfo.memberSince}</p>
           </div>
 
           <div className={styles.infoCard}>
