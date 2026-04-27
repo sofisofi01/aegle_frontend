@@ -1,15 +1,10 @@
+import type { NextConfig } from "next";
 
-const nextConfig = {
-  experimental: {
-    turbo: {
-
-      rules: {}
-    }
+const nextConfig: NextConfig = {
+  output: 'export',
+  images: {
+    unoptimized: true,
   },
+};
 
-  turbopack: {
-    root: __dirname
-  }
-}
-
-module.exports = nextConfig
+export default nextConfig;

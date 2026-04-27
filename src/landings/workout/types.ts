@@ -1,9 +1,0 @@
-import { StaticImageData } from 'next/image';
-
-export type WorkoutProps = {
-    title: string;
-    muscles: string;
-    text: string;
-    image?: string | StaticImageData;
-    onAddToWorkout?: () => void; 
-};

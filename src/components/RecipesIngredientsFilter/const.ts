@@ -1,0 +1,1 @@
+export const availableIngredients = ['eggs', 'milk', 'tomatoes', 'chicken', 'cheese', 'flour'];

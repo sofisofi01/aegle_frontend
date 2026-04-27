@@ -4,21 +4,45 @@ import styles from "./signin.module.scss";
 import { data } from "./const";
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import { authService } from "@/services/authService";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const isValidEmail = (email: string) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const router = useRouter();
+  const setAuth = useAuthStore((state) => state.setAuth);
 
-  const handleSubmit = () => {
+  const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  const handleSubmit = async () => {
     if (!isValidEmail(email) || !password) {
-      alert("Please enter valid email and password!");
+      setError("Please enter valid email and password!");
       return;
     }
-    alert("Signed in!");
+
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const data = await authService.login({ email, password });
+      setAuth(data.user, data.access, data.refresh);
+      router.push("/profile");
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.detail || "Failed to sign in. Please check your credentials.");
+      } else {
+        setError("An unexpected error occurred.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -34,11 +58,18 @@ export function SignInPage() {
               handleSubmit();
             }}
           >
+            {error && (
+              <p className={styles.error} style={{ marginBottom: "10px" }}>
+                {error}
+              </p>
+            )}
+
             <input
               placeholder={data.fields.email}
               className={styles.input}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              disabled={isLoading}
             />
 
             {!isValidEmail(email) && email.length > 0 && (
@@ -48,11 +79,12 @@ export function SignInPage() {
             <div className={styles.passwordWrapper}>
               <input
                 placeholder={data.fields.password}
-                type={showPassword ? "text" : "password"} 
+                type={showPassword ? "text" : "password"}
                 className={styles.inputPassword}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 style={{ fontWeight: showPassword ? 400 : 700 }}
+                disabled={isLoading}
               />
               <span
                 className={styles.passwordToggle}
@@ -63,8 +95,8 @@ export function SignInPage() {
             </div>
 
             <div className={styles.signInRow}>
-              <button type="submit" className={styles.submit}>
-                {data.actions.submit}
+              <button type="submit" className={styles.submit} disabled={isLoading}>
+                {isLoading ? "Signing in..." : data.actions.submit}
               </button>
 
               <p className={styles.signInText}>

@@ -1,13 +1,15 @@
-"use client"; 
+"use client";
 import { HeaderProps } from "./types";
 import styles from "./Header.module.scss";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import logo from "./assets/icon.png";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export function Header({ menu }: HeaderProps) {
-  const pathname = usePathname(); 
+  const pathname = usePathname();
+  const { isAuthenticated, user } = useAuthStore();
 
   return (
     <header className={styles.header}>
@@ -21,16 +23,46 @@ export function Header({ menu }: HeaderProps) {
 
       <nav>
         <ul className={styles.nav}>
-          {menu.map((item) => (
-            <li key={item.id}>
+          {isAuthenticated &&
+            menu.map((item) => (
+              <li key={item.id}>
+                <Link
+                  href={item.href}
+                  className={`${styles.link} ${pathname === item.href ? styles.active : ""}`}
+                >
+                  {item.text}
+                </Link>
+              </li>
+            ))}
+          <li>
+            {isAuthenticated ? (
+              <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+                <Link
+                  href="/profile"
+                  className={`${styles.link} ${pathname === "/profile" ? styles.active : ""}`}
+                >
+                  {user?.first_name || "Profile"}
+                </Link>
+                <button
+                  onClick={() => {
+                    useAuthStore.getState().logout();
+                    window.location.href = "/";
+                  }}
+                  className={styles.link}
+                  style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
               <Link
-                href={item.href}
-                className={`${styles.link} ${pathname === item.href ? styles.active : ""}`}
+                href="/signin"
+                className={`${styles.link} ${pathname === "/signin" ? styles.active : ""}`}
               >
-                {item.text}
+                Sign In
               </Link>
-            </li>
-          ))}
+            )}
+          </li>
         </ul>
       </nav>
     </header>

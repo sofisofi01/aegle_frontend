@@ -1,0 +1,175 @@
+@import "../../styles/mixins/breakpoints.scss";
+@import "../../styles/variables/fonts.scss";
+@import "../../styles/variables/colors.scss";
+
+.card {
+    background-color: $color-white;
+    display: flex;
+    border-radius: 30px;
+    flex-direction: column;
+    height: 200px;
+    width: 150px;
+    overflow: hidden;
+    position: relative;
+}
+
+.bottom {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    padding: 10px 10px 0 10px;
+    font-family: $font-family-secondary;
+    font-weight: bold;
+    min-height: 50px; 
+    flex-shrink: 0; 
+}
+
+.title {
+    color: $color-text-green-dark;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; 
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    line-height: 1.3;
+    max-height: calc(1.3em * 2);
+}
+
+.macros {
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+    font-family: $font-family-secondary;
+    color: $color-text-black;
+    gap: 5px;
+    min-height: 20px; 
+    flex-shrink: 0; 
+}
+
+.calories {
+    color: $color-text-black;
+    flex-shrink: 0;
+    text-align: right;
+    font-size: 15px;
+    white-space: nowrap; 
+}
+
+.macros {
+    display: flex;
+    flex-direction: column;
+    padding: 5px 10px 10px;
+    font-size: 13px;
+    font-family: $font-family-secondary;
+    color: $color-text-black;
+    gap: 5px;
+}
+
+.macroRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.macroName {
+    text-align: left;
+}
+
+.macroValue {
+    font-weight: bold;
+    text-align: right;
+}
+
+.imageWrapper {
+    position: relative;
+    width: 100%;
+    flex: 1;
+    min-height: 0; 
+    overflow: hidden;
+}
+
+.image {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+.donePopup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: none;
+    color: white;
+    padding: 8px 16px;
+    font-family: $font-family-secondary;
+    font-size: 30px;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+    
+    font-weight: bold;
+    z-index: 10;
+    pointer-events: none;
+    white-space: nowrap;
+
+    animation: fadeInOut 1.5s ease forwards;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.doneButton {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 2;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: $color-button-tick;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $color-text-green-dark;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    
+    &:hover {
+        filter: brightness(0.8);  
+    }
+}
+
+@include breakpoints(xl) {
+    .card {
+        width: 200px;
+        height: 250px;
+    }
+    
+    .bottom {
+        font-size: 18px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    
+    .macros {
+        padding-left: 20px;
+    }
+
+    .macroRow {
+        padding-right: 20px;
+    }
+
+}

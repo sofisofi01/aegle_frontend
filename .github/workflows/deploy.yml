@@ -1,0 +1,53 @@
+name: Build and Deploy Frontend
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          no-cache: true
+          tags: |
+            sofisofi01/aegle-frontend:latest
+            sofisofi01/aegle-frontend:${{ github.sha }}
+          build-args: |
+            NEXT_PUBLIC_API_BASE_URL=/api
+      
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          script: |
+            cd /root/wellness
+            # Используем конкретный тег коммита для деплоя
+            export FRONTEND_IMAGE=sofisofi01/aegle-frontend:${{ github.sha }}
+            docker pull $FRONTEND_IMAGE
+            # Принудительно обновляем локальный тег latest, чтобы он указывал на новый образ
+            docker tag $FRONTEND_IMAGE sofisofi01/aegle-frontend:latest
+            docker compose -f docker-compose.prod.yml stop frontend
+            docker compose -f docker-compose.prod.yml rm -f frontend
+            # Теперь можно запускать просто через compose, так как latest обновлен
+            docker compose -f docker-compose.prod.yml up -d frontend
+            docker image prune -f

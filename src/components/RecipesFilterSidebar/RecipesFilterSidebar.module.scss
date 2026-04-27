@@ -1,0 +1,339 @@
+@import "../../styles/mixins/breakpoints.scss";
+@import "../../styles/variables/fonts.scss";
+@import "../../styles/variables/colors.scss";
+
+.sidebar {
+    position: sticky;
+    top: 20px;
+    width: 280px;
+    height: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    
+    @media (max-width: 767px) {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 300px;
+        height: 100vh;
+        overflow-y: auto;
+        scrollbar-width: none;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 1000;
+        
+        &.open {
+            transform: translateX(0);
+        }
+    }
+}
+
+.filterGroup h3 {
+    margin: 10px 0 15px 0px;
+    font-size: $font-size-title;
+    font-weight: bold;
+    color: $color-text-green-dark;
+    font-family: $font-family-secondary;
+    
+}
+
+.filterGroup {
+    background: rgba($color-white, 0.6);
+    border-radius: 30px;
+    border-top: 3px solid $color-mid-green;
+    backdrop-filter: blur(10px);
+    margin-bottom: 3px;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    
+    &.open {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    @media (min-width: 768px) {
+        display: none;
+    }
+}
+
+.content {
+    padding: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: $font-size-base;
+    font-family: $font-family-secondary;
+    color: $color-text-black;
+}
+
+.options div {
+    cursor: pointer;
+    text-align: left;
+    position: relative;
+    margin-left: 35px;
+
+    &:last-child {
+        padding-bottom: 10px;
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        right: 0;
+        width: 90%;
+        height: 1px;
+        background: $color-text-green-dark;
+        margin-left: -13px;
+    }
+    
+    &:last-child::after {
+        display: none;
+    }
+
+    &.active {
+        color: $color-mid-green;
+        font-weight: bold;
+    }
+}
+
+// Стили для Ingredients
+.selectedIngredients {
+    display: flex;
+    flex-direction: column;
+    gap: 0x;
+    margin-bottom: 12px;
+}
+
+.ingredientItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    font-size: $font-size-base;
+    font-family: $font-family-secondary;
+    color: $color-text-black;
+    text-align: left;
+    position: relative;
+    margin-left: 35px;
+    
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 90%;
+        height: 1px;
+        background: $color-text-green-dark;
+        margin-left: -13px;
+    }
+    
+    &:last-child::after {
+        display: none;
+    }
+}
+
+.removeButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-right: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #999;
+    transition: color 0.2s ease;
+}
+
+.addButtonWrapper {
+    position: relative;
+    text-align: left;
+    margin-left: 35px;
+}
+
+.addButton {
+    background: none;
+    border: none;
+    color: $color-text-green;
+    font-size: $font-size-base;
+    font-family: $font-family-secondary;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 8px 0;
+    transition: opacity 0.2s ease;
+    
+    &:hover {
+        opacity: 0.7;
+    }
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    min-width: 120px;
+    z-index: 100;
+    overflow: hidden;
+    margin-top: 4px;
+}
+
+.dropdownItem {
+    padding: 8px 16px;
+    font-size: $font-size-base;
+    font-family: $font-family-secondary;
+    color: $color-text-black;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    
+    &:hover {
+        background: rgba($color-mid-green, 0.1);
+    }
+}
+
+.searchWrapper {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.searchInput {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    background-color: $color-white;
+    color: $color-text-black;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: $font-family-secondary;
+    outline: none;
+    
+    &:focus {
+        border-color: $color-mid-green;
+    }
+}
+
+.noResults {
+    padding: 12px 16px;
+    text-align: center;
+}
+
+// Range Slider Styles
+.sliderContainer {
+    margin-top: 12px;
+    max-width: 180px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sliderTrack {
+    position: relative;
+    height: 6px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.sliderRange {
+    position: absolute;
+    height: 100%;
+    background: $color-dark-green;
+    border-radius: 4px;
+}
+
+.sliderHandle {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: $color-dark-green;
+    border-radius: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.1s ease;
+    
+    &:active {
+        cursor: grabbing;
+    }
+}
+
+.sliderValues {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    
+    span {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 13px;
+        margin-bottom: 10px;
+    }
+}
+
+@include breakpoints(sm) {
+    .sidebar {
+        position: sticky;
+        top: 20px;
+        width: 250px;
+    }
+    
+    .filterGroup {
+        margin-bottom: 30px; 
+        backdrop-filter: none;
+    }
+    
+    .overlay {
+        display: none;
+    }
+    
+    .selectedIngredients {
+        margin-bottom: 16px;
+    }
+}
+
+// dropdown mobile fix
+@media (max-width: 767px) {
+    .sidebar {
+        z-index: 1500;
+        position: fixed;
+    }
+
+    .content {
+        position: relative;    
+        z-index: auto;        
+    }
+
+    .filterGroup {
+        position: relative;
+        z-index: 1;        
+    }
+
+    .filterGroup:has(.addButtonWrapper) {
+        z-index: 10;
+    }
+}

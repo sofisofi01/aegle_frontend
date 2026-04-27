@@ -1,44 +1,100 @@
 "use client";
 import { Page } from "@/containers/Page";
 import styles from "./signup.module.scss";
-import { data } from "./const"; 
+import { data } from "./const";
 import { useState } from "react";
-import DatePicker from "react-datepicker";
 import Link from "next/link";
-import "react-datepicker/dist/react-datepicker.css"; 
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import { authService } from "@/services/authService";
+import { useAuthStore } from "@/store/useAuthStore";
+import "react-datepicker/dist/react-datepicker.css";
 
 export function SignUpPage() {
-  const [gender, setGender] = useState<"male" | "female" | null>(null);
-  const [activity, setActivity] = useState<number | null>(null);
-  const [birthDate, setBirthDate] = useState<Date | null>(null);
+  const [gender, setGender] = useState<"M" | "F" | null>(null);
+  const [activityLevel, setActivityLevel] = useState<string | null>(null);
+  const [goal, setGoal] = useState<string | null>(null);
 
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
+  const [targetWeight, setTargetWeight] = useState("");
+  const [age, setAge] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const isValidEmail = (email: string) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const router = useRouter();
+  const setAuth = useAuthStore((state) => state.setAuth);
 
-  const handleLettersOnly = (e: React.ChangeEvent<HTMLInputElement>, setFn: Function) => {
+  const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  const handleLettersOnly = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setFn: (val: string) => void
+  ) => {
     const value = e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ\s-]/g, "");
     setFn(value);
   };
 
-  const handleNumbersOnly = (e: React.ChangeEvent<HTMLInputElement>, setFn: Function) => {
+  const handleNumbersOnly = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setFn: (val: string) => void
+  ) => {
     const value = e.target.value.replace(/[^0-9]/g, "");
     setFn(value);
   };
 
-  const handleSubmit = () => {
-    if (!name || !surname || !height || !weight || !isValidEmail(email) || !password) {
-      alert("Please fill all fields correctly!");
+  const handleSubmit = async () => {
+    if (
+      !name ||
+      !surname ||
+      !height ||
+      !weight ||
+      !targetWeight ||
+      !age ||
+      !isValidEmail(email) ||
+      !password ||
+      !gender ||
+      !activityLevel ||
+      !goal
+    ) {
+      setError("Please fill all fields correctly!");
       return;
     }
-    alert("Form submitted!");
+
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const data = await authService.register({
+        email,
+        password,
+        first_name: name,
+        last_name: surname,
+        height: parseInt(height),
+        weight: parseInt(weight),
+        target_weight: parseInt(targetWeight),
+        gender: gender,
+        age: parseInt(age),
+        activity_level: activityLevel,
+        goal: goal,
+      });
+
+      setAuth(data.user, data.access, data.refresh);
+      router.push("/profile");
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.detail || "Registration failed. Please try again.");
+      } else {
+        setError("An unexpected error occurred.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -47,6 +103,14 @@ export function SignUpPage() {
         <section className={styles.wrapper}>
           <h1 className={styles.title}>{data.title}</h1>
           <p className={styles.subtitle}>{data.subtitle}</p>
+          {error && (
+            <p
+              className={styles.error}
+              style={{ color: "red", textAlign: "center", marginBottom: "10px" }}
+            >
+              {error}
+            </p>
+          )}
 
           <div className={styles.block}>
             <input
@@ -66,14 +130,14 @@ export function SignUpPage() {
               <p className={styles.label}>Select your sex</p>
               <div className={styles.rowOptions}>
                 <button
-                  className={`${styles.option} ${styles.genderOption} ${gender === "male" ? styles.active : ""}`}
-                  onClick={() => setGender("male")}
+                  className={`${styles.option} ${styles.genderOption} ${gender === "M" ? styles.active : ""}`}
+                  onClick={() => setGender("M")}
                 >
                   ♂
                 </button>
                 <button
-                  className={`${styles.option} ${styles.genderOption} ${gender === "female" ? styles.active : ""}`}
-                  onClick={() => setGender("female")}
+                  className={`${styles.option} ${styles.genderOption} ${gender === "F" ? styles.active : ""}`}
+                  onClick={() => setGender("F")}
                 >
                   ♀
                 </button>
@@ -81,16 +145,12 @@ export function SignUpPage() {
             </div>
 
             <div className={styles.labelRow}>
-              <p className={styles.label}>Enter your date of birth</p>
-              <DatePicker
-                selected={birthDate}
-                onChange={(date) => setBirthDate(date)}
-                placeholderText="DD/MM/YYYY"
-                className={styles.inputDate}
-                calendarClassName={styles.datepickerCalendar}
-                dateFormat="dd/MM/yyyy"
-                popperPlacement="bottom-start"
-                portalId="root-portal"
+              <p className={styles.label}>Enter your age</p>
+              <input
+                placeholder="Age"
+                className={styles.input}
+                value={age}
+                onChange={(e) => handleNumbersOnly(e, setAge)}
               />
             </div>
           </div>
@@ -110,19 +170,40 @@ export function SignUpPage() {
               value={weight}
               onChange={(e) => handleNumbersOnly(e, setWeight)}
             />
+            <input
+              placeholder={data.fields.targetWeight}
+              className={styles.input}
+              value={targetWeight}
+              onChange={(e) => handleNumbersOnly(e, setTargetWeight)}
+            />
 
             <div className={styles.labelRow}>
-              <p className={styles.label}>
-                Enter your activity level from low (sedentary lifestyle) to high (regular exercise)
-              </p>
-              <div className={styles.rowOptions}>
-                {data.activity.map((_, i) => (
+              <p className={styles.label}>Select your activity level</p>
+              <div className={styles.rowOptions} style={{ flexWrap: "wrap", gap: "10px" }}>
+                {data.activity.map((act) => (
                   <button
-                    key={i}
-                    className={`${styles.option} ${activity === i ? styles.active : ""}`}
-                    onClick={() => setActivity(i)}
+                    key={act.id}
+                    className={`${styles.option} ${activityLevel === act.id ? styles.active : ""}`}
+                    onClick={() => setActivityLevel(act.id)}
+                    style={{ padding: "5px 15px", fontSize: "14px" }}
                   >
-                    {i + 1}
+                    {act.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className={styles.labelRow}>
+              <p className={styles.label}>Select your goal</p>
+              <div className={styles.rowOptions}>
+                {data.goals.map((g) => (
+                  <button
+                    key={g.id}
+                    className={`${styles.option} ${goal === g.id ? styles.active : ""}`}
+                    onClick={() => setGoal(g.id)}
+                    style={{ padding: "5px 15px", fontSize: "14px" }}
+                  >
+                    {g.label}
                   </button>
                 ))}
               </div>
@@ -143,35 +224,35 @@ export function SignUpPage() {
             )}
 
             <div className={styles.passwordWrapper}>
-            <input
+              <input
                 placeholder={data.fields.password}
                 type={showPassword ? "text" : "password"}
                 className={styles.inputPassword}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                style={{ fontWeight: password && !showPassword ? 700 : 400 }} 
-            />
-            <span
+                style={{ fontWeight: password && !showPassword ? 700 : 400 }}
+              />
+              <span
                 className={styles.passwordToggle}
                 onClick={() => setShowPassword(!showPassword)}
-            >
+              >
                 {showPassword ? "⌣" : "👁"}
-            </span>
+              </span>
             </div>
           </div>
 
           <div className={styles.signInBlock}>
             <p className={styles.signInText}>
-                {data.actions.haveAccount}{" "}
-                <Link href="/signin" className={styles.signInLink}>
+              {data.actions.haveAccount}{" "}
+              <Link href="/signin" className={styles.signInLink}>
                 {data.actions.signIn}
-                </Link>
+              </Link>
             </p>
 
-            <button className={styles.submit} onClick={handleSubmit}>
-                Sign Up
+            <button className={styles.submit} onClick={handleSubmit} disabled={isLoading}>
+              {isLoading ? "Signing Up..." : "Sign Up"}
             </button>
-            </div>
+          </div>
         </section>
       </Page>
     </div>

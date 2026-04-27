@@ -7,5 +7,3 @@ export type HeroData = {
 export type AdvantagesData = {
   title: string;
 };
-
-export type MainProps = {};
