@@ -23,6 +23,7 @@ export const data = {
     { id: "active", label: "Active" },
     { id: "very_active", label: "Very active" },
   ],
+
   goals: [
     { id: "lose", label: "Lose weight" },
     { id: "maintain", label: "Maintain weight" },

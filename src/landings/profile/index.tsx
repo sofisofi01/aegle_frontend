@@ -363,7 +363,6 @@ export function ProfilePage() {
                     <option value="light">Lightly active</option>
                     <option value="moderate">Moderately active</option>
                     <option value="very_active">Very active</option>
-                    <option value="extra_active">Extra active</option>
                   </select>
                 ) : (
                   <span>
