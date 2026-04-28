@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import styles from "./RecipesCreateCard.module.scss";
-import time from "@/landings/recipes/assets/time.png";
 import plusIcon from "@/landings/recipes/assets/plusIcon.svg";
 import minusIcon from "@/landings/recipes/assets/minus.png";
 import { availableIngredients } from "../RecipesIngredientsFilter/const";
@@ -27,10 +26,10 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
   const [recipe, setRecipe] = useState<NewRecipe>({
     title: initialData?.title || "",
     type: initialData?.type || "Breakfast",
-    calories: 200,
-    proteins: 23,
-    fats: 3,
-    carbohydrates: 33,
+    calories: initialData?.calories || 200,
+    proteins: initialData?.proteins || 23,
+    fats: initialData?.fats || 3,
+    carbohydrates: initialData?.carbohydrates || 33,
     ingredients: initialData?.ingredients || [],
     recipe: initialData?.recipe || "",
     time: initialData?.time || "",
@@ -42,7 +41,6 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
   const [imagePreview, setImagePreview] = useState<string>(
     typeof recipe.image === "string" ? recipe.image : ""
   );
-  const [timeUnit, setTimeUnit] = useState("min");
 
   const filteredIngredients = availableIngredients.filter((ingredient) =>
     ingredient.toLowerCase().includes(searchTerm.toLowerCase())
@@ -52,12 +50,6 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
     field: keyof NewRecipe,
     value: string | number | IngredientWithAmount[]
   ) => {
-    if (field === "time" && typeof value === "string") {
-      const numValue = parseInt(value);
-      if (!isNaN(numValue) && numValue < 0) {
-        return;
-      }
-    }
     setRecipe((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -136,6 +128,7 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
             protein: recipe.proteins,
             carbs: recipe.carbohydrates,
             fat: recipe.fats,
+            image_url: imagePreview,
           });
           router.push("/nutrition");
         } catch (error) {
@@ -149,7 +142,6 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
     <form onSubmit={handleSubmit} className={styles.form}>
       <div className={styles.card}>
         <div className={styles.cardChars}>
-          {/* Левая колонка - изображение */}
           <div className={styles.previewContainer}>
             <div className={styles.imageWrapper}>
               {imagePreview ? (
@@ -186,7 +178,6 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
               )}
             </div>
 
-            {/* Блок с макроэлементами*/}
             <div className={styles.macronutrients}>
               <input
                 type="text"
@@ -196,26 +187,44 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
                 className={styles.titleInput}
                 required
               />
-
               <div className={styles.macroDisplay}>
                 <div className={styles.macroItem}>
                   <span className={styles.macroLabel}>Calories</span>
-                  <span className={styles.macroValue}>{recipe.calories} kcal</span>
+                  <input
+                    type="number"
+                    value={recipe.calories}
+                    onChange={(e) => handleChange("calories", parseInt(e.target.value) || 0)}
+                    className={styles.macroInput}
+                  />
                 </div>
                 <div className={styles.macroItem}>
                   <span className={styles.macroLabel}>Proteins</span>
-                  <span className={styles.macroValue}>{recipe.proteins} g</span>
+                  <input
+                    type="number"
+                    value={recipe.proteins}
+                    onChange={(e) => handleChange("proteins", parseInt(e.target.value) || 0)}
+                    className={styles.macroInput}
+                  />
                 </div>
                 <div className={styles.macroItem}>
                   <span className={styles.macroLabel}>Fats</span>
-                  <span className={styles.macroValue}>{recipe.fats} g</span>
+                  <input
+                    type="number"
+                    value={recipe.fats}
+                    onChange={(e) => handleChange("fats", parseInt(e.target.value) || 0)}
+                    className={styles.macroInput}
+                  />
                 </div>
                 <div className={styles.macroItem}>
                   <span className={styles.macroLabel}>Carbohydrates</span>
-                  <span className={styles.macroValue}>{recipe.carbohydrates} g</span>
+                  <input
+                    type="number"
+                    value={recipe.carbohydrates}
+                    onChange={(e) => handleChange("carbohydrates", parseInt(e.target.value) || 0)}
+                    className={styles.macroInput}
+                  />
                 </div>
               </div>
-
               <div className={styles.macroField}>
                 <label>Type</label>
                 <select
@@ -233,12 +242,9 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
             </div>
           </div>
 
-          {/* Правая колонка - ингредиенты и рецепт */}
           <div className={styles.recipeContainer}>
             <div className={styles.ingredients}>
               <div className={styles.ingredientsTitle}>Ingredients</div>
-
-              {/* Список ингредиентов */}
               <div className={styles.selectedIngredients}>
                 {recipe.ingredients.map((ingredient, idx) => (
                   <div key={idx} className={styles.ingredientItem}>
@@ -275,12 +281,7 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
                     </button>
                   </div>
                 ))}
-                {recipe.ingredients.length === 0 && (
-                  <div className={styles.emptyIngredients}>No ingredients added yet</div>
-                )}
               </div>
-
-              {/* Кнопка добавления ингредиента */}
               <div className={styles.addButtonWrapper}>
                 <button
                   type="button"
@@ -289,81 +290,51 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
                 >
                   Add ingredient...
                 </button>
-
                 {isDropdownOpen && (
                   <div className={styles.dropdown}>
-                    <div className={styles.searchWrapper}>
-                      <input
-                        type="text"
-                        placeholder="Search ingredients..."
-                        className={styles.searchInput}
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        autoFocus
-                      />
-                    </div>
-
+                    <input
+                      type="text"
+                      placeholder="Search or type new..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className={styles.dropdownSearch}
+                      autoFocus
+                    />
                     <div className={styles.dropdownList}>
-                      {filteredIngredients.length > 0 ? (
-                        filteredIngredients.map((ingredient) => (
-                          <div
-                            key={ingredient}
-                            className={styles.dropdownItem}
-                            onClick={() => handleAddIngredient(ingredient)}
-                          >
-                            {ingredient}
-                          </div>
-                        ))
-                      ) : (
-                        <div className={styles.noResults}>No ingredients found</div>
+                      {filteredIngredients.map((ing) => (
+                        <div
+                          key={ing}
+                          className={styles.dropdownItem}
+                          onClick={() => handleAddIngredient(ing)}
+                        >
+                          {ing}
+                        </div>
+                      ))}
+                      {searchTerm && !availableIngredients.includes(searchTerm) && (
+                        <div
+                          className={styles.dropdownItem}
+                          onClick={() => handleAddIngredient(searchTerm)}
+                        >
+                          Add new: &ldquo;{searchTerm}&rdquo;
+                        </div>
                       )}
                     </div>
                   </div>
                 )}
               </div>
             </div>
-
-            <div className={styles.recipe}>
-              <div className={styles.recipeHeader}>
-                <div className={styles.recipeTitle}>Recipe</div>
-                <div className={styles.timeContainer}>
-                  <div className={styles.timeLabel}>
-                    <Image src={time} alt="Time" height={20} width={20} />
-                    <span>Cooking time</span>
-                  </div>
-                  <div className={styles.timeControls}>
-                    <input
-                      type="number"
-                      value={recipe.time}
-                      onChange={(e) => handleChange("time", e.target.value)}
-                      className={styles.timeAmountInput}
-                      placeholder="0"
-                    />
-                    <select
-                      value={timeUnit}
-                      onChange={(e) => setTimeUnit(e.target.value)}
-                      className={styles.timeUnitSelect}
-                    >
-                      <option value="min">min</option>
-                      <option value="hour">hour</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
+            <div className={styles.recipeText}>
+              <div className={styles.recipeTitle}>Recipe</div>
               <textarea
-                placeholder="Write the recipe steps here..."
                 value={recipe.recipe}
                 onChange={(e) => handleChange("recipe", e.target.value)}
+                placeholder="Describe the cooking process..."
                 className={styles.recipeTextarea}
-                rows={8}
                 required
               />
             </div>
           </div>
         </div>
-
-        {/* Кнопки действий */}
         <div className={styles.actions}>
           <button type="button" onClick={onCancel} className={styles.cancelButton}>
             Cancel

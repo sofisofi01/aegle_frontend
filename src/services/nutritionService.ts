@@ -69,6 +69,11 @@ export const nutritionService = {
     const response = await api.get(`/food-diary/search/?q=${query}`);
     return response.data;
   },
+
+  getUserFoodItems: async (): Promise<FoodSearchResult[]> => {
+    const response = await api.get("/food-diary/user-food-items/");
+    return response.data;
+  },
 };
 
 export interface FoodSearchResult {
