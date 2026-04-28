@@ -178,6 +178,7 @@ export function WorkoutPage() {
               onDelete={() => handleDeleteExercise(ex.id)}
               onUpdateSets={handleUpdateSets}
               onToggleComplete={handleToggleComplete}
+              calories={Number(ex.total_calories)}
             />
           ))}
         </div>

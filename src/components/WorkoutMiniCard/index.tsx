@@ -14,6 +14,7 @@ export function WorkoutMiniCard({
   onDelete,
   onUpdateSets,
   onToggleComplete,
+  calories,
 }: WorkoutMiniCardProps) {
   const [showDone, setShowDone] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -108,6 +109,9 @@ export function WorkoutMiniCard({
             </span>
           )}
         </div>
+        {calories !== undefined && (
+          <div className={styles.calories}>{calories.toFixed(0)} kcal</div>
+        )}
       </div>
     </div>
   );

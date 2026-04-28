@@ -9,4 +9,5 @@ export type WorkoutMiniCardProps = {
   onDelete?: (id: number) => void;
   onUpdateSets?: (id: number, newSets: string) => void;
   onToggleComplete?: (id: number) => void;
+  calories?: number;
 };
