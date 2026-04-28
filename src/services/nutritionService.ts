@@ -79,7 +79,7 @@ export const nutritionService = {
       cooking_time?: number;
     }
   ) => {
-    const response = await api.post("/food-diary/food-items/create/", data);
+    const response = await api.post("/food-diary/food-items/", data);
     return response.data;
   },
 
