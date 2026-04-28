@@ -841,10 +841,28 @@ export function ProfilePage() {
                         )}
                       </>
                     ) : (
-                      <div>
-                        No active weight goal set. Target weight:{" "}
-                        <span className={styles.analyticsStrong}>{goalsInfo.targetWeight}</span> kg
-                      </div>
+                      <>
+                        <div>
+                          Target weight:{" "}
+                          <span className={styles.analyticsStrong}>{goalsInfo.targetWeight}</span>{" "}
+                          kg
+                        </div>
+                        <div>
+                          Current weight:{" "}
+                          <span className={styles.analyticsStrong}>{profileInfo.weight}</span> kg
+                        </div>
+                        {Number(goalsInfo.targetWeight) !== Number(profileInfo.weight) && (
+                          <div>
+                            Remaining:{" "}
+                            <span className={styles.analyticsStrong}>
+                              {Math.abs(
+                                Number(goalsInfo.targetWeight) - Number(profileInfo.weight)
+                              ).toFixed(1)}
+                            </span>{" "}
+                            kg to go
+                          </div>
+                        )}
+                      </>
                     )}
                     {analytics?.weight_change !== null &&
                       analytics?.weight_change !== undefined && (
