@@ -104,22 +104,41 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (recipe.title && recipe.recipe && recipe.ingredients.length > 0) {
-      if (onSave) {
-        onSave(recipe);
-      }
+      const ingredientsString = recipe.ingredients
+        .map((ing) => `${ing.name} (${ing.amount}${ing.unit})`)
+        .join(", ");
 
-      if (day && mealType) {
-        const dayMap: Record<string, number> = {
-          Monday: 1,
-          Tuesday: 2,
-          Wednesday: 3,
-          Thursday: 4,
-          Friday: 5,
-          Saturday: 6,
-          Sunday: 7,
-        };
+      try {
+        // Сохраняем как FoodItem для страницы рецептов
+        await nutritionService.createFoodItem({
+          name: recipe.title,
+          calories: recipe.calories,
+          protein: recipe.proteins,
+          carbs: recipe.carbohydrates,
+          fat: recipe.fats,
+          serving_size: "100g",
+          meal_type: recipe.type,
+          ingredients: ingredientsString,
+          recipe: recipe.recipe,
+          cooking_time: parseInt(recipe.time) || 15,
+          image_url: imagePreview,
+        });
 
-        try {
+        if (onSave) {
+          onSave(recipe);
+        }
+
+        if (day && mealType) {
+          const dayMap: Record<string, number> = {
+            Monday: 1,
+            Tuesday: 2,
+            Wednesday: 3,
+            Thursday: 4,
+            Friday: 5,
+            Saturday: 6,
+            Sunday: 7,
+          };
+
           await nutritionService.addFoodToPlan({
             day_number: dayMap[day] || 1,
             meal_type: mealType.toLowerCase(),
@@ -129,11 +148,16 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
             carbs: recipe.carbohydrates,
             fat: recipe.fats,
             image_url: imagePreview,
+            ingredients: ingredientsString,
           });
           router.push("/nutrition");
-        } catch (error) {
-          console.error("Failed to add custom food to plan:", error);
+        } else {
+          // Если мы просто создавали рецепт, а не добавляли в план
+          onCancel?.();
+          window.location.reload(); // Чтобы обновить список рецептов
         }
+      } catch (error) {
+        console.error("Failed to save recipe:", error);
       }
     }
   };

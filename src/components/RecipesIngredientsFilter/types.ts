@@ -1,4 +1,5 @@
 export type IngredientsFilterProps = {
-    selectedIngredients: string[];
-    onSelectIngredients: (ingredients: string[]) => void;
-}
+  selectedIngredients: string[];
+  onSelectIngredients: (ingredients: string[]) => void;
+  availableIngredients?: string[];
+};

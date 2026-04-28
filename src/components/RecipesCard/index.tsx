@@ -39,18 +39,20 @@ export function RecipesCard({
       try {
         const results = await nutritionService.getUserFoodItems();
         // Преобразуем формат бэкенда в формат карточки
-        const formatted: RecipeData[] = results.map((item) => ({
-          title: item.name,
-          type: "custom",
-          calories: item.calories,
-          proteins: item.protein,
-          fats: item.fat,
-          carbohydrates: item.carbs,
-          ingredients: "Custom ingredients",
-          recipe: "Custom recipe",
-          time: "15 min",
-          image: item.image_url || mockData[0].image,
-        }));
+        const formatted: RecipeData[] = results.map((item) => {
+          return {
+            title: item.name,
+            type: item.meal_type || "custom",
+            calories: item.calories,
+            proteins: item.protein,
+            fats: item.fat,
+            carbohydrates: item.carbs,
+            ingredients: item.ingredients || "No ingredients listed",
+            recipe: item.recipe || "No recipe instructions",
+            time: `${item.cooking_time || 15} min`,
+            image: item.image_url || mockData[0].image,
+          };
+        });
         setUserRecipes(formatted);
       } catch (error) {
         console.error("Failed to fetch user recipes:", error);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Page } from "@/containers/Page";
 import { RecipesCard } from "@/components/RecipesCard";
@@ -32,6 +32,32 @@ export function RecipesPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<FoodSearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [availableIngredients, setAvailableIngredients] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchIngredients = async () => {
+      try {
+        const results = await nutritionService.getUserFoodItems();
+        const ingredientsSet = new Set<string>();
+        results.forEach((item) => {
+          if (item.ingredients) {
+            item.ingredients.split(",").forEach((ing) => {
+              const name = ing.split("(")[0].trim();
+              if (name) ingredientsSet.add(name);
+            });
+          }
+        });
+        // Добавляем стандартные
+        ["eggs", "milk", "tomatoes", "chicken", "cheese", "flour"].forEach((i) =>
+          ingredientsSet.add(i)
+        );
+        setAvailableIngredients(Array.from(ingredientsSet));
+      } catch (e) {
+        console.error("Failed to fetch ingredients:", e);
+      }
+    };
+    fetchIngredients();
+  }, []);
 
   const handleSearch = async () => {
     if (!searchQuery.trim()) return;
@@ -156,6 +182,7 @@ export function RecipesPage() {
               onCarbsRangeChange={handleCarbsChange}
               onProteinsRangeChange={handleProteinsChange}
               onFatsRangeChange={handleFatsChange}
+              availableIngredients={availableIngredients}
             />
           </div>
 

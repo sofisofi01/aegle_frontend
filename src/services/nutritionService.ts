@@ -28,12 +28,16 @@ export interface NutritionPlan {
 
 export interface FoodSearchResult {
   id: number;
-  food_name: string;
+  name: string;
   calories: number;
   protein: number;
   carbs: number;
   fat: number;
   image_url?: string;
+  meal_type?: string;
+  ingredients?: string;
+  recipe?: string;
+  cooking_time?: number;
 }
 
 export const nutritionService = {
@@ -51,6 +55,7 @@ export const nutritionService = {
     carbs: number;
     fat: number;
     image_url?: string;
+    ingredients?: string;
   }) => {
     const response = await api.post("/food-diary/plans/add_food/", data);
     return response.data;
@@ -63,6 +68,18 @@ export const nutritionService = {
 
   deleteNutritionEntry: async (id: number) => {
     await api.delete(`/food-diary/nutrition-entries/${id}/`);
+  },
+
+  createFoodItem: async (
+    data: Partial<FoodSearchResult> & {
+      meal_type?: string;
+      ingredients?: string;
+      recipe?: string;
+      cooking_time?: number;
+    }
+  ) => {
+    const response = await api.post("/food-diary/food-items/create/", data);
+    return response.data;
   },
 
   searchFood: async (query: string): Promise<FoodSearchResult[]> => {
