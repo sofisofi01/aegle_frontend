@@ -38,6 +38,7 @@ export interface FoodSearchResult {
   ingredients?: string;
   recipe?: string;
   cooking_time?: number;
+  serving_size?: string;
 }
 
 export const nutritionService = {
