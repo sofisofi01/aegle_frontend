@@ -59,6 +59,7 @@ export const nutritionService = {
     fat: number;
     image_url?: string;
     ingredients?: string;
+    recipe?: string;
   }) => {
     const response = await api.post("/food-diary/plans/add_food/", data);
     return response.data;

@@ -149,6 +149,7 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
             fat: recipe.fats,
             image_url: imagePreview,
             ingredients: ingredientsString,
+            recipe: recipe.recipe,
           });
           router.push("/nutrition");
         } else {
