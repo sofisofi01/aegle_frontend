@@ -72,13 +72,21 @@ export function ProfilePage() {
 
   const calculateEatenCalories = () => {
     if (!nutritionPlan) return 0;
+
+    // Получаем текущий день недели (0 - воскресенье, 1 - понедельник...)
+    // В модели обычно 1 - Понедельник, ..., 7 - Воскресенье
+    const now = new Date();
+    let dayNum = now.getDay();
+    if (dayNum === 0) dayNum = 7; // Превращаем воскресенье в 7
+
+    const currentDay = nutritionPlan.days.find((d) => d.day_number === dayNum);
+    if (!currentDay) return 0;
+
     let total = 0;
-    nutritionPlan.days.forEach((day) => {
-      day.entries.forEach((entry) => {
-        if (entry.is_eaten) {
-          total += entry.calories;
-        }
-      });
+    currentDay.entries.forEach((entry) => {
+      if (entry.is_eaten) {
+        total += entry.calories;
+      }
     });
     return total;
   };
@@ -87,6 +95,20 @@ export function ProfilePage() {
     try {
       const data = await progressService.getAnalytics();
       setAnalytics(data);
+
+      // Если нет активной цели, но есть целевой вес в профиле, создаем цель
+      if (!data.goal_progress && goalsInfo.targetWeight && profileInfo.weight) {
+        await progressService.createGoal({
+          target_weight: Number(goalsInfo.targetWeight),
+          start_weight: Number(profileInfo.weight),
+          start_date: new Date().toISOString().split("T")[0],
+          target_date: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split("T")[0], // По умолчанию на 90 дней
+          is_active: true,
+        });
+        // Перезагружаем аналитику, чтобы получить расчеты
+        const updatedData = await progressService.getAnalytics();
+        setAnalytics(updatedData);
+      }
     } catch (error) {
       console.error("Failed to fetch analytics:", error);
     }
