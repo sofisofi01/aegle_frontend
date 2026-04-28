@@ -38,7 +38,11 @@ export function AIConsultantPage() {
 
         {isLoading ? (
           <div className={styles.loading}>
-            <p>AI is analyzing your data...</p>
+            <div className={styles.aiBrain}>🧠</div>
+            <p>GigaChat is analyzing your lifestyle...</p>
+            <div className={styles.loadingBar}>
+              <div className={styles.loadingProgress}></div>
+            </div>
           </div>
         ) : error ? (
           <div className={styles.error}>
