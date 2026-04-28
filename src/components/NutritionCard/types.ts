@@ -11,4 +11,6 @@ export type NutritionCardProps = {
   isEaten?: boolean;
   onDelete?: (id: number) => void;
   onToggleEaten?: (id: number) => void;
+  ingredients?: string;
+  recipe?: string;
 };

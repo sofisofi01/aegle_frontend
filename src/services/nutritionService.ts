@@ -10,6 +10,8 @@ export interface NutritionEntry {
   meal_type: "breakfast" | "lunch" | "dinner" | "snack";
   is_eaten: boolean;
   image_url?: string;
+  ingredients?: string;
+  recipe?: string;
 }
 
 export interface NutritionDay {

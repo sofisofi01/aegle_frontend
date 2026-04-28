@@ -7,8 +7,11 @@ import heroImg from "./assets/yoga.jpg";
 import food1 from "./assets/food 1.png";
 import food2 from "./assets/food 2.png";
 import Link from "next/link";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export function MainPage() {
+  const { accessToken } = useAuthStore();
+
   return (
     <Page>
       <section className={styles.hero}>
@@ -25,9 +28,11 @@ export function MainPage() {
             ))}
           </div>
 
-          <Link href="/signup">
-            <button className={styles.cta}>Get Started Today</button>
-          </Link>
+          {!accessToken && (
+            <Link href="/signup">
+              <button className={styles.cta}>Get Started Today</button>
+            </Link>
+          )}
         </div>
 
         <div className={styles.heroImage}>

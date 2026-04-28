@@ -141,11 +141,13 @@ export function RecipesCard({
               <div className={styles.imageWrapper}>
                 <Image
                   src={
-                    typeof item.image === "string"
-                      ? item.image.startsWith("http")
-                        ? item.image
-                        : `https://xn--80abcyabjk1czh.xn--p1ai${item.image}`
-                      : item.image.src
+                    item.image && typeof item.image === "string" && item.image.startsWith("http")
+                      ? item.image
+                      : item.image && typeof item.image === "string"
+                        ? `https://xn--80abcyabjk1czh.xn--p1ai${item.image}`
+                        : item.image && typeof item.image !== "string"
+                          ? item.image.src
+                          : mockData[0].image.src
                   }
                   alt="Recipe"
                   width={150}
@@ -153,6 +155,13 @@ export function RecipesCard({
                   className={styles.recipeImage}
                   quality={95}
                   priority={index === 0}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src =
+                      typeof mockData[0].image === "string"
+                        ? mockData[0].image
+                        : mockData[0].image.src;
+                  }}
                 />
               </div>
 

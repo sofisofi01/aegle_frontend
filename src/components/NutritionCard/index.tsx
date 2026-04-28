@@ -5,6 +5,7 @@ import Image from "next/image";
 import styles from "./NutritionCard.module.scss";
 import doneIcon from "@/landings/workout/assets/doneIcon.png";
 import nodoneIcon from "@/landings/workout/assets/nodoneIcon.svg";
+import workoutDefaultImg from "@/landings/workout/assets/workout.png";
 import { NutritionCardProps } from "./types";
 
 export function NutritionCard({
@@ -18,7 +19,9 @@ export function NutritionCard({
   isEaten,
   onToggleEaten,
   onDelete,
-}: NutritionCardProps & { onDelete?: (id: number) => void }) {
+  ingredients,
+  recipe,
+}: NutritionCardProps) {
   const [showDone, setShowDone] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -43,16 +46,22 @@ export function NutritionCard({
           <div className={styles.imageWrapper}>
             <Image
               src={
-                typeof image === "string"
-                  ? image.startsWith("http")
-                    ? image
-                    : `https://xn--80abcyabjk1czh.xn--p1ai${image}`
-                  : image.src
+                image && typeof image === "string" && image.startsWith("http")
+                  ? image
+                  : image && typeof image === "string"
+                    ? `https://xn--80abcyabjk1czh.xn--p1ai${image}`
+                    : image && typeof image !== "string"
+                      ? image.src
+                      : workoutDefaultImg.src
               }
               alt={title}
               width={200}
               height={200}
               className={styles.image}
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = workoutDefaultImg.src;
+              }}
             />
             {showDone && <div className={styles.donePopup}>Done!</div>}
             <button className={styles.doneButton} onClick={handleComplete}>
@@ -113,6 +122,21 @@ export function NutritionCard({
                   <span className={styles.macroValue}>{fats}g</span>
                 </div>
               </div>
+
+              {ingredients && (
+                <div className={styles.modalSection}>
+                  <h3>Ingredients</h3>
+                  <p>{ingredients}</p>
+                </div>
+              )}
+
+              {recipe && (
+                <div className={styles.modalSection}>
+                  <h3>Recipe</h3>
+                  <p className={styles.recipeText}>{recipe}</p>
+                </div>
+              )}
+
               <div className={styles.modalStatus}>
                 Status: <strong>{isEaten ? "Eaten" : "Planned"}</strong>
               </div>

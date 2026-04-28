@@ -268,6 +268,28 @@
   font-size: 16px;
 }
 
+.modalSection {
+  margin-bottom: 20px;
+  text-align: left;
+
+  h3 {
+    font-family: "Montserrat", sans-serif;
+    font-size: 18px;
+    color: #7ebc9e; // $color-text-green-dark
+    margin-bottom: 8px;
+  }
+
+  p {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #444;
+  }
+}
+
+.recipeText {
+  white-space: pre-line;
+}
+
 .deleteButton {
   width: 100%;
   padding: 12px;

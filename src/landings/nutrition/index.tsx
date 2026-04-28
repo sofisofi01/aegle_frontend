@@ -121,6 +121,8 @@ export function NutritionPage() {
                     fats={item.fat}
                     image={item.image_url || mondayImg}
                     isEaten={item.is_eaten}
+                    ingredients={item.ingredients}
+                    recipe={item.recipe}
                     onToggleEaten={handleToggleEaten}
                     onDelete={handleDeleteEntry}
                   />
