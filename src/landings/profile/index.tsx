@@ -19,6 +19,7 @@ import {
   NutritionDay,
   NutritionEntry,
 } from "@/services/nutritionService";
+import { progressService, AnalyticsData } from "@/services/progressService";
 import workoutDefaultImg from "@/landings/workout/assets/workout.png";
 import { useRouter } from "next/navigation";
 
@@ -52,6 +53,48 @@ export function ProfilePage() {
     goal: "maintain",
     activityLevel: "moderate",
   });
+
+  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
+  const [weightInput, setWeightInput] = useState({
+    weight: "",
+    date: new Date().toISOString().split("T")[0],
+  });
+  const [isSubmittingWeight, setIsSubmittingWeight] = useState(false);
+
+  const fetchAnalytics = async () => {
+    try {
+      const data = await progressService.getAnalytics();
+      setAnalytics(data);
+    } catch (error) {
+      console.error("Failed to fetch analytics:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === "analytics") {
+      fetchAnalytics();
+    }
+  }, [activeTab]);
+
+  const handleWeightSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!weightInput.weight || !weightInput.date) return;
+
+    setIsSubmittingWeight(true);
+    try {
+      await progressService.addWeightEntry({
+        weight: parseFloat(weightInput.weight),
+        date: weightInput.date,
+      });
+      setWeightInput({ ...weightInput, weight: "" });
+      fetchAnalytics();
+      fetchData(); // Обновить вес в профиле
+    } catch (error) {
+      console.error("Failed to add weight entry:", error);
+    } finally {
+      setIsSubmittingWeight(false);
+    }
+  };
 
   const fetchData = async () => {
     try {
@@ -682,55 +725,114 @@ export function ProfilePage() {
                 <div className={styles.analyticsBlock}>
                   <h3 className={styles.analyticsTitle}>Meals</h3>
                   <div className={styles.analyticsText}>
-                    <div>Your calorie intake over the last 7 days</div>
+                    <div>Your calorie intake over the last 30 days</div>
                     <div>
                       Your <span className={styles.analyticsStrong}>average</span>{" "}
                       <span className={styles.analyticsStrong}>calorie</span> intake was{" "}
-                      <span className={styles.analyticsStrong}>1207</span> kcal
+                      <span className={styles.analyticsStrong}>
+                        {analytics?.avg_daily_calories || 0}
+                      </span>{" "}
+                      kcal
                     </div>
-                    <div>
-                      <span className={styles.analyticsStrong}>45% Carbs</span>: Your main fuel
-                      source for workouts and daily activity.
-                    </div>
-                    <div>
-                      <span className={styles.analyticsStrong}>30% Protein</span>: Crucial for
-                      muscle repair after your 3 workouts.
-                    </div>
-                    <div>
-                      <span className={styles.analyticsStrong}>25% Fats</span>: Essential for
-                      hormone production and vitamin absorption.
-                    </div>
-                    <div>
-                      <span className={styles.analyticsStrong}>This is 33% below your target</span>,
-                      putting you in a significant calorie deficit for weight loss.
-                    </div>
+                    {analytics?.daily_calorie_goal && (
+                      <div>
+                        Your target is{" "}
+                        <span className={styles.analyticsStrong}>
+                          {analytics.daily_calorie_goal}
+                        </span>{" "}
+                        kcal.
+                      </div>
+                    )}
                   </div>
                 </div>
 
                 <div className={styles.analyticsBlock}>
-                  <h3 className={styles.analyticsTitle}>Workouts</h3>
+                  <h3 className={styles.analyticsTitle}>Weight Progress</h3>
                   <div className={styles.analyticsText}>
-                    <div>
-                      You completed <span className={styles.analyticsStrong}>30 workouts</span>
-                      <span className={styles.analyticsStatusOk}>Status: On track ✔</span>
-                    </div>
-                    <div>
-                      You logged <span className={styles.analyticsStrong}>135 active minutes</span>
-                      <span className={styles.analyticsStatusBad}>Status: Below target ✘</span>
-                    </div>
-                    <div>
-                      Your <span className={styles.analyticsStrong}>average</span> daily{" "}
-                      <span className={styles.analyticsStrong}>step</span> count was{" "}
-                      <span className={styles.analyticsStrong}>7800</span>
-                    </div>
+                    {analytics?.goal_progress ? (
+                      <>
+                        <div>
+                          Current progress:{" "}
+                          <span className={styles.analyticsStrong}>
+                            {Math.round(analytics?.goal_progress?.progress_percentage || 0)}%
+                          </span>
+                        </div>
+                        <div>
+                          Target weight:{" "}
+                          <span className={styles.analyticsStrong}>
+                            {analytics?.goal_progress?.target_weight}
+                          </span>{" "}
+                          kg
+                        </div>
+                        {analytics?.goal_progress?.estimated_completion && (
+                          <div>
+                            Estimated completion:{" "}
+                            <span className={styles.analyticsStrong}>
+                              {new Date(
+                                analytics?.goal_progress?.estimated_completion || ""
+                              ).toLocaleDateString()}
+                            </span>
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <div>No active weight goal set.</div>
+                    )}
+                    {analytics?.weight_change !== null &&
+                      analytics?.weight_change !== undefined && (
+                        <div>
+                          Weight change:{" "}
+                          <span
+                            className={
+                              analytics.weight_change <= 0
+                                ? styles.analyticsStatusOk
+                                : styles.analyticsStatusBad
+                            }
+                          >
+                            {analytics.weight_change > 0 ? "+" : ""}
+                            {analytics.weight_change.toFixed(1)} kg
+                          </span>
+                        </div>
+                      )}
                   </div>
+
+                  <form className={styles.weightForm} onSubmit={handleWeightSubmit}>
+                    <h4>Log Your Weight</h4>
+                    <div className={styles.inputGroup}>
+                      <label>Weight (kg)</label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        value={weightInput.weight}
+                        onChange={(e) => setWeightInput({ ...weightInput, weight: e.target.value })}
+                        placeholder="e.g. 75.5"
+                        required
+                      />
+                    </div>
+                    <div className={styles.inputGroup}>
+                      <label>Date</label>
+                      <input
+                        type="date"
+                        value={weightInput.date}
+                        onChange={(e) => setWeightInput({ ...weightInput, date: e.target.value })}
+                        required
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className={styles.submitBtn}
+                      disabled={isSubmittingWeight}
+                    >
+                      {isSubmittingWeight ? "Saving..." : "Save Weight"}
+                    </button>
+                  </form>
                 </div>
 
                 <div className={styles.analyticsBlock}>
                   <div className={styles.analyticsText}>
-                    You were excellent with your diet and workout consistency this week. The main
-                    area for improvement is increasing your overall daily activity (like walking) to
-                    hit your minute goal. Keep up the great work with your workouts!
+                    {analytics && analytics.weight_change !== null && analytics.weight_change <= 0
+                      ? "You are making great progress towards your weight goal! Keep maintaining your diet and activity levels."
+                      : "Consistency is key. Try to stick closer to your calorie goals and keep logging your progress."}
                   </div>
                 </div>
               </div>

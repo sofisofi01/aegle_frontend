@@ -855,6 +855,65 @@ input.profileInput[type="number"]::-webkit-outer-spin-button {
   color: $color-green;
 }
 
+.weightForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(126, 188, 158, 0.1); // $color-green with opacity
+  border-radius: 15px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+
+  h4 {
+    font-family: "Montserrat", sans-serif;
+    font-size: 18px;
+    margin: 0;
+    text-align: center;
+  }
+
+  .inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    label {
+      font-size: 14px;
+      font-family: "Open Sans", sans-serif;
+    }
+
+    input {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-family: "Open Sans", sans-serif;
+    }
+  }
+
+  .submitBtn {
+    padding: 10px;
+    background-color: #7ebc9e; // $color-green
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    &:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  }
+}
+
 @include breakpoints(xs) {
   .profilePage {
     flex-direction: column;
