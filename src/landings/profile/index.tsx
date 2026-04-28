@@ -853,7 +853,7 @@ export function ProfilePage() {
                           <span className={styles.analyticsStrong}>{goalsInfo.targetWeight}</span>{" "}
                           kg
                         </div>
-                        {analytics?.goal_progress?.estimated_completion && (
+                        {analytics?.goal_progress?.estimated_completion ? (
                           <div>
                             Estimated completion date:{" "}
                             <span className={styles.analyticsStrong}>
@@ -865,6 +865,11 @@ export function ProfilePage() {
                                 day: "numeric",
                               })}
                             </span>
+                          </div>
+                        ) : (
+                          <div>
+                            Estimated completion:{" "}
+                            <span className={styles.analyticsStrong}>Need more data</span>
                           </div>
                         )}
                       </>
