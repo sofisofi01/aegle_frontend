@@ -20,6 +20,15 @@ import {
   NutritionEntry,
 } from "@/services/nutritionService";
 import { progressService, AnalyticsData } from "@/services/progressService";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 import workoutDefaultImg from "@/landings/workout/assets/workout.png";
 import { useRouter } from "next/navigation";
 
@@ -60,6 +69,19 @@ export function ProfilePage() {
     date: new Date().toISOString().split("T")[0],
   });
   const [isSubmittingWeight, setIsSubmittingWeight] = useState(false);
+
+  const calculateEatenCalories = () => {
+    if (!nutritionPlan) return 0;
+    let total = 0;
+    nutritionPlan.days.forEach((day) => {
+      day.entries.forEach((entry) => {
+        if (entry.is_eaten) {
+          total += entry.calories;
+        }
+      });
+    });
+    return total;
+  };
 
   const fetchAnalytics = async () => {
     try {
@@ -725,22 +747,30 @@ export function ProfilePage() {
                 <div className={styles.analyticsBlock}>
                   <h3 className={styles.analyticsTitle}>Meals</h3>
                   <div className={styles.analyticsText}>
-                    <div>Your calorie intake over the last 30 days</div>
+                    <div>Your calorie intake from tracked meals</div>
                     <div>
-                      Your <span className={styles.analyticsStrong}>average</span>{" "}
-                      <span className={styles.analyticsStrong}>calorie</span> intake was{" "}
-                      <span className={styles.analyticsStrong}>
-                        {analytics?.avg_daily_calories || 0}
-                      </span>{" "}
-                      kcal
+                      You have consumed{" "}
+                      <span className={styles.analyticsStrong}>{calculateEatenCalories()}</span>{" "}
+                      kcal from eaten items.
                     </div>
-                    {analytics?.daily_calorie_goal && (
+                    {goalsInfo.dailyCalories && (
                       <div>
-                        Your target is{" "}
-                        <span className={styles.analyticsStrong}>
-                          {analytics.daily_calorie_goal}
-                        </span>{" "}
+                        Your daily target is{" "}
+                        <span className={styles.analyticsStrong}>{goalsInfo.dailyCalories}</span>{" "}
                         kcal.
+                        {calculateEatenCalories() > Number(goalsInfo.dailyCalories) ? (
+                          <span className={styles.analyticsStatusBad}>
+                            {" "}
+                            You have exceeded your goal.
+                          </span>
+                        ) : (
+                          <span>
+                            {" "}
+                            You have {Number(goalsInfo.dailyCalories) -
+                              calculateEatenCalories()}{" "}
+                            kcal left.
+                          </span>
+                        )}
                       </div>
                     )}
                   </div>
@@ -748,6 +778,39 @@ export function ProfilePage() {
 
                 <div className={styles.analyticsBlock}>
                   <h3 className={styles.analyticsTitle}>Weight Progress</h3>
+
+                  {analytics?.weight_data && analytics.weight_data.length > 0 && (
+                    <div className={styles.chartContainer}>
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={analytics.weight_data}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis
+                            dataKey="date"
+                            tickFormatter={(str) =>
+                              new Date(str).toLocaleDateString(undefined, {
+                                day: "numeric",
+                                month: "short",
+                              })
+                            }
+                          />
+                          <YAxis domain={["dataMin - 2", "dataMax + 2"]} />
+                          <Tooltip
+                            labelFormatter={(label) => new Date(label).toLocaleDateString()}
+                            formatter={(value) => [`${value} kg`, "Weight"]}
+                          />
+                          <Line
+                            type="monotone"
+                            dataKey="weight"
+                            stroke="#7ebc9e"
+                            strokeWidth={3}
+                            dot={{ r: 6 }}
+                            activeDot={{ r: 8 }}
+                          />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </div>
+                  )}
+
                   <div className={styles.analyticsText}>
                     {analytics?.goal_progress ? (
                       <>
@@ -759,24 +822,29 @@ export function ProfilePage() {
                         </div>
                         <div>
                           Target weight:{" "}
-                          <span className={styles.analyticsStrong}>
-                            {analytics?.goal_progress?.target_weight}
-                          </span>{" "}
+                          <span className={styles.analyticsStrong}>{goalsInfo.targetWeight}</span>{" "}
                           kg
                         </div>
                         {analytics?.goal_progress?.estimated_completion && (
                           <div>
-                            Estimated completion:{" "}
+                            Estimated completion date:{" "}
                             <span className={styles.analyticsStrong}>
                               {new Date(
                                 analytics?.goal_progress?.estimated_completion || ""
-                              ).toLocaleDateString()}
+                              ).toLocaleDateString(undefined, {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              })}
                             </span>
                           </div>
                         )}
                       </>
                     ) : (
-                      <div>No active weight goal set.</div>
+                      <div>
+                        No active weight goal set. Target weight:{" "}
+                        <span className={styles.analyticsStrong}>{goalsInfo.targetWeight}</span> kg
+                      </div>
                     )}
                     {analytics?.weight_change !== null &&
                       analytics?.weight_change !== undefined && (

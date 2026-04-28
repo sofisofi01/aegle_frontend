@@ -914,6 +914,16 @@ input.profileInput[type="number"]::-webkit-outer-spin-button {
   }
 }
 
+.chartContainer {
+  width: 100%;
+  height: 300px;
+  margin-top: 20px;
+  background: white;
+  padding: 10px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
 @include breakpoints(xs) {
   .profilePage {
     flex-direction: column;
