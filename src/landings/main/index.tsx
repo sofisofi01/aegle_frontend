@@ -1,3 +1,4 @@
+"use client";
 import { Page } from "@/containers/Page";
 import styles from "./main.module.scss";
 import { hero } from "./const";

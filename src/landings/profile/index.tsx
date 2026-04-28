@@ -2,7 +2,7 @@
 import { Page } from "@/containers/Page";
 import styles from "./profile.module.scss";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import caloriesIcon from "./assets/calories.svg";
 import stepsIcon from "./assets/steps.svg";
 import decorProfile from "./assets/decor-profile.png";
@@ -91,7 +91,7 @@ export function ProfilePage() {
     return total;
   };
 
-  const fetchAnalytics = async () => {
+  const fetchAnalytics = useCallback(async () => {
     try {
       const data = await progressService.getAnalytics();
       setAnalytics(data);
@@ -112,13 +112,13 @@ export function ProfilePage() {
     } catch (error) {
       console.error("Failed to fetch analytics:", error);
     }
-  };
+  }, [goalsInfo.targetWeight, profileInfo.weight]);
 
   useEffect(() => {
     if (activeTab === "analytics") {
       fetchAnalytics();
     }
-  }, [activeTab]);
+  }, [activeTab, fetchAnalytics]);
 
   const handleWeightSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
