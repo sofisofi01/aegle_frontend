@@ -152,7 +152,10 @@ export function NutritionPage() {
                   if (meal === "Total") {
                     const totals = calculateDayTotals(day.id);
                     return (
-                      <div key="${day.name}-total" className="${styles.cell} ${styles.totalCell}">
+                      <div
+                        key={`${day.name}-total`}
+                        className={`${styles.cell} ${styles.totalCell}`}
+                      >
                         <NutritionTotalCard
                           calories={totals.calories}
                           proteins={totals.protein}
@@ -166,7 +169,7 @@ export function NutritionPage() {
                   const entries = getEntriesForDayAndMeal(day.id, meal);
 
                   return (
-                    <div key="${day.name}-${meal}" className={styles.cell}>
+                    <div key={`${day.name}-${meal}`} className={styles.cell}>
                       {entries.length > 0 ? (
                         entries.map((entry) => (
                           <NutritionTableCard

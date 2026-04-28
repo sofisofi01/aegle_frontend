@@ -61,7 +61,7 @@ export function RecipesCard({
     fetchUserRecipes();
   }, []);
 
-  const allData = [...userRecipes, ...mockData];
+  const allData = userRecipes;
 
   // Фильтрация по типу
   let filteredData = selectedType
@@ -138,7 +138,13 @@ export function RecipesCard({
             <div className={styles.previewContainer}>
               <div className={styles.imageWrapper}>
                 <Image
-                  src={typeof item.image === "string" ? item.image : item.image.src}
+                  src={
+                    typeof item.image === "string"
+                      ? item.image.startsWith("http")
+                        ? item.image
+                        : `https://xn--80abcyabjk1czh.xn--p1ai${item.image}`
+                      : item.image.src
+                  }
                   alt="Recipe"
                   width={150}
                   height={150}

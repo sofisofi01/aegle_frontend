@@ -605,7 +605,13 @@ export function ProfilePage() {
                                   }`}
                                 >
                                   <Image
-                                    src={meal.image_url || workoutDefaultImg}
+                                    src={
+                                      meal.image_url
+                                        ? meal.image_url.startsWith("http")
+                                          ? meal.image_url
+                                          : `https://xn--80abcyabjk1czh.xn--p1ai${meal.image_url}`
+                                        : workoutDefaultImg
+                                    }
                                     alt={meal.food_name}
                                     width={200}
                                     height={200}

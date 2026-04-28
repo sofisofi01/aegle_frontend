@@ -43,11 +43,13 @@ api.interceptors.response.use(
         } catch (refreshError) {
           console.error("Refresh token failed", refreshError);
           useAuthStore.getState().logout();
+          window.location.href = "/login";
           return Promise.reject(refreshError);
         }
       } else {
         console.warn("No refresh token available");
         useAuthStore.getState().logout();
+        window.location.href = "/login";
       }
     }
     return Promise.reject(error);
