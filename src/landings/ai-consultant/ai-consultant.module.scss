@@ -1,0 +1,165 @@
+@import "../../styles/mixins/breakpoints.scss";
+@import "../../styles/variables/fonts.scss";
+@import "../../styles/variables/colors.scss";
+
+.page {
+  padding: 40px 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  min-height: 80vh;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+
+  h1 {
+    font-family: $font-family;
+    font-size: 48px;
+    color: $color-text-black;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-family: $font-family-secondary;
+    font-size: 18px;
+    color: #666;
+  }
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+
+  @include breakpoints(md) {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.mainCard {
+  background: white;
+  padding: 30px;
+  border-radius: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.summarySection {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+
+  h2 {
+    font-family: $font-family;
+    font-size: 24px;
+    color: $color-green;
+    margin-bottom: 15px;
+  }
+
+  p {
+    font-size: 18px;
+    line-height: 1.6;
+  }
+}
+
+.analysisSection {
+  h3 {
+    font-family: $font-family;
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .text {
+    white-space: pre-line;
+    font-size: 16px;
+    line-height: 1.8;
+    color: #444;
+  }
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.statusCard {
+  background: $color-green;
+  color: white;
+  padding: 20px;
+  border-radius: 20px;
+  text-align: center;
+
+  .label {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 5px;
+  }
+
+  .value {
+    font-size: 24px;
+    font-weight: bold;
+    font-family: $font-family;
+  }
+}
+
+.recommendationsCard {
+  background: #f9f9f9;
+  padding: 25px;
+  border-radius: 25px;
+
+  h3 {
+    font-family: $font-family;
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    li {
+      display: flex;
+      gap: 10px;
+      font-size: 15px;
+      line-height: 1.4;
+
+      &::before {
+        content: "✦";
+        color: $color-green;
+      }
+    }
+  }
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: 100px 0;
+  font-size: 20px;
+}
+
+.refreshButton {
+  margin-top: 20px;
+  padding: 12px 24px;
+  background: $color-green;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-family: $font-family;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
