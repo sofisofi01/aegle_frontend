@@ -1,10 +1,10 @@
 export const hero = {
-  title: "Your path to healthier life starts here",
+  title: "Ваш путь к здоровой жизни начинается здесь",
   subtitle:
-    "From nutritious recipes to professional healthcare advice, we provide all the resources you need to achieve your wellness goals.",
-  features: ["Healthy foods", "Expert healthcare", "Community support"],
+    "От полезных рецептов до профессиональных рекомендаций по здоровью — мы предоставляем все необходимые ресурсы для достижения ваших целей в wellness и заботе о себе.",
+  features: ["Полезное питание", "Профессиональная поддержка", "Поддержка сообщества"],
 };
 
 export const advantages = {
-  title: "Advantages of our platform",
+  title: "Преимущества нашей платформы",
 };

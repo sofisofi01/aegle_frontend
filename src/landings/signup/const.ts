@@ -1,36 +1,41 @@
 export const data = {
-  title: "Create your Equilibria account",
-  subtitle: "Let's start with the basics",
+  title: "Создайте аккаунт Эквилибриа",
+  subtitle: "Начнём с основ",
+
   fields: {
-    name: "Enter your name",
-    surname: "Enter your surname",
-    birth: "Enter your date of birth",
-    email: "Enter your email",
-    password: "Enter your password",
-    height: "Enter your height (cm)",
-    weight: "Enter your weight (kg)",
-    targetWeight: "Enter your target weight (kg)",
+    name: "Введите ваше имя",
+    surname: "Введите вашу фамилию",
+    birth: "Введите дату рождения",
+    age: "Введите ваш возраст",
+    email: "Введите вашу почту",
+    password: "Введите пароль",
+    height: "Введите ваш рост (см)",
+    weight: "Введите ваш вес (кг)",
+    targetWeight: "Введите ваш целевой вес (кг)",
   },
+
   sections: {
-    personal: "A few details to personalize your experience...",
-    goals: "Your goals",
-    safety: "And finally for your safety",
+    personal: "Несколько деталей, чтобы персонализировать ваш опыт...",
+    goals: "Ваши цели",
+    safety: "И наконец — для вашей безопасности",
   },
+
   activity: [
-    { id: "sedentary", label: "Sedentary" },
-    { id: "light", label: "Light" },
-    { id: "moderate", label: "Moderate" },
-    { id: "active", label: "Active" },
-    { id: "very_active", label: "Very active" },
+    { id: "sedentary", label: "Малоподвижный" },
+    { id: "light", label: "Лёгкая активность" },
+    { id: "moderate", label: "Умеренная активность" },
+    { id: "active", label: "Активный" },
+    { id: "very_active", label: "Очень активный" },
   ],
 
   goals: [
-    { id: "lose", label: "Lose weight" },
-    { id: "maintain", label: "Maintain weight" },
-    { id: "gain", label: "Gain weight" },
+    { id: "lose", label: "Похудеть" },
+    { id: "maintain", label: "Поддерживать вес" },
+    { id: "gain", label: "Набрать вес" },
   ],
+
   actions: {
-    haveAccount: "Already have an account?",
-    signIn: "Sign In!",
+    haveAccount: "Уже есть аккаунт?",
+    signIn: "Войти!",
   },
 };

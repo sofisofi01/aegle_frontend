@@ -46,26 +46,25 @@
   width: 100%;
 
   .inputPassword {
-    width: 100%;
-    padding: 15px 50px 15px 20px;
-    border-radius: 20px;
-    border: none;
-    background: $color-input-background;
-    font-size: 18px;
-    font-family: $font-family-secondary;
-    color: $color-text-black;
-    caret-color: black; 
-    text-align: left;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 15px 50px 15px 20px;
+  border-radius: 20px;
+  border: none;
+  background: $color-input-background;
+  font-size: 18px;
+  font-family: $font-family-secondary;
+  color: $color-text-black;
 
-    &::placeholder {
-      font-weight: 400;
-      color: $color-text-black;
-    }
+  &::placeholder {
+    font-weight: lighter;
+    color: $color-text-black;
   }
+}
 
   .passwordToggle {
     position: absolute;
-    right: 15px;
+    right: 35px;
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;

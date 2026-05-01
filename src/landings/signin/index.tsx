@@ -23,7 +23,7 @@ export function SignInPage() {
 
   const handleSubmit = async () => {
     if (!isValidEmail(email) || !password) {
-      setError("Please enter valid email and password!");
+      setError("Пожалуйста, введите корректную почту и пароль!");
       return;
     }
 
@@ -36,9 +36,9 @@ export function SignInPage() {
       router.push("/profile");
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
-        setError(err.response?.data?.detail || "Failed to sign in. Please check your credentials.");
+        setError(err.response?.data?.detail || "Не удалось выполнить вход. Проверьте правильность данных.");
       } else {
-        setError("An unexpected error occurred.");
+        setError("Произошла непредвиденная ошибка.");
       }
     } finally {
       setIsLoading(false);
@@ -73,7 +73,7 @@ export function SignInPage() {
             />
 
             {!isValidEmail(email) && email.length > 0 && (
-              <span className={styles.error}>Invalid email format</span>
+              <span className={styles.error}>Неверный формат почты</span>
             )}
 
             <div className={styles.passwordWrapper}>
@@ -96,7 +96,7 @@ export function SignInPage() {
 
             <div className={styles.signInRow}>
               <button type="submit" className={styles.submit} disabled={isLoading}>
-                {isLoading ? "Signing in..." : data.actions.submit}
+                {isLoading ? "Выполняется вход..." : data.actions.submit}
               </button>
 
               <p className={styles.signInText}>

@@ -62,7 +62,7 @@ export function SignUpPage() {
       !activityLevel ||
       !goal
     ) {
-      setError("Please fill all fields correctly!");
+      setError("Пожалуйста, заполните все поля корректно!");
       return;
     }
 
@@ -127,7 +127,7 @@ export function SignUpPage() {
             />
 
             <div className={styles.labelRow}>
-              <p className={styles.label}>Select your sex</p>
+              <p className={styles.label}>Выберите ваш пол</p>
               <div className={styles.rowOptions}>
                 <button
                   className={`${styles.option} ${styles.genderOption} ${gender === "M" ? styles.active : ""}`}
@@ -145,9 +145,9 @@ export function SignUpPage() {
             </div>
 
             <div className={styles.labelRow}>
-              <p className={styles.label}>Enter your age</p>
+              <p className={styles.label}>{data.fields.age}</p>
               <input
-                placeholder="Age"
+                placeholder="Возраст"
                 className={styles.input}
                 value={age}
                 onChange={(e) => handleNumbersOnly(e, setAge)}
@@ -178,7 +178,7 @@ export function SignUpPage() {
             />
 
             <div className={styles.labelRow}>
-              <p className={styles.label}>Select your activity level</p>
+              <p className={styles.label}>Выберите уровень активности</p>
               <div className={styles.rowOptions} style={{ flexWrap: "wrap", gap: "10px" }}>
                 {data.activity.map((act) => (
                   <button
@@ -194,7 +194,7 @@ export function SignUpPage() {
             </div>
 
             <div className={styles.labelRow}>
-              <p className={styles.label}>Select your goal</p>
+              <p className={styles.label}>Выберите вашу цель</p>
               <div className={styles.rowOptions}>
                 {data.goals.map((g) => (
                   <button
@@ -220,7 +220,7 @@ export function SignUpPage() {
               onChange={(e) => setEmail(e.target.value)}
             />
             {!isValidEmail(email) && email.length > 0 && (
-              <span style={{ color: "red", fontSize: "14px" }}>Invalid email format</span>
+              <span style={{ color: "red", fontSize: "14px" }}>Неверный формат почты</span>
             )}
 
             <div className={styles.passwordWrapper}>
@@ -250,7 +250,7 @@ export function SignUpPage() {
             </p>
 
             <button className={styles.submit} onClick={handleSubmit} disabled={isLoading}>
-              {isLoading ? "Signing Up..." : "Sign Up"}
+              {isLoading ? "Регистрация..." : "Зарегистрироваться"}
             </button>
           </div>
         </section>
