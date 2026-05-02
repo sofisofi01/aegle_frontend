@@ -5,12 +5,14 @@ import Image from "next/image";
 import { useState, useEffect, useCallback } from "react";
 import caloriesIcon from "./assets/calories.svg";
 import stepsIcon from "./assets/steps.svg";
+import workoutIcon from "./assets/workout.svg";
+import goalIcon from "./assets/time.svg";
 import decorProfile from "./assets/decor-profile.png";
 import decorGoals from "./assets/decor-goals.png";
 import food1 from "./assets/food 1.png";
 import food2 from "./assets/food 2.png";
 
-import { profileData, goalsData } from "./const";
+import { profileData, goalsData, getYearWord } from "./const";
 import { profileService } from "@/services/profileService";
 import { exerciseService, WorkoutPlan } from "@/services/exerciseService";
 import {
@@ -323,7 +325,7 @@ export function ProfilePage() {
           </h1>
 
           <div className={styles.memberInfo}>
-            <p>Member since: {profileInfo.memberSince}</p>
+            <p>Участник с: {profileInfo.memberSince}</p>
           </div>
 
           <div className={styles.infoCard}>
@@ -331,7 +333,7 @@ export function ProfilePage() {
               {isEditingProfile ? (
                 <>
                   <label className={styles.profileField}>
-                    <span>Email</span>
+                    <span>Почта</span>
                     <input
                       className={styles.profileInput}
                       type="email"
@@ -341,18 +343,18 @@ export function ProfilePage() {
                     {emailError && <span className={styles.profileError}>{emailError}</span>}
                   </label>
                   <label className={styles.profileField}>
-                    <span>Sex</span>
+                    <span>Пол</span>
                     <select
                       className={styles.profileInput}
                       value={profileInfo.sex}
                       onChange={(e) => handleProfileFieldChange("sex", e.target.value)}
                     >
-                      <option value="male">male</option>
-                      <option value="female">female</option>
+                      <option value="male">муж.</option>
+                      <option value="female">жен.</option>
                     </select>
                   </label>
                   <label className={styles.profileField}>
-                    <span>Age</span>
+                    <span>Возраст</span>
                     <input
                       className={styles.profileInput}
                       type="number"
@@ -362,7 +364,7 @@ export function ProfilePage() {
                     />
                   </label>
                   <label className={styles.profileField}>
-                    <span>Height</span>
+                    <span>Рост</span>
                     <input
                       className={styles.profileInput}
                       type="number"
@@ -372,7 +374,7 @@ export function ProfilePage() {
                     />
                   </label>
                   <label className={styles.profileField}>
-                    <span>Weight</span>
+                    <span>Вес</span>
                     <input
                       className={styles.profileInput}
                       type="number"
@@ -386,10 +388,10 @@ export function ProfilePage() {
                 <>
                   <p>{profileInfo.email}</p>
                   <p>
-                    {profileInfo.sex}, {profileInfo.age} y.o
+                    {profileInfo.sex}, {profileInfo.age} {getYearWord(Number(profileInfo.age))}
                   </p>
-                  <p>{profileInfo.height} cm</p>
-                  <p>{profileInfo.weight} kg</p>
+                  <p>{profileInfo.height} см</p>
+                  <p>{profileInfo.weight} кг</p>
                 </>
               )}
 
@@ -398,7 +400,7 @@ export function ProfilePage() {
                 className={styles.editProfile}
                 onClick={handleProfileEditToggle}
               >
-                {isEditingProfile ? "Save profile" : "Edit profile"}
+                {isEditingProfile ? "Сохранить профиль" : "Редактировать"}
               </button>
             </div>
             <Image
@@ -412,24 +414,24 @@ export function ProfilePage() {
         </div>
 
         <div className={styles.profileRight}>
-          <h2>Your goals are...</h2>
+          <h2>Ваши цели...</h2>
 
           <div className={styles.goalsCard}>
             <div className={styles.content}>
               <div className={styles.goalRow}>
                 <div className={styles.left}>
                   <Image src={caloriesIcon} alt="" width={30} height={30} />
-                  <span className={styles.label}>Daily calories:</span>
+                  <span className={styles.label}>Дневные калории:</span>
                 </div>
                 <span>
-                  <span className={styles.value}>{goalsInfo.dailyCalories}</span> kcal
+                  <span className={styles.value}>{goalsInfo.dailyCalories}</span> ккал
                 </span>
               </div>
 
               <div className={styles.goalRow}>
                 <div className={styles.left}>
                   <Image src={stepsIcon} alt="" width={30} height={30} />
-                  <span className={styles.label}>Target weight:</span>
+                  <span className={styles.label}>Целевой вес:</span>
                 </div>
                 {isEditingGoals ? (
                   <input
@@ -441,15 +443,15 @@ export function ProfilePage() {
                   />
                 ) : (
                   <span>
-                    <span className={styles.value}>{goalsInfo.targetWeight}</span> kg
+                    <span className={styles.value}>{goalsInfo.targetWeight}</span> кг
                   </span>
                 )}
               </div>
 
               <div className={styles.goalRow}>
                 <div className={styles.left}>
-                  <Image src={stepsIcon} alt="" width={30} height={30} />
-                  <span className={styles.label}>Goal:</span>
+                  <Image src={goalIcon} alt="" width={30} height={30} />
+                  <span className={styles.label}>Цель:</span>
                 </div>
                 {isEditingGoals ? (
                   <select
@@ -457,21 +459,29 @@ export function ProfilePage() {
                     value={goalsInfo.goal}
                     onChange={(e) => handleGoalsFieldChange("goal", e.target.value)}
                   >
-                    <option value="lose">Lose weight</option>
-                    <option value="maintain">Maintain weight</option>
-                    <option value="gain">Gain weight</option>
+                    <option value="lose">Сбросить вес</option>
+                    <option value="maintain">Поддерживать вес</option>
+                    <option value="gain">Набрать вес</option>
                   </select>
                 ) : (
                   <span>
-                    <span className={styles.value}>{goalsInfo.goal}</span>
+                    <span className={styles.value}>
+                      {goalsInfo.goal === "lose"
+                        ? "Сбросить вес"
+                        : goalsInfo.goal === "maintain"
+                        ? "Поддерживать вес"
+                        : goalsInfo.goal === "gain"
+                        ? "Набрать вес"
+                        : goalsInfo.goal}
+                    </span>
                   </span>
                 )}
               </div>
 
               <div className={styles.goalRow}>
                 <div className={styles.left}>
-                  <Image src={stepsIcon} alt="" width={30} height={30} />
-                  <span className={styles.label}>Activity:</span>
+                  <Image src={workoutIcon} alt="" width={30} height={30} />
+                  <span className={styles.label}>Активность:</span>
                 </div>
                 {isEditingGoals ? (
                   <select
@@ -479,20 +489,30 @@ export function ProfilePage() {
                     value={goalsInfo.activityLevel}
                     onChange={(e) => handleGoalsFieldChange("activityLevel", e.target.value)}
                   >
-                    <option value="sedentary">Sedentary</option>
-                    <option value="light">Lightly active</option>
-                    <option value="moderate">Moderately active</option>
-                    <option value="very_active">Very active</option>
+                    <option value="sedentary">Сидячий образ жизни</option>
+                    <option value="light">Легкая активность</option>
+                    <option value="moderate">Умеренная активность</option>
+                    <option value="very_active">Высокая активность</option>
                   </select>
                 ) : (
                   <span>
-                    <span className={styles.value}>{goalsInfo.activityLevel}</span>
+                    <span className={styles.value}>
+                      {goalsInfo.activityLevel === "sedentary"
+                        ? "Сидячий образ жизни"
+                        : goalsInfo.activityLevel === "light"
+                        ? "Лёгкая активность"
+                        : goalsInfo.activityLevel === "moderate"
+                        ? "Умеренная активность"
+                        : goalsInfo.activityLevel === "very_active"
+                        ? "Высокая активность"
+                        : goalsInfo.activityLevel}
+                    </span>
                   </span>
                 )}
               </div>
 
               <button type="button" className={styles.editGoals} onClick={handleGoalsEditToggle}>
-                {isEditingGoals ? "Save goals" : "Edit goals"}
+                {isEditingGoals ? "Сохранить цели" : "Редактировать"}
               </button>
             </div>
 
@@ -503,29 +523,29 @@ export function ProfilePage() {
 
       <div className={styles.activityWrapper}>
         <div className={styles.activitySection}>
-          <h2 className={styles.activityTitle}>ACTIVITY OVERVIEW</h2>
-          <p className={styles.activitySubtitle}>Your weekly summary!</p>
+          <h2 className={styles.activityTitle}>ОБЗОР АКТИВНОСТИ</h2>
+          <p className={styles.activitySubtitle}>Ваш еженедельный обзор!</p>
 
           <div className={styles.tabs}>
             <div
               className={`${styles.tab} ${activeTab === "meals" ? styles.active : ""}`}
               onClick={() => setActiveTab("meals")}
             >
-              Meals
+              Приёмы пищи
             </div>
 
             <div
               className={`${styles.tab} ${activeTab === "workouts" ? styles.active : ""}`}
               onClick={() => setActiveTab("workouts")}
             >
-              Workouts
+              Тренировки
             </div>
 
             <div
               className={`${styles.tab} ${activeTab === "analytics" ? styles.active : ""}`}
               onClick={() => setActiveTab("analytics")}
             >
-              Analytics
+              Аналитика
             </div>
 
             <div className={`${styles.activeBg} ${styles[activeTab]}`} />
@@ -541,22 +561,22 @@ export function ProfilePage() {
                 {nutritionPlan.days.every((d) => d.entries.length === 0) ? (
                   <div className={styles.noDataMessage}>
                     <p>
-                      You haven&apos;t planned any meals yet. Go to the Nutrition page to start!
+                      Вы еще не запланировали ни одного приема пищи. Перейдите на страницу Питание, чтобы начать!
                     </p>
                     <button onClick={() => router.push("/nutrition")} className={styles.goToButton}>
-                      Go to Nutrition
+                      Перейти к Питанию
                     </button>
                   </div>
                 ) : (
                   nutritionPlan.days.map((dayData: NutritionDay) => {
                     const dayNames = [
-                      "Monday",
-                      "Tuesday",
-                      "Wednesday",
-                      "Thursday",
-                      "Friday",
-                      "Saturday",
-                      "Sunday",
+                      "Понедельник",
+                      "Вторник",
+                      "Среда",
+                      "Четверг",
+                      "Пятница",
+                      "Суббота",
+                      "Воскресенье",
                     ];
                     const displayName = dayNames[dayData.day_number - 1] || dayData.name;
                     const totals = dayData.entries.reduce(
@@ -574,24 +594,24 @@ export function ProfilePage() {
                         <h3 className={styles.dayTitle}>{displayName}</h3>
                         <ul className={styles.macrosList}>
                           <li className={styles.macroRow}>
-                            <span className={styles.macroName}>✦ Calories:</span>
+                            <span className={styles.macroName}>✦ Калории:</span>
                             <span className={styles.macroValue}>{totals.calories.toFixed(0)}</span>
                           </li>
                           <li className={styles.macroRow}>
-                            <span className={styles.macroName}>✦ Protein:</span>
+                            <span className={styles.macroName}>✦ Белки:</span>
                             <span className={styles.macroValue}>{totals.protein.toFixed(1)}g</span>
                           </li>
                           <li className={styles.macroRow}>
-                            <span className={styles.macroName}>✦ Carbs:</span>
+                            <span className={styles.macroName}>✦ Углеводы:</span>
                             <span className={styles.macroValue}>{totals.carbs.toFixed(1)}g</span>
                           </li>
                           <li className={styles.macroRow}>
-                            <span className={styles.macroName}>✦ Fat:</span>
+                            <span className={styles.macroName}>✦ Жиры:</span>
                             <span className={styles.macroValue}>{totals.fat.toFixed(1)}g</span>
                           </li>
                         </ul>
                         <p className={styles.totalMeals}>
-                          <strong>{dayData.entries.length}</strong> meals planned
+                          <strong>{dayData.entries.length}</strong> приемов пищи запланировано
                         </p>
                         <div className={styles.mealsList}>
                           {dayData.entries.map((meal: NutritionEntry, idx: number) => {
@@ -634,7 +654,7 @@ export function ProfilePage() {
                                   }`}
                                 >
                                   <p>{meal.calories} kcal</p>
-                                  <p>Status: {meal.is_eaten ? "✅ Eaten" : "⏳ Planned"}</p>
+                                  <p>Status: {meal.is_eaten ? "✅ Съедено" : "⏳ Запланировано"}</p>
                                 </div>
                               </div>
                             );
@@ -654,22 +674,22 @@ export function ProfilePage() {
                 {activePlan.days.every((d) => d.exercises.length === 0) ? (
                   <div className={styles.noDataMessage}>
                     <p>
-                      You haven&apos;t planned any workouts yet. Go to the Workout page to start!
+                      Вы еще не запланировали ни одной тренировки. Перейдите на страницу Тренировки, чтобы начать!
                     </p>
                     <button onClick={() => router.push("/workout")} className={styles.goToButton}>
-                      Go to Workout
+                      Перейти к Тренировкам
                     </button>
                   </div>
                 ) : (
                   activePlan.days.map((dayData) => {
                     const dayNames = [
-                      "Monday",
-                      "Tuesday",
-                      "Wednesday",
-                      "Thursday",
-                      "Friday",
-                      "Saturday",
-                      "Sunday",
+                      "Понедельник",
+                      "Вторник",
+                      "Среда",
+                      "Четверг",
+                      "Пятница",
+                      "Суббота",
+                      "Воскресенье",
                     ];
                     const displayName = dayNames[dayData.day_number - 1] || dayData.name;
                     const totalDayCalories = dayData.exercises.reduce(
@@ -689,22 +709,22 @@ export function ProfilePage() {
                         <h3 className={styles.dayTitle}>{displayName}</h3>
                         <ul className={styles.workoutStats}>
                           <li className={styles.statRow}>
-                            <span className={styles.statLabel}>✦ Completed:</span>
+                            <span className={styles.statLabel}>✦ Выполнено:</span>
                             <span className={styles.statValue}>
                               {completedWorkouts}/{dayData.exercises.length}
                             </span>
                           </li>
                           <li className={styles.statRow}>
-                            <span className={styles.statLabel}>✦ Total time:</span>
+                            <span className={styles.statLabel}>✦ Общее время:</span>
                             <span className={styles.statValue}>{totalDayTime.toFixed(0)} min</span>
                           </li>
                           <li className={styles.statRow}>
-                            <span className={styles.statLabel}>✦ Kcal burned:</span>
+                            <span className={styles.statLabel}>✦ Ккал сожжено:</span>
                             <span className={styles.statValue}>{totalDayCalories.toFixed(0)}</span>
                           </li>
                         </ul>
                         <p className={styles.totalWorkouts}>
-                          <strong>{dayData.exercises.length}</strong> exercises planned
+                          <strong>{dayData.exercises.length}</strong> тренировок запланировано
                         </p>
                         <div className={styles.workoutsList}>
                           {dayData.exercises.map((ex, idx) => {
@@ -747,7 +767,7 @@ export function ProfilePage() {
                                     {ex.reps}x{ex.sets}
                                   </p>
                                   <p>Calories: {Number(ex.total_calories || 0).toFixed(0)}</p>
-                                  <p>Status: {ex.is_completed ? "✅ Done" : "⏳ Pending"}</p>
+                                  <p>Status: {ex.is_completed ? "✅ Выполнено" : "⏳ В ожидании"}</p>
                                 </div>
                               </div>
                             );
@@ -773,30 +793,30 @@ export function ProfilePage() {
 
               <div className={styles.analyticsInner}>
                 <div className={styles.analyticsBlock}>
-                  <h3 className={styles.analyticsTitle}>Meals</h3>
+                  <h3 className={styles.analyticsTitle}>Питание</h3>
                   <div className={styles.analyticsText}>
-                    <div>Your calorie intake from tracked meals</div>
+                    <div>Ваше потребление калорий из отслеженных приёмов:</div>
                     <div>
-                      You have consumed{" "}
+                      Вы потребили{" "}
                       <span className={styles.analyticsStrong}>{calculateEatenCalories()}</span>{" "}
-                      kcal from eaten items.
+                      ккал из съеденных продуктов.
                     </div>
                     {goalsInfo.dailyCalories && (
                       <div>
-                        Your daily target is{" "}
+                        Ваша дневная норма составляет{" "}
                         <span className={styles.analyticsStrong}>{goalsInfo.dailyCalories}</span>{" "}
-                        kcal.
+                        ккал.
                         {calculateEatenCalories() > Number(goalsInfo.dailyCalories) ? (
                           <span className={styles.analyticsStatusBad}>
                             {" "}
-                            You have exceeded your goal.
+                            Вы превысили свою цель.
                           </span>
                         ) : (
                           <span>
                             {" "}
-                            You have {Number(goalsInfo.dailyCalories) -
-                              calculateEatenCalories()}{" "}
-                            kcal left.
+                            У вас осталось{" "}
+                            {Number(goalsInfo.dailyCalories) - calculateEatenCalories()}{" "}
+                            ккал.
                           </span>
                         )}
                       </div>
@@ -805,7 +825,7 @@ export function ProfilePage() {
                 </div>
 
                 <div className={styles.analyticsBlock}>
-                  <h3 className={styles.analyticsTitle}>Weight Progress</h3>
+                  <h3 className={styles.analyticsTitle}>Прогресс веса</h3>
 
                   {analytics?.weight_data && analytics.weight_data.length > 0 && (
                     <div className={styles.chartContainer}>
@@ -824,7 +844,7 @@ export function ProfilePage() {
                           <YAxis domain={["dataMin - 2", "dataMax + 2"]} />
                           <Tooltip
                             labelFormatter={(label) => new Date(label).toLocaleDateString()}
-                            formatter={(value) => [`${value} kg`, "Weight"]}
+                            formatter={(value) => [`${value} кг`, "Вес"]}
                           />
                           <Line
                             type="monotone"
@@ -843,19 +863,19 @@ export function ProfilePage() {
                     {analytics?.goal_progress ? (
                       <>
                         <div>
-                          Current progress:{" "}
+                          Текущий прогресс:{" "}
                           <span className={styles.analyticsStrong}>
                             {Math.round(analytics?.goal_progress?.progress_percentage || 0)}%
                           </span>
                         </div>
                         <div>
-                          Target weight:{" "}
+                          Целевой вес:{" "}
                           <span className={styles.analyticsStrong}>{goalsInfo.targetWeight}</span>{" "}
-                          kg
+                          кг
                         </div>
                         {analytics?.goal_progress?.estimated_completion ? (
                           <div>
-                            Estimated completion date:{" "}
+                            Примерная дата достижения цели:{" "}
                             <span className={styles.analyticsStrong}>
                               {new Date(
                                 analytics?.goal_progress?.estimated_completion || ""
@@ -868,39 +888,40 @@ export function ProfilePage() {
                           </div>
                         ) : (
                           <div>
-                            Estimated completion:{" "}
-                            <span className={styles.analyticsStrong}>Need more data</span>
+                            Прогноз завершения:{" "}
+                            <span className={styles.analyticsStrong}>Недостаточно данных</span>
                           </div>
                         )}
                       </>
                     ) : (
                       <>
                         <div>
-                          Target weight:{" "}
+                          Целевой вес:{" "}
                           <span className={styles.analyticsStrong}>{goalsInfo.targetWeight}</span>{" "}
-                          kg
+                          кг
                         </div>
                         <div>
-                          Current weight:{" "}
-                          <span className={styles.analyticsStrong}>{profileInfo.weight}</span> kg
+                          Текущий вес:{" "}
+                          <span className={styles.analyticsStrong}>{profileInfo.weight}</span> кг
                         </div>
                         {Number(goalsInfo.targetWeight) !== Number(profileInfo.weight) && (
                           <div>
-                            Remaining:{" "}
+                            Осталось:{" "}
                             <span className={styles.analyticsStrong}>
                               {Math.abs(
                                 Number(goalsInfo.targetWeight) - Number(profileInfo.weight)
                               ).toFixed(1)}
                             </span>{" "}
-                            kg to go
+                            кг до цели
                           </div>
                         )}
                       </>
                     )}
+
                     {analytics?.weight_change !== null &&
                       analytics?.weight_change !== undefined && (
                         <div>
-                          Weight change:{" "}
+                          Изменение веса:{" "}
                           <span
                             className={
                               analytics.weight_change <= 0
@@ -909,27 +930,27 @@ export function ProfilePage() {
                             }
                           >
                             {analytics.weight_change > 0 ? "+" : ""}
-                            {analytics.weight_change.toFixed(1)} kg
+                            {analytics.weight_change.toFixed(1)} кг
                           </span>
                         </div>
                       )}
                   </div>
 
                   <form className={styles.weightForm} onSubmit={handleWeightSubmit}>
-                    <h4>Log Your Weight</h4>
+                    <h4>Записать вес</h4>
                     <div className={styles.inputGroup}>
-                      <label>Weight (kg)</label>
+                      <label>Вес (кг)</label>
                       <input
                         type="number"
                         step="0.1"
                         value={weightInput.weight}
                         onChange={(e) => setWeightInput({ ...weightInput, weight: e.target.value })}
-                        placeholder="e.g. 75.5"
+                        placeholder="например, 75.5"
                         required
                       />
                     </div>
                     <div className={styles.inputGroup}>
-                      <label>Date</label>
+                      <label>Дата</label>
                       <input
                         type="date"
                         value={weightInput.date}
@@ -942,7 +963,7 @@ export function ProfilePage() {
                       className={styles.submitBtn}
                       disabled={isSubmittingWeight}
                     >
-                      {isSubmittingWeight ? "Saving..." : "Save Weight"}
+                      {isSubmittingWeight ? "Сохранение..." : "Сохранить вес"}
                     </button>
                   </form>
                 </div>
@@ -950,8 +971,8 @@ export function ProfilePage() {
                 <div className={styles.analyticsBlock}>
                   <div className={styles.analyticsText}>
                     {analytics && analytics.weight_change !== null && analytics.weight_change <= 0
-                      ? "You are making great progress towards your weight goal! Keep maintaining your diet and activity levels."
-                      : "Consistency is key. Try to stick closer to your calorie goals and keep logging your progress."}
+                      ? "Вы отлично прогрессируете к своей цели! Продолжайте соблюдать питание и активность."
+                      : "Главное — регулярность. Старайтесь придерживаться нормы калорий и продолжайте отслеживать прогресс."}
                   </div>
                 </div>
               </div>
