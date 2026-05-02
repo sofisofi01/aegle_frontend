@@ -15,14 +15,14 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-  if (isHydrated) {
-    // if (!isAuthenticated) {
-    //   router.push("/signin");
-    // } else {
-    setIsChecking(false);
-    // }
-  }
-}, [isAuthenticated, isHydrated, router]);
+    if (isHydrated) {
+      if (!isAuthenticated) {
+        router.push("/signin");
+      } else {
+        setIsChecking(false);
+      }
+    }
+  }, [isAuthenticated, isHydrated, router]);
 
   if (!isHydrated || isChecking) {
     return (
