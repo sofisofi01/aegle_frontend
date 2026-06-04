@@ -8,5 +8,9 @@ export type NutritionTableCardProps = {
   carbs?: number;
   fats?: number;
   image: string | StaticImageData;
+  isEaten?: boolean;
+  ingredients?: string;
+  recipe?: string;
   onDelete?: (id: number) => void;
+  onToggleEaten?: (id: number) => void;
 };

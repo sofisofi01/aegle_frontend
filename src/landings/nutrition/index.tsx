@@ -19,6 +19,8 @@ import fridayImg from "./assets/fri.png";
 import saturdayImg from "./assets/sat.png";
 import sundayImg from "./assets/sun.png";
 
+import foodDefaultImg from "./assets/food.png";
+
 const daysOfWeek = [
   { id: 1, name: "Monday", image: mondayImg },
   { id: 2, name: "Tuesday", image: tuesdayImg },
@@ -119,7 +121,7 @@ export function NutritionPage() {
                     proteins={item.protein}
                     carbs={item.carbs}
                     fats={item.fat}
-                    image={item.image_url || mondayImg}
+                    image={item.image_url || foodDefaultImg}
                     isEaten={item.is_eaten}
                     ingredients={item.ingredients}
                     recipe={item.recipe}
@@ -179,7 +181,14 @@ export function NutritionPage() {
                             id={entry.id}
                             title={entry.food_name}
                             calories={entry.calories}
-                            image={entry.image_url || day.image}
+                            proteins={entry.protein}
+                            carbs={entry.carbs}
+                            fats={entry.fat}
+                            image={entry.image_url || foodDefaultImg}
+                            isEaten={entry.is_eaten}
+                            ingredients={entry.ingredients}
+                            recipe={entry.recipe}
+                            onToggleEaten={handleToggleEaten}
                             onDelete={handleDeleteEntry}
                           />
                         ))
