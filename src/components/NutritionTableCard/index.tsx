@@ -48,7 +48,7 @@ export function NutritionTableCard({
   };
 
   const imageUrl =
-    image && typeof image === "string" && image.startsWith("http")
+    image && typeof image === "string" && (image.startsWith("http") || image.startsWith("data:"))
       ? image
       : image && typeof image === "string"
         ? `https://xn--80abcyabjk1czh.xn--p1ai${image}`

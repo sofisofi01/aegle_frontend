@@ -144,7 +144,9 @@ export function RecipesCard({
               <div className={styles.imageWrapper}>
                 <Image
                   src={
-                    item.image && typeof item.image === "string" && item.image.startsWith("http")
+                    item.image &&
+                    typeof item.image === "string" &&
+                    (item.image.startsWith("http") || item.image.startsWith("data:"))
                       ? item.image
                       : item.image && typeof item.image === "string"
                         ? `https://xn--80abcyabjk1czh.xn--p1ai${item.image}`

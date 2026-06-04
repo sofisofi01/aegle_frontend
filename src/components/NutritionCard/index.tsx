@@ -46,7 +46,9 @@ export function NutritionCard({
           <div className={styles.imageWrapper}>
             <Image
               src={
-                image && typeof image === "string" && image.startsWith("http")
+                image &&
+                typeof image === "string" &&
+                (image.startsWith("http") || image.startsWith("data:"))
                   ? image
                   : image && typeof image === "string"
                     ? `https://xn--80abcyabjk1czh.xn--p1ai${image}`
@@ -91,7 +93,7 @@ export function NutritionCard({
               <Image
                 src={
                   typeof image === "string"
-                    ? image.startsWith("http")
+                    ? image.startsWith("http") || image.startsWith("data:")
                       ? image
                       : `https://xn--80abcyabjk1czh.xn--p1ai${image}`
                     : image?.src || ""
