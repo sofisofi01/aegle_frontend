@@ -469,10 +469,10 @@ export function ProfilePage() {
                       {goalsInfo.goal === "lose"
                         ? "Сбросить вес"
                         : goalsInfo.goal === "maintain"
-                        ? "Поддерживать вес"
-                        : goalsInfo.goal === "gain"
-                        ? "Набрать вес"
-                        : goalsInfo.goal}
+                          ? "Поддерживать вес"
+                          : goalsInfo.goal === "gain"
+                            ? "Набрать вес"
+                            : goalsInfo.goal}
                     </span>
                   </span>
                 )}
@@ -500,12 +500,12 @@ export function ProfilePage() {
                       {goalsInfo.activityLevel === "sedentary"
                         ? "Сидячий образ жизни"
                         : goalsInfo.activityLevel === "light"
-                        ? "Лёгкая активность"
-                        : goalsInfo.activityLevel === "moderate"
-                        ? "Умеренная активность"
-                        : goalsInfo.activityLevel === "very_active"
-                        ? "Высокая активность"
-                        : goalsInfo.activityLevel}
+                          ? "Лёгкая активность"
+                          : goalsInfo.activityLevel === "moderate"
+                            ? "Умеренная активность"
+                            : goalsInfo.activityLevel === "very_active"
+                              ? "Высокая активность"
+                              : goalsInfo.activityLevel}
                     </span>
                   </span>
                 )}
@@ -561,7 +561,8 @@ export function ProfilePage() {
                 {nutritionPlan.days.every((d) => d.entries.length === 0) ? (
                   <div className={styles.noDataMessage}>
                     <p>
-                      Вы еще не запланировали ни одного приема пищи. Перейдите на страницу Питание, чтобы начать!
+                      Вы еще не запланировали ни одного приема пищи. Перейдите на страницу Питание,
+                      чтобы начать!
                     </p>
                     <button onClick={() => router.push("/nutrition")} className={styles.goToButton}>
                       Перейти к Питанию
@@ -627,7 +628,8 @@ export function ProfilePage() {
                                   <Image
                                     src={
                                       meal.image_url
-                                        ? meal.image_url.startsWith("http")
+                                        ? meal.image_url.startsWith("http") ||
+                                          meal.image_url.startsWith("data:")
                                           ? meal.image_url
                                           : `https://xn--80abcyabjk1czh.xn--p1ai${meal.image_url}`
                                         : workoutDefaultImg
@@ -674,7 +676,8 @@ export function ProfilePage() {
                 {activePlan.days.every((d) => d.exercises.length === 0) ? (
                   <div className={styles.noDataMessage}>
                     <p>
-                      Вы еще не запланировали ни одной тренировки. Перейдите на страницу Тренировки, чтобы начать!
+                      Вы еще не запланировали ни одной тренировки. Перейдите на страницу Тренировки,
+                      чтобы начать!
                     </p>
                     <button onClick={() => router.push("/workout")} className={styles.goToButton}>
                       Перейти к Тренировкам
@@ -767,7 +770,9 @@ export function ProfilePage() {
                                     {ex.reps}x{ex.sets}
                                   </p>
                                   <p>Calories: {Number(ex.total_calories || 0).toFixed(0)}</p>
-                                  <p>Status: {ex.is_completed ? "✅ Выполнено" : "⏳ В ожидании"}</p>
+                                  <p>
+                                    Status: {ex.is_completed ? "✅ Выполнено" : "⏳ В ожидании"}
+                                  </p>
                                 </div>
                               </div>
                             );
@@ -815,8 +820,7 @@ export function ProfilePage() {
                           <span>
                             {" "}
                             У вас осталось{" "}
-                            {Number(goalsInfo.dailyCalories) - calculateEatenCalories()}{" "}
-                            ккал.
+                            {Number(goalsInfo.dailyCalories) - calculateEatenCalories()} ккал.
                           </span>
                         )}
                       </div>
