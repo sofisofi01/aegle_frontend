@@ -24,7 +24,7 @@
   line-height: 1;
   width: 500px;
   color: $color-text-black;
-  margin-bottom: 15px;
+  margin-bottom: 30px;
 }
 
 .subtitle {
@@ -32,7 +32,7 @@
   font-size: 22px;
   line-height: 1.5;
   color: $color-text-black;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   max-width: 600px;
 }
 
@@ -40,7 +40,7 @@
   display: flex;
   flex-direction: row;
   gap: 40px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .featureItem {
@@ -127,7 +127,7 @@
 
 .foodImage1 {
   position: absolute;
-  left: 650;
+  left: 650px;
   top: 150px;
   width: 250px;
   height: 250px;
@@ -138,7 +138,7 @@
 
 .foodImage2 {
   position: absolute;
-  right: 700;
+  right: 700px;
   top: 800px;
   width: 250px;
   height: 250px;

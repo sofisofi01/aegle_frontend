@@ -1,12 +1,12 @@
 export const data = {
-  title: "Login into your Equilibria account",
+  title: "Вход в аккаунт Эквилибриа",
   fields: {
-    email: "Enter your email",
-    password: "Enter your password",
+    email: "Введите вашу почту",
+    password: "Введите ваш пароль",
   },
   actions: {
-    submit: "Sign In",
-    noAccount: "Don’t have an account?",
-    signUp: "Sign Up!",
+    submit: "Войти",
+    noAccount: "Нет аккаунта?",
+    signUp: "Зарегистрироваться!",
   },
 };

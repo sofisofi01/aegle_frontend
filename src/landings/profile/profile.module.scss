@@ -10,7 +10,7 @@
 }
 
 .profileInput {
-  width: 100%;
+  width: 90%;
   border: 1px solid rgba(255, 255, 255, 0.15);
   background: rgba(255, 255, 255, 0.08);
   color: $color-text-white;
@@ -150,7 +150,7 @@ input.profileInput[type="number"]::-webkit-outer-spin-button {
     }
 
     .profileInput {
-      width: 100%;
+      width: 90%;
       border: 1px solid rgba(255, 255, 255, 0.15);
       background: rgba(255, 255, 255, 0.15);
       color: $color-text-black;
@@ -1119,7 +1119,7 @@ input.profileInput[type="number"]::-webkit-outer-spin-button {
 
 @include breakpoints(xl) {
   .profilePage {
-    padding: 50px 200px;
+    padding: 50px 100px;
   }
 
   .profileLeft {
