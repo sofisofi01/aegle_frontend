@@ -241,6 +241,8 @@ export function RecipesPage() {
                 carbsRange={carbsRange}
                 proteinsRange={proteinsRange}
                 fatsRange={fatsRange}
+                onAdd={handleAddToPlan}
+                mealType={mealType}
               />
             </div>
           </div>

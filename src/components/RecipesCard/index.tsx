@@ -4,11 +4,12 @@ import { useState, useEffect } from "react";
 import styles from "./RecipesCard.module.scss";
 import Image from "next/image";
 import time from "@/landings/recipes/assets/time.png";
-import { data as mockData } from "@/landings/recipes/const";
 import { RecipesCardProps } from "./types";
 import { nutritionService } from "@/services/nutritionService";
 
 import { StaticImageData } from "next/image";
+
+import foodDefaultImg from "@/landings/nutrition/assets/food.png";
 
 interface RecipeData {
   title: string;
@@ -30,6 +31,8 @@ export function RecipesCard({
   carbsRange,
   proteinsRange,
   fatsRange,
+  onAdd,
+  mealType,
 }: RecipesCardProps) {
   const [userRecipes, setUserRecipes] = useState<RecipeData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -50,7 +53,7 @@ export function RecipesCard({
             ingredients: item.ingredients || "No ingredients listed",
             recipe: item.recipe || "No recipe instructions",
             time: `${item.cooking_time || 15} min`,
-            image: item.image_url || mockData[0].image,
+            image: item.image_url || foodDefaultImg,
           };
         });
         setUserRecipes(formatted);
@@ -147,7 +150,7 @@ export function RecipesCard({
                         ? `https://xn--80abcyabjk1czh.xn--p1ai${item.image}`
                         : item.image && typeof item.image !== "string"
                           ? item.image.src
-                          : mockData[0].image.src
+                          : foodDefaultImg.src
                   }
                   alt="Recipe"
                   width={150}
@@ -157,10 +160,7 @@ export function RecipesCard({
                   priority={index === 0}
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
-                    target.src =
-                      typeof mockData[0].image === "string"
-                        ? mockData[0].image
-                        : mockData[0].image.src;
+                    target.src = foodDefaultImg.src;
                   }}
                 />
               </div>
@@ -198,6 +198,25 @@ export function RecipesCard({
 
                 <div className={styles.recipeText}>{item.recipe}</div>
               </div>
+              {onAdd && mealType && (
+                <button
+                  className={styles.addToPlanButton}
+                  onClick={() =>
+                    onAdd({
+                      id: 0, // Temporary ID for custom recipes
+                      external_id: "",
+                      name: item.title,
+                      calories: item.calories,
+                      protein: item.proteins,
+                      carbs: item.carbohydrates,
+                      fat: item.fats,
+                      image_url: typeof item.image === "string" ? item.image : item.image.src,
+                    })
+                  }
+                >
+                  Add to {mealType}
+                </button>
+              )}
             </div>
           </div>
         </div>

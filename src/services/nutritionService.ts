@@ -29,12 +29,13 @@ export interface NutritionPlan {
 }
 
 export interface FoodSearchResult {
-  id: number;
+  id?: number;
   name: string;
   calories: number;
   protein: number;
   carbs: number;
   fat: number;
+  external_id?: string;
   image_url?: string;
   meal_type?: string;
   ingredients?: string;
@@ -96,13 +97,3 @@ export const nutritionService = {
     return response.data;
   },
 };
-
-export interface FoodSearchResult {
-  name: string;
-  calories: number;
-  protein: number;
-  carbs: number;
-  fat: number;
-  external_id: string;
-  image_url?: string;
-}
