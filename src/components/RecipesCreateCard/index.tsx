@@ -251,7 +251,7 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
                 </div>
               </div>
               <div className={styles.macroField}>
-                <label>Type</label>
+                <label>Тип</label>
                 <select
                   value={recipe.type}
                   onChange={(e) => handleChange("type", e.target.value)}
@@ -269,7 +269,7 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
 
           <div className={styles.recipeContainer}>
             <div className={styles.ingredients}>
-              <div className={styles.ingredientsTitle}>Ingredients</div>
+              <div className={styles.ingredientsTitle}>Ингредиенты</div>
               <div className={styles.selectedIngredients}>
                 {recipe.ingredients.map((ingredient, idx) => (
                   <div key={idx} className={styles.ingredientItem}>

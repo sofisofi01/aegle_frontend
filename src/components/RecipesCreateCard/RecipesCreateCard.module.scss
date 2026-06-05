@@ -67,8 +67,11 @@
 }
 
 .imageUploadLabel {
-    display: block;
+    display: flex;        
+    justify-content: center;
+    align-items: center;    
     cursor: pointer;
+    width: 100%;           
 }
 
 .imageInput {
@@ -99,6 +102,25 @@
     text-align: left;
 }
 
+.macroInput {
+  width: 60px; 
+  padding: 4px 8px;
+  font-size: 14px;
+  font-family: $font-family-secondary;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  color: $color-text-black;
+  text-align: right; 
+  box-sizing: border-box;
+  flex-shrink: 0; 
+  
+  &:focus {
+    outline: none;
+    border-color: $color-mid-green;
+  }
+}
+
 .titleInput {
     width: 100%;
     padding: 10px;
@@ -110,6 +132,7 @@
     border: none;
     border-bottom: 2px solid $color-mid-green;
     margin-bottom: 15px;
+    box-sizing: border-box;
     
     &::placeholder {
         color: #888;
@@ -180,7 +203,7 @@
     text-align: center;
     font-size: 14px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 20px;
 }
 
@@ -435,6 +458,8 @@
     font-size: 18px;
     font-weight: bold;
     color: $color-text-black;
+    margin-bottom: 15px;
+    text-align: center;
 }
 
 .recipeTextarea {
@@ -448,6 +473,7 @@
     background-color: $color-light-green;
     border: none;
     color: $color-text-black;
+    box-sizing: border-box;
     
     &::placeholder {
         color: #888;
@@ -522,9 +548,14 @@
     .recipeTitle, .ingredientsTitle, .titleInput {
         font-size: $font-size-title;
     }
+    .imagePlaceholder {    
+        span {
+            font-size: $font-size-base;
+        }
+    }
 
     .selectInput {
-        width: 100px;
+        width: 140px;
     }
 
     .removeButton img{
@@ -532,7 +563,19 @@
         height: 20px;
     }
 
-    
+    .macroField {
+        label {
+          font-size: $font-size-base;
+        }
+    }
+
+    .macroInput {
+        width: 80px;
+    }
+
+    .previewContainer {
+        flex-direction: row;
+    }
 }
 
 @include breakpoints(md) {
@@ -563,7 +606,12 @@
     }
     
     .card {
-        width: 90%;
+        width: 80%;
     }
 }
 
+@include breakpoints(xxl) {
+    .card {
+        width: 70%;
+    }
+}
