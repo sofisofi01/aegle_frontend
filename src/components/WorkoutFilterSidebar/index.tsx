@@ -36,7 +36,7 @@ export function WorkoutFilterSidebar({
 
   return (
     <>
-      <div className={`${styles.overlay} ${isOpen ? styles.open : ""}`} onClick={onClose} />
+      <div className={`${styles.overlay} ${isOpen ? styles.open : ""}`} onClick={onClose}/>
 
       <aside className={`${styles.sidebar} ${isOpen ? styles.open : ""}`}>
         <div className={styles.content}>
