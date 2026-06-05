@@ -1,1 +1,1 @@
-export const availableIngredients = ['eggs', 'milk', 'tomatoes', 'chicken', 'cheese', 'flour'];
+export const availableIngredients = ['яйца', 'молоко', 'помидоры', 'курица', 'сыр', 'мука'];

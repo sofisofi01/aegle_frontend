@@ -17,7 +17,7 @@ export function NutritionEmptyCard({ day, mealType }: NutritionEmptyCardProps) {
     <div className={styles.card}>
       <button className={styles.addButton} onClick={handleAddClick}>
         <Image src={plusIcon} alt="plusIcon" className={styles.plusIcon} />
-        <p>add</p>
+        <p>добавить</p>
       </button>
     </div>
   );

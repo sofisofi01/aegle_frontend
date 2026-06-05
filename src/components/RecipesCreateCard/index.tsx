@@ -183,7 +183,7 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
                     className={styles.changeImageButton}
                     onClick={() => document.getElementById("imageUpload")?.click()}
                   >
-                    Change image
+                    Поменять изображение
                   </button>
                 </div>
               ) : (
@@ -197,7 +197,7 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
                   />
                   <div className={styles.imagePlaceholder}>
                     <Image src={plusIcon} alt="Upload" width={40} height={40} />
-                    <span>Upload image</span>
+                    <span>Загрузить изображение</span>
                   </div>
                 </label>
               )}
@@ -206,7 +206,7 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
             <div className={styles.macronutrients}>
               <input
                 type="text"
-                placeholder="Recipe title"
+                placeholder="Название рецепта"
                 value={recipe.title}
                 onChange={(e) => handleChange("title", e.target.value)}
                 className={styles.titleInput}
@@ -214,7 +214,7 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
               />
               <div className={styles.macroDisplay}>
                 <div className={styles.macroItem}>
-                  <span className={styles.macroLabel}>Calories</span>
+                  <span className={styles.macroLabel}>Калории</span>
                   <input
                     type="number"
                     value={recipe.calories}
@@ -223,7 +223,7 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
                   />
                 </div>
                 <div className={styles.macroItem}>
-                  <span className={styles.macroLabel}>Proteins</span>
+                  <span className={styles.macroLabel}>Белки</span>
                   <input
                     type="number"
                     value={recipe.proteins}
@@ -232,7 +232,7 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
                   />
                 </div>
                 <div className={styles.macroItem}>
-                  <span className={styles.macroLabel}>Fats</span>
+                  <span className={styles.macroLabel}>Жиры</span>
                   <input
                     type="number"
                     value={recipe.fats}
@@ -241,7 +241,7 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
                   />
                 </div>
                 <div className={styles.macroItem}>
-                  <span className={styles.macroLabel}>Carbohydrates</span>
+                  <span className={styles.macroLabel}>Углеводы</span>
                   <input
                     type="number"
                     value={recipe.carbohydrates}
@@ -313,13 +313,13 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
                   className={styles.addButton}
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 >
-                  Add ingredient...
+                  Добавить ингредиент...
                 </button>
                 {isDropdownOpen && (
                   <div className={styles.dropdown}>
                     <input
                       type="text"
-                      placeholder="Search or type new..."
+                      placeholder="найти"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className={styles.dropdownSearch}
@@ -340,7 +340,7 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
                           className={styles.dropdownItem}
                           onClick={() => handleAddIngredient(searchTerm)}
                         >
-                          Add new: &ldquo;{searchTerm}&rdquo;
+                          Добавить: &ldquo;{searchTerm}&rdquo;
                         </div>
                       )}
                     </div>
@@ -349,11 +349,11 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
               </div>
             </div>
             <div className={styles.recipeText}>
-              <div className={styles.recipeTitle}>Recipe</div>
+              <div className={styles.recipeTitle}>Рецепт</div>
               <textarea
                 value={recipe.recipe}
                 onChange={(e) => handleChange("recipe", e.target.value)}
-                placeholder="Describe the cooking process..."
+                placeholder="Опишите рецепт..."
                 className={styles.recipeTextarea}
                 required
               />
@@ -362,10 +362,10 @@ export function CreateRecipesCard({ onSave, onCancel, initialData }: CreateRecip
         </div>
         <div className={styles.actions}>
           <button type="button" onClick={onCancel} className={styles.cancelButton}>
-            Cancel
+            Отменить
           </button>
           <button type="submit" className={styles.saveButton}>
-            Save Recipe
+            Сохранить рецепт
           </button>
         </div>
       </div>

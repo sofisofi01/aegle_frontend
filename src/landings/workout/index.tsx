@@ -26,13 +26,13 @@ export function WorkoutPage() {
   const [activePlan, setActivePlan] = useState<WorkoutPlan | null>(null);
 
   const daysOfWeek = [
-    { id: 1, name: "Mon" },
-    { id: 2, name: "Tue" },
-    { id: 3, name: "Wed" },
-    { id: 4, name: "Thu" },
-    { id: 5, name: "Fri" },
-    { id: 6, name: "Sat" },
-    { id: 7, name: "Sun" },
+    { id: 1, name: "Пн" },
+    { id: 2, name: "Вт" },
+    { id: 3, name: "Ср" },
+    { id: 4, name: "Чт" },
+    { id: 5, name: "Пт" },
+    { id: 6, name: "Сб" },
+    { id: 7, name: "Вс" },
   ];
 
   const fetchData = async () => {
@@ -44,7 +44,7 @@ export function WorkoutPage() {
       setExercises(exercisesData);
       setActivePlan(planData);
     } catch (error) {
-      console.error("Failed to fetch data:", error);
+      console.error("Не удалось загрузить данные:", error);
     } finally {
       setIsLoading(false);
     }
@@ -97,7 +97,7 @@ export function WorkoutPage() {
       await exerciseService.addExerciseToPlan(selectedDay, exercise.id, { sets: 3, reps: 10 });
       await fetchData();
     } catch (error) {
-      console.error("Failed to add exercise:", error);
+      console.error("Не удалось добавить упражнение:", error);
     }
   };
 
@@ -106,7 +106,7 @@ export function WorkoutPage() {
       await exerciseService.removeExerciseFromPlan(workoutExerciseId);
       await fetchData();
     } catch (error) {
-      console.error("Failed to delete exercise:", error);
+      console.error("Не удалось удалить упражнение:", error);
     }
   };
 
@@ -121,7 +121,7 @@ export function WorkoutPage() {
         await fetchData();
       }
     } catch (error) {
-      console.error("Failed to update sets:", error);
+      console.error("Не удалось обновить подходы:", error);
     }
   };
 
@@ -135,7 +135,7 @@ export function WorkoutPage() {
         await fetchData();
       }
     } catch (error) {
-      console.error("Failed to toggle complete:", error);
+      console.error("Не удалось изменить статус выполнения:", error);
     }
   };
 
@@ -143,14 +143,14 @@ export function WorkoutPage() {
     <Page>
       <div className={styles.page}>
         <div className={styles.textStart}>
-          <h1 className={styles.title}>Start your daily workout</h1>
+          <h1 className={styles.title}>Начните свою ежедневную тренировку</h1>
           <div className={styles.stats}>
-            <span>Total Calories: {totalCalories.toFixed(0)} kcal</span>
-            <span>Estimated Time: {totalTime.toFixed(0)} min</span>
+            <span>Всего калорий: {totalCalories.toFixed(0)} ккал</span>
+            <span>Примерное время: {totalTime.toFixed(0)} мин</span>
           </div>
           <button onClick={() => setIsPopupOpen(true)} className={styles.openButton}>
-            <Image src={checkIcon} alt="Check" width={20} height={20} />
-            Check our recommendations
+            <Image src={checkIcon} alt="Галочка" width={20} height={20} />
+            Посмотреть наши рекомендации
           </button>
         </div>
 
@@ -198,7 +198,7 @@ export function WorkoutPage() {
               <div className={`${styles.imageContainer} ${styles.racket}`}>
                 <Image
                   src={racket}
-                  alt="racket"
+                  alt="ракетка"
                   width={120}
                   height={120}
                   className={styles.peekingImage}
@@ -207,7 +207,7 @@ export function WorkoutPage() {
               <div className={`${styles.imageContainer} ${styles.weights}`}>
                 <Image
                   src={weights}
-                  alt="weights"
+                  alt="гантели"
                   width={120}
                   height={120}
                   className={styles.peekingImage}
@@ -217,13 +217,13 @@ export function WorkoutPage() {
           </div>
 
           <button className={styles.filterButton} onClick={() => setIsFiltersOpen(true)}>
-            <Image src={filterIcon} alt="Filters" width={40} height={40} />
+            <Image src={filterIcon} alt="Фильтры" width={40} height={40} />
           </button>
 
           <div className={styles.mainContent}>
             <div className={styles.cardsContainer}>
               {isLoading ? (
-                <p>Loading exercises...</p>
+                <p>Загрузка упражнений...</p>
               ) : (
                 filteredExercises.map((exercise) => (
                   <WorkoutCard

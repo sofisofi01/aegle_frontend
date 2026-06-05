@@ -118,20 +118,20 @@ export function NutritionTableCard({
             <div className={styles.modalBody}>
               <div className={styles.modalMacros}>
                 <div className={styles.modalMacroItem}>
-                  <span className={styles.macroLabel}>Calories</span>
-                  <span className={styles.macroValue}>{calories} kcal</span>
+                  <span className={styles.macroLabel}>Калории</span>
+                  <span className={styles.macroValue}>{calories} ккал</span>
                 </div>
                 <div className={styles.modalMacroItem}>
-                  <span className={styles.macroLabel}>Proteins</span>
-                  <span className={styles.macroValue}>{proteins}g</span>
+                  <span className={styles.macroLabel}>Белки</span>
+                  <span className={styles.macroValue}>{proteins}г</span>
                 </div>
                 <div className={styles.modalMacroItem}>
-                  <span className={styles.macroLabel}>Carbs</span>
-                  <span className={styles.macroValue}>{carbs}g</span>
+                  <span className={styles.macroLabel}>Углеводы</span>
+                  <span className={styles.macroValue}>{carbs}г</span>
                 </div>
                 <div className={styles.modalMacroItem}>
-                  <span className={styles.macroLabel}>Fats</span>
-                  <span className={styles.macroValue}>{fats}g</span>
+                  <span className={styles.macroLabel}>Жиры</span>
+                  <span className={styles.macroValue}>{fats}г</span>
                 </div>
               </div>
 
@@ -144,13 +144,13 @@ export function NutritionTableCard({
 
               {recipe && (
                 <div className={styles.modalSection}>
-                  <h3>Recipe</h3>
+                  <h3>Рецепт</h3>
                   <p className={styles.recipeText}>{recipe}</p>
                 </div>
               )}
 
               <div className={styles.modalStatus}>
-                Status: <strong>{isEaten ? "Eaten" : "Planned"}</strong>
+                Статус: <strong>{isEaten ? "Eaten" : "Planned"}</strong>
               </div>
               {onDelete && (
                 <button
@@ -160,7 +160,7 @@ export function NutritionTableCard({
                     setIsModalOpen(false);
                   }}
                 >
-                  Remove from plan
+                  Убрать из плана
                 </button>
               )}
             </div>

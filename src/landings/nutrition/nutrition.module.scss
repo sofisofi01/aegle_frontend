@@ -93,7 +93,9 @@
 
 .dayImage {
   width: 25px;
-  height: 100px;
+  height: auto; 
+  max-height: 100px; 
+  object-fit: contain;
 }
 
 .cell {
@@ -177,7 +179,9 @@
 
   .dayImage {
     width: 25px;
-    height: 100px;
+    height: auto;
+    max-height: 100px;
+    object-fit: contain;
   }
 }
 
@@ -219,7 +223,9 @@
 
   .dayImage {
     width: 40px;
-    height: 140px;
+    height: auto;
+    max-height: 140px;
+    object-fit: contain;
   }
 }
 
@@ -244,6 +250,8 @@
 
   .dayImage {
     width: 50px;
-    height: 160px;
+    height: auto;
+    max-height: 160px;
+    object-fit: contain;
   }
 }

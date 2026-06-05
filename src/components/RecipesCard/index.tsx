@@ -115,7 +115,7 @@ export function RecipesCard({
   if (isLoading) {
     return (
       <div className={styles.emptyState}>
-        <p>Loading recipes...</p>
+        <p>Загрузка рецептов...</p>
       </div>
     );
   }
@@ -124,13 +124,13 @@ export function RecipesCard({
   if (filteredData.length === 0) {
     return (
       <div className={styles.emptyState}>
-        <p>No recipes found</p>
+        <p>Рецепты не найдены</p>
         {(selectedType ||
           selectedIngredients.length > 0 ||
           caloriesRange ||
           carbsRange ||
           proteinsRange ||
-          fatsRange) && <p className={styles.emptyStateHint}>Try changing your filters</p>}
+          fatsRange) && <p className={styles.emptyStateHint}>Попробуй поменять фильтры</p>}
       </div>
     );
   }
@@ -170,18 +170,18 @@ export function RecipesCard({
               <div className={styles.macronutrients}>
                 <h1 className={styles.title}>{item.title}</h1>
                 <div>
-                  Calories: <span className={styles.value}>{item.calories}</span>
+                  Калории: <span className={styles.value}>{item.calories}</span>
                 </div>
                 <div>
-                  Proteins: <span className={styles.value}>{item.proteins}</span>
+                  Белки: <span className={styles.value}>{item.proteins}</span>
                 </div>
                 <div>
-                  Fats: <span className={styles.value}>{item.fats}</span>
+                  Жиры: <span className={styles.value}>{item.fats}</span>
                 </div>
                 <div>
-                  Carbohydrates: <span className={styles.value}>{item.carbohydrates}</span>
+                  Углеводы: <span className={styles.value}>{item.carbohydrates}</span>
                 </div>
-                <div className={styles.perunit}>(Per 100 gramm)</div>
+                <div className={styles.perunit}>(на 100 грамм)</div>
               </div>
             </div>
             <div className={styles.recipeContainer}>
@@ -216,7 +216,7 @@ export function RecipesCard({
                     })
                   }
                 >
-                  Add to {mealType}
+                  Добавить в {mealType}
                 </button>
               )}
             </div>

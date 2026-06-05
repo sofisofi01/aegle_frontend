@@ -73,12 +73,12 @@ export function WorkoutMiniCard({
       {image && (
         <div className={styles.imageWrapper}>
           <Image src={image} alt={title} className={styles.image} />
-          {showDone && <div className={styles.donePopup}>Done!</div>}
+          {showDone && <div className={styles.donePopup}>Сделано!</div>}
           <div className={styles.buttonGroup}>
             <button className={styles.doneButton} onClick={handleComplete}>
               <Image
                 src={initialIsCompleted ? doneIcon : nodoneIcon}
-                alt={initialIsCompleted ? "done" : "no done"}
+                alt={initialIsCompleted ? "сделано" : "не сделано"}
                 width={20}
                 height={20}
                 className={styles.doneIcon}
@@ -110,7 +110,7 @@ export function WorkoutMiniCard({
           )}
         </div>
         {calories !== undefined && (
-          <div className={styles.calories}>{calories.toFixed(0)} kcal</div>
+          <div className={styles.calories}>{calories.toFixed(0)} ккал</div>
         )}
       </div>
     </div>
