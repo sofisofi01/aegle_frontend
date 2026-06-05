@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useAuthStore } from "@/store/useAuthStore";
 
-// МАКСИМАЛЬНО ЖЕСТКИЙ ХАРДКОД ДЛЯ ПРОВЕРКИ
-const API_URL = "/api";
+// Use public env var if provided (set NEXT_PUBLIC_API_URL in .env.local),
+// otherwise fallback to relative `/api` for proxy setups.
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
 
 const api = axios.create({
   baseURL: API_URL,

@@ -21,11 +21,11 @@ export const data = {
   },
 
   activity: [
-    { id: "sedentary", label: "Малоподвижный" },
-    { id: "light", label: "Лёгкая активность" },
-    { id: "moderate", label: "Умеренная активность" },
-    { id: "active", label: "Активный" },
-    { id: "very_active", label: "Очень активный" },
+    { id: 1, label: "Малоподвижный" },
+    { id: 2, label: "Лёгкая активность" },
+    { id: 3, label: "Умеренная активность" },
+    { id: 4, label: "Активный" },
+    { id: 5, label: "Очень активный" },
   ],
 
   goals: [

@@ -22,7 +22,7 @@ export interface RegisterData {
   target_weight?: number;
   gender?: string;
   age?: number;
-  activity_level?: string;
+  activity_level?: number;
   goal?: string;
 }
 

@@ -1,4 +1,4 @@
-export type ActivityLevel = 0 | 1 | 2 | 3;
+export type ActivityLevel = 1 | 2 | 3 | 4 | 5;
 
 export type Gender = "male" | "female" | null;
 
