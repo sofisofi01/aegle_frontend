@@ -33,6 +33,13 @@ export const authService = {
   },
 
   async register(data: RegisterData) {
+    // Debug: log the full request URL and payload
+    try {
+      // eslint-disable-next-line no-console
+      console.log("authService.register -> POST", api.defaults.baseURL + "/users/register/", data);
+    } catch (e) {
+      // ignore
+    }
     const response = await api.post<LoginResponse>("/users/register/", data);
     return response.data;
   },
