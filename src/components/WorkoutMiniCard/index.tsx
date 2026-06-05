@@ -92,26 +92,28 @@ export function WorkoutMiniCard({
       )}
       <div className={styles.bottom}>
         <div className={styles.title}>{title}</div>
-        <div className={styles.sets}>
-          {isEditing ? (
-            <input
-              type="text"
-              value={editedSets}
-              onChange={handleSetsChange}
-              onBlur={handleSetsBlur}
-              onKeyPress={handleKeyPress}
-              className={styles.setsInput}
-              autoFocus
-            />
-          ) : (
-            <span onClick={handleSetsClick} className={styles.setsText}>
-              {editedSets}
-            </span>
+        <div className={styles.setsAndCalories}>
+          <div className={styles.sets}>
+            {isEditing ? (
+              <input
+                type="text"
+                value={editedSets}
+                onChange={handleSetsChange}
+                onBlur={handleSetsBlur}
+                onKeyPress={handleKeyPress}
+                className={styles.setsInput}
+                autoFocus
+              />
+            ) : (
+              <span onClick={handleSetsClick} className={styles.setsText}>
+                {editedSets}
+              </span>
+            )}
+          </div>
+          {calories !== undefined && (
+            <div className={styles.calories}>{calories.toFixed(0)} ккал</div>
           )}
         </div>
-        {calories !== undefined && (
-          <div className={styles.calories}>{calories.toFixed(0)} ккал</div>
-        )}
       </div>
     </div>
   );
