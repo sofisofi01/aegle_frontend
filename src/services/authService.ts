@@ -20,7 +20,7 @@ export interface RegisterData {
   height?: number;
   weight?: number;
   target_weight?: number;
-  gender?: string;
+  gender?: "M" | "F";
   age?: number;
   activity_level?: number;
   goal?: string;
@@ -33,29 +33,7 @@ export const authService = {
   },
 
   async register(data: RegisterData) {
-    // Debug: log the full request URL and payload
-    try {
-      // eslint-disable-next-line no-console
-      console.log("authService.register -> POST", api.defaults.baseURL + "/users/register/", data);
-    } catch (e) {
-      // ignore
-    }
     const response = await api.post<LoginResponse>("/users/register/", data);
-    return response.data;
-  },
-
-  async getMe() {
-    const response = await api.get("/users/me/");
-    return response.data;
-  },
-
-  async updateProfile(data: FormData | Record<string, unknown>) {
-    const isFormData = data instanceof FormData;
-    const response = await api.patch("/users/me/", data, {
-      headers: {
-        "Content-Type": isFormData ? "multipart/form-data" : "application/json",
-      },
-    });
     return response.data;
   },
 };

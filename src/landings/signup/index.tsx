@@ -11,9 +11,9 @@ import { useAuthStore } from "@/store/useAuthStore";
 import "react-datepicker/dist/react-datepicker.css";
 
 export function SignUpPage() {
-  const [gender, setGender] = useState<"M" | "F" | null>(null);
+  const [gender, setGender] = useState<"M" | "F">();
   const [activityLevel, setActivityLevel] = useState<number | null>(null);
-  const [goal, setGoal] = useState<string | null>(null);
+  const [goal, setGoal] = useState<string>();
 
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
@@ -32,18 +32,22 @@ export function SignUpPage() {
 
   const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  // Валидация данных
   const validateForm = (): string | null => {
     if (!name || !surname) return "Заполните имя и фамилию";
     if (!isValidEmail(email)) return "Введите корректный email";
     if (!password || password.length < 4) return "Пароль должен быть минимум 4 символа";
-    if (!height || isNaN(parseInt(height)) || parseInt(height) < 100 || parseInt(height) > 300) 
+    if (!height || isNaN(parseInt(height)) || parseInt(height) < 100 || parseInt(height) > 300)
       return "Рост должен быть между 100 и 300 см";
-    if (!weight || isNaN(parseInt(weight)) || parseInt(weight) < 30 || parseInt(weight) > 500) 
+    if (!weight || isNaN(parseInt(weight)) || parseInt(weight) < 30 || parseInt(weight) > 500)
       return "Вес должен быть между 30 и 500 кг";
-    if (!targetWeight || isNaN(parseInt(targetWeight)) || parseInt(targetWeight) < 30 || parseInt(targetWeight) > 500) 
+    if (
+      !targetWeight ||
+      isNaN(parseInt(targetWeight)) ||
+      parseInt(targetWeight) < 30 ||
+      parseInt(targetWeight) > 500
+    )
       return "Целевой вес должен быть между 30 и 500 кг";
-    if (!age || isNaN(parseInt(age)) || parseInt(age) < 13 || parseInt(age) > 120) 
+    if (!age || isNaN(parseInt(age)) || parseInt(age) < 13 || parseInt(age) > 120)
       return "Возраст должен быть между 13 и 120 лет";
     if (!gender) return "Выберите пол";
     if (!activityLevel) return "Выберите уровень активности";
