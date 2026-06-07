@@ -44,12 +44,12 @@ export function Header({ menu }: HeaderProps) {
                   {user?.first_name || "Profile"}
                 </Link>
                 <button
+                  type="button"
                   onClick={() => {
                     useAuthStore.getState().logout();
                     window.location.href = "/";
                   }}
-                  className={styles.link}
-                  style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                  className={`${styles.link} ${styles.button}`}
                 >
                   Выйти
                 </button>
