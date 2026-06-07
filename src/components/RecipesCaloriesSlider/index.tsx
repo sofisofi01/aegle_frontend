@@ -99,7 +99,7 @@ export function CaloriesSlider({
 
   return (
     <div className={styles.filterGroup}>
-      <h3>Calories</h3>
+      <h3>Калории</h3>
       <div className={styles.sliderContainer}>
         <div ref={sliderRef} className={styles.sliderTrack} onClick={handleSliderClick}>
           <div
@@ -127,8 +127,8 @@ export function CaloriesSlider({
           />
         </div>
         <div className={styles.sliderValues}>
-          <span>{minNumber} kcal</span>
-          <span>{maxNumber} kcal</span>
+          <span>{minNumber} ккал</span>
+          <span>{maxNumber} ккал</span>
         </div>
       </div>
     </div>

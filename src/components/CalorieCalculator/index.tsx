@@ -7,18 +7,18 @@ import arrow from './image.png';
 
 export function CalorieCalculator() {
 
-    const [gender, setGender] = useState('female');
+    const [gender, setGender] = useState('женщина');
     
     // Состояния для дропдаунов
-    const [selectedGoal, setSelectedGoal] = useState('to gain weight');
+    const [selectedGoal, setSelectedGoal] = useState('набрать вес');
     const [isGoalDropdownOpen, setIsGoalDropdownOpen] = useState(false);
     
-    const [selectedActivity, setSelectedActivity] = useState('low');
+    const [selectedActivity, setSelectedActivity] = useState('низкая');
     const [isActivityDropdownOpen, setIsActivityDropdownOpen] = useState(false);
 
     // Варианты для дропдаунов
-    const goalOptions = ['lose weight', 'maintain weight', 'gain weight'];
-    const activityOptions = ['sedentary', 'low', 'medium', 'high'];
+    const goalOptions = ['снизить вес', 'поддерживать вес', 'набрать вес'];
+    const activityOptions = ['очень низкая', 'низкая', 'средняя', 'высокая'];
 
     const handleSelectGoal = (goal: string) => {
         setSelectedGoal(goal);
@@ -33,10 +33,10 @@ export function CalorieCalculator() {
     return (
         <div className={styles.container}>
             <div className={styles.card}>
-                <h1>Calorie Calculator</h1>
+                <h1>Калькулятор калорий</h1>
                 <div className={styles.firstRow}>
                     <div className={styles.sexContainer}>
-                        <h2>sex</h2>
+                        <h2>пол</h2>
                             <div className={styles.radioGroup}>
                                 <input 
                                     type="radio" 
@@ -47,7 +47,7 @@ export function CalorieCalculator() {
                                     onChange={(e) => setGender(e.target.value)}
                                     className={styles.radioInput}
                                 />
-                                <label htmlFor="female" className={styles.radioLabel}>female</label>
+                                <label htmlFor="female" className={styles.radioLabel}>женщина</label>
 
                                 <input 
                                 type="radio" 
@@ -58,11 +58,11 @@ export function CalorieCalculator() {
                                 onChange={(e) => setGender(e.target.value)}
                                 className={styles.radioInput}
                                 />
-                                <label htmlFor="male" className={styles.radioLabel}>male</label>
+                                <label htmlFor="male" className={styles.radioLabel}>мужчина</label>
                             </div>
                     </div>
                     <div className={styles.ageContainer}>
-                        <h2>age</h2>
+                        <h2>возраст</h2>
                         <input
                             type="text"
                             placeholder="0"
@@ -71,7 +71,7 @@ export function CalorieCalculator() {
                         />
                     </div>
                     <div className={styles.weightContainer}>
-                            <h2>weight(kg)</h2>
+                            <h2>вес(kg)</h2>
                             <input
                                 type="text"
                                 placeholder="0"
@@ -80,7 +80,7 @@ export function CalorieCalculator() {
                             />
                     </div>
                     <div className={styles.heightContainer}>
-                            <h2>height(sm)</h2>
+                            <h2>рост(см)</h2>
                             <input
                                 type="text"
                                 placeholder="0"
@@ -91,7 +91,7 @@ export function CalorieCalculator() {
                 </div>
                 <div className={styles.secondRow}>
                     <div className={styles.goalContainer}>
-                        <h2>goal</h2>
+                        <h2>цель</h2>
                         <div className={styles.dropdownContainer}>
                             <button
                                 type="button"
@@ -122,7 +122,7 @@ export function CalorieCalculator() {
                         </div>
                     </div>
                     <div className={styles.activitylevelContainer}>
-                        <h2>activity level</h2>
+                        <h2>активность</h2>
                         <div className={styles.dropdownContainer}>
                             <button
                                 type="button"
@@ -153,7 +153,7 @@ export function CalorieCalculator() {
                         </div>
                     </div>
                 </div>
-                <button className={styles.calculateButton}>calculate</button>
+                <button className={styles.calculateButton}>рассчитать</button>
             </div>
         </div>
     )

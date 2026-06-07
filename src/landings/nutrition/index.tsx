@@ -11,27 +11,27 @@ import { NutritionTotalCard } from "@/components/NutritionTotalCard";
 import { NutritionTableCard } from "@/components/NutritionTableCard";
 import { nutritionService, NutritionPlan } from "@/services/nutritionService";
 
-import mondayImg from "./assets/mon.png";
-import tuesdayImg from "./assets/tue.png";
-import wednesdayImg from "./assets/wed.png";
-import thursdayImg from "./assets/thur.png";
-import fridayImg from "./assets/fri.png";
-import saturdayImg from "./assets/sat.png";
-import sundayImg from "./assets/sun.png";
+import mondayImg from "./assets/mon1.png";
+import tuesdayImg from "./assets/tue1.png";
+import wednesdayImg from "./assets/wed1.png";
+import thursdayImg from "./assets/thur1.png";
+import fridayImg from "./assets/fri1.png";
+import saturdayImg from "./assets/sat1.png";
+import sundayImg from "./assets/sun1.png";
 
 import foodDefaultImg from "./assets/food.png";
 
 const daysOfWeek = [
-  { id: 1, name: "Monday", image: mondayImg },
-  { id: 2, name: "Tuesday", image: tuesdayImg },
-  { id: 3, name: "Wednesday", image: wednesdayImg },
-  { id: 4, name: "Thursday", image: thursdayImg },
-  { id: 5, name: "Friday", image: fridayImg },
-  { id: 6, name: "Saturday", image: saturdayImg },
-  { id: 7, name: "Sunday", image: sundayImg },
+  { id: 1, name: "Понедельник", image: mondayImg },
+  { id: 2, name: "Вторник", image: tuesdayImg },
+  { id: 3, name: "Среда", image: wednesdayImg },
+  { id: 4, name: "Четверг", image: thursdayImg },
+  { id: 5, name: "Пятница", image: fridayImg },
+  { id: 6, name: "Суббота", image: saturdayImg },
+  { id: 7, name: "Воскресенье", image: sundayImg },
 ];
 
-const mealTypes = ["Breakfast", "Lunch", "Dinner", "Snack", "Total"];
+const mealTypes = ["Завтрак", "Обед", "Ужин", "Снеки", "Всего"];
 
 export function NutritionPage() {
   const [activePlan, setActivePlan] = useState<NutritionPlan | null>(null);
@@ -42,7 +42,7 @@ export function NutritionPage() {
       const plan = await nutritionService.getActivePlan();
       setActivePlan(plan);
     } catch (error) {
-      console.error("Failed to fetch nutrition plan:", error);
+      console.error("Не удалось загрузить план питания:", error);
     } finally {
       setIsLoading(false);
     }
@@ -53,7 +53,7 @@ export function NutritionPage() {
   }, []);
 
   const getCurrentDayNumber = () => {
-    const day = new Date().getDay(); // 0 (Sun) - 6 (Sat)
+    const day = new Date().getDay(); // 0 (Вс) - 6 (Сб)
     return day === 0 ? 7 : day;
   };
 
@@ -67,7 +67,7 @@ export function NutritionPage() {
         await nutritionService.updateNutritionEntry(entryId, { is_eaten: !entry.is_eaten });
         await fetchData();
       } catch (error) {
-        console.error("Failed to update entry:", error);
+        console.error("Не удалось обновить запись:", error);
       }
     }
   };
@@ -77,7 +77,7 @@ export function NutritionPage() {
       await nutritionService.deleteNutritionEntry(entryId);
       await fetchData();
     } catch (error) {
-      console.error("Failed to delete entry:", error);
+      console.error("Не удалось удалить запись:", error);
     }
   };
 
@@ -105,12 +105,12 @@ export function NutritionPage() {
       <div className={styles.page}>
         <div className={styles.upperContainer}>
           <div className={styles.cardsTitle}>
-            <h1 className={styles.title}>Your meals today are...</h1>
+            <h1 className={styles.title}>Ваши блюда на сегодня...</h1>
             <div className={styles.cardContainer}>
               {isLoading ? (
-                <p>Loading...</p>
+                <p>Загрузка...</p>
               ) : todayPlan?.entries.length === 0 ? (
-                <p>No meals planned for today.</p>
+                <p>Нет запланированных приёмов пищи на сегодня.</p>
               ) : (
                 todayPlan?.entries.map((item) => (
                   <NutritionCard
@@ -153,7 +153,7 @@ export function NutritionPage() {
                 </div>
 
                 {mealTypes.map((meal) => {
-                  if (meal === "Total") {
+                  if (meal === "Всего") {
                     const totals = calculateDayTotals(day.id);
                     return (
                       <div

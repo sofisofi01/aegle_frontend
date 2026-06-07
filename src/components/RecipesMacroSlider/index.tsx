@@ -9,7 +9,7 @@ export function MacroSlider({
   onRangeChange,
   minValue = 0,
   maxValue = 100,
-  unit = "g",
+  unit = "г",
 }: MacroSliderProps) {
   const MIN_LIMIT = 0;
   const MAX_LIMIT = maxValue;

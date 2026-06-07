@@ -48,12 +48,12 @@ export function RecipesPage() {
           }
         });
         // Добавляем стандартные
-        ["eggs", "milk", "tomatoes", "chicken", "cheese", "flour"].forEach((i) =>
+        ["яйца", "молоко", "помидоры", "курица", "сыр", "мука"].forEach((i) =>
           ingredientsSet.add(i)
         );
         setAvailableIngredients(Array.from(ingredientsSet));
       } catch (e) {
-        console.error("Failed to fetch ingredients:", e);
+        console.error("Не удалось загрузить ингредиенты:", e);
       }
     };
     fetchIngredients();
@@ -66,7 +66,7 @@ export function RecipesPage() {
       const results = await nutritionService.searchFood(searchQuery);
       setSearchResults(results);
     } catch (error) {
-      console.error("Search failed:", error);
+      console.error("Ошибка поиска:", error);
     } finally {
       setIsSearching(false);
     }
@@ -76,13 +76,13 @@ export function RecipesPage() {
     if (!day || !mealType) return;
 
     const dayMap: Record<string, number> = {
-      Monday: 1,
-      Tuesday: 2,
-      Wednesday: 3,
-      Thursday: 4,
-      Friday: 5,
-      Saturday: 6,
-      Sunday: 7,
+      Понедельник: 1,
+      Вторник: 2,
+      Среда: 3,
+      Четверг: 4,
+      Пятница: 5,
+      Суббота: 6,
+      Воскресенье: 7,
     };
 
     try {
@@ -98,7 +98,7 @@ export function RecipesPage() {
       });
       router.push("/nutrition");
     } catch (error) {
-      console.error("Failed to add food to plan:", error);
+      console.error("Не удалось добавить блюдо в план:", error);
     }
   };
 
@@ -145,25 +145,25 @@ export function RecipesPage() {
         <div className={styles.searchBlock}>
           <div className={styles.headerContainer}>
             <h1 className={styles.title}>
-              Find your perfect dish <br /> or create it yourself
+              Найдите своё идеальное блюдо <br /> или создайте его сами
             </h1>
             <div className={styles.searchContainer}>
               <div className={styles.searchWrapper}>
                 <input
                   type="text"
-                  placeholder="Search for the recipe or food..."
+                  placeholder="Поиск рецептов..."
                   className={styles.searchInput}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && handleSearch()}
                 />
                 <button className={styles.searchButton} onClick={handleSearch}>
-                  <Image src={searchIcon} alt="Search icon" width={20} height={20} />
+                  <Image src={searchIcon} alt="Иконка поиска" width={20} height={20} />
                 </button>
               </div>
               <button className={styles.createButton} onClick={() => setIsCreatePopupOpen(true)}>
-                <span>create</span>
-                <Image src={plusIcon} alt="Create icon" width={20} height={20} />
+                <span>создать</span>
+                <Image src={plusIcon} alt="Иконка создания" width={20} height={20} />
               </button>
             </div>
           </div>
@@ -189,42 +189,42 @@ export function RecipesPage() {
           <button
             className={styles.filterButton}
             onClick={() => setIsFiltersOpen(true)}
-            aria-label="Open filters"
+            aria-label="Открыть фильтры"
           >
-            <Image src={filterIcon} alt="Filters" width={40} height={40} />
+            <Image src={filterIcon} alt="Фильтры" width={40} height={40} />
           </button>
 
           <div className={styles.mainContent}>
-            {isSearching && <p className={styles.loadingText}>Searching in FatSecret...</p>}
+            {isSearching && <p className={styles.loadingText}>Поиск в FatSecret...</p>}
 
             {!isSearching && searchQuery && searchResults.length === 0 && (
               <div className={styles.noResults}>
-                <p>Didn&apos;t find what you were looking for in our database?</p>
+                <p>Не нашли то, что искали в нашей базе данных?</p>
                 <button
                   className={styles.createCustomButton}
                   onClick={() => setIsCreatePopupOpen(true)}
                 >
-                  Create custom food entry
+                  Создать своё блюдо
                 </button>
               </div>
             )}
 
             {searchResults.length > 0 && (
               <div className={styles.searchResults}>
-                <h2>Search Results</h2>
+                <h2>Результаты поиска</h2>
                 <div className={styles.resultsGrid}>
                   {searchResults.map((food, idx) => (
                     <div key={idx} className={styles.resultCard}>
                       <div className={styles.resultInfo}>
                         <h3>{food.name}</h3>
                         <p>
-                          {food.calories} kcal | P: {food.protein}g | C: {food.carbs}g | F:{" "}
-                          {food.fat}g
+                          {food.calories} ккал | Б: {food.protein}г | Ж: {food.carbs}г | У:{" "}
+                          {food.fat}г
                         </p>
                       </div>
                       {day && mealType && (
                         <button className={styles.addButton} onClick={() => handleAddToPlan(food)}>
-                          Add to {mealType}
+                          Добавить к {mealType}
                         </button>
                       )}
                     </div>

@@ -212,7 +212,7 @@
 .cardsContainer {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 20px;  
 }
 
 .popupOverlay {
@@ -232,8 +232,10 @@
 .popupContent {
   position: relative;
   width: 100%;
-  max-height: 100vh;
+  max-height: 90vh;
   overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 @include breakpoints(sm) {

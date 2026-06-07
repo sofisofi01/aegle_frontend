@@ -73,12 +73,12 @@ export function WorkoutMiniCard({
       {image && (
         <div className={styles.imageWrapper}>
           <Image src={image} alt={title} className={styles.image} />
-          {showDone && <div className={styles.donePopup}>Done!</div>}
+          {showDone && <div className={styles.donePopup}>Сделано!</div>}
           <div className={styles.buttonGroup}>
             <button className={styles.doneButton} onClick={handleComplete}>
               <Image
                 src={initialIsCompleted ? doneIcon : nodoneIcon}
-                alt={initialIsCompleted ? "done" : "no done"}
+                alt={initialIsCompleted ? "сделано" : "не сделано"}
                 width={20}
                 height={20}
                 className={styles.doneIcon}
@@ -92,26 +92,28 @@ export function WorkoutMiniCard({
       )}
       <div className={styles.bottom}>
         <div className={styles.title}>{title}</div>
-        <div className={styles.sets}>
-          {isEditing ? (
-            <input
-              type="text"
-              value={editedSets}
-              onChange={handleSetsChange}
-              onBlur={handleSetsBlur}
-              onKeyPress={handleKeyPress}
-              className={styles.setsInput}
-              autoFocus
-            />
-          ) : (
-            <span onClick={handleSetsClick} className={styles.setsText}>
-              {editedSets}
-            </span>
+        <div className={styles.setsAndCalories}>
+          <div className={styles.sets}>
+            {isEditing ? (
+              <input
+                type="text"
+                value={editedSets}
+                onChange={handleSetsChange}
+                onBlur={handleSetsBlur}
+                onKeyPress={handleKeyPress}
+                className={styles.setsInput}
+                autoFocus
+              />
+            ) : (
+              <span onClick={handleSetsClick} className={styles.setsText}>
+                {editedSets}
+              </span>
+            )}
+          </div>
+          {calories !== undefined && (
+            <div className={styles.calories}>{calories.toFixed(0)} ккал</div>
           )}
         </div>
-        {calories !== undefined && (
-          <div className={styles.calories}>{calories.toFixed(0)} kcal</div>
-        )}
       </div>
     </div>
   );

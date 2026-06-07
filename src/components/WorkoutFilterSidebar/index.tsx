@@ -13,38 +13,38 @@ export function WorkoutFilterSidebar({
   onResetFilters,
 }: WorkoutFilterSidebarProps) {
   const muscles = [
-    "Deltoid",
-    "Abs",
-    "Chest",
-    "Legs",
-    "Back muscles",
-    "Hands",
-    "Trapezoid",
-    "Cardio",
-    "Warm",
+    "Дельтовидные",
+    "Пресс",
+    "Грудные",
+    "Ноги",
+    "Мышцы спины",
+    "Руки",
+    "Трапеции",
+    "Кардио",
+    "Разминка",
   ];
   const equipment = [
-    "Dumbbells",
-    "Kettlebell",
-    "Jump rope",
-    "Resistance band",
-    "Mat",
-    "Weights",
-    "Barbell",
-    "Horizontal bar",
+    "Гантели",
+    "Гиря",
+    "Скакалка",
+    "Эспандер",
+    "Коврик",
+    "Утяжелители",
+    "Штанга",
+    "Турник",
   ];
 
   return (
     <>
-      <div className={`${styles.overlay} ${isOpen ? styles.open : ""}`} onClick={onClose} />
+      <div className={`${styles.overlay} ${isOpen ? styles.open : ""}`} onClick={onClose}/>
 
       <aside className={`${styles.sidebar} ${isOpen ? styles.open : ""}`}>
         <div className={styles.content}>
           <button className={styles.resetButton} onClick={onResetFilters}>
-            Reset Filters
+            Сбросить фильтры
           </button>
           <div className={styles.filterGroup}>
-            <h3>Muscles</h3>
+            <h3>Мышцы</h3>
             <div className={styles.options}>
               {muscles.map((m) => (
                 <div
@@ -61,7 +61,7 @@ export function WorkoutFilterSidebar({
           </div>
 
           <div className={styles.filterGroup}>
-            <h3>Equipment</h3>
+            <h3>Снаряжение</h3>
             <div className={styles.options}>
               {equipment.map((e) => (
                 <div

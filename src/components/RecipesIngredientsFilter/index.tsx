@@ -33,7 +33,7 @@ export function IngredientsFilter({
 
   return (
     <div className={styles.filterGroup}>
-      <h3>Ingredients</h3>
+      <h3>Ингредиенты</h3>
 
       <div className={styles.selectedIngredients}>
         {selectedIngredients.map((ingredient) => (
@@ -43,7 +43,7 @@ export function IngredientsFilter({
               className={styles.removeButton}
               onClick={() => handleRemoveIngredient(ingredient)}
             >
-              <Image src={minusIcon} alt="minus" height={20} width={20} />
+              <Image src={minusIcon} alt="минус" height={20} width={20} />
             </button>
           </div>
         ))}
@@ -51,7 +51,7 @@ export function IngredientsFilter({
 
       <div className={styles.addButtonWrapper}>
         <button className={styles.addButton} onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-          Add...
+          Добавить...
         </button>
 
         {isDropdownOpen && (
@@ -59,7 +59,7 @@ export function IngredientsFilter({
             <div className={styles.searchWrapper}>
               <input
                 type="text"
-                placeholder="Search ingredients..."
+                placeholder="Поиск ингредиентов..."
                 className={styles.searchInput}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -79,7 +79,7 @@ export function IngredientsFilter({
                   </div>
                 ))
               ) : (
-                <div className={styles.noResults}>No ingredients found</div>
+                <div className={styles.noResults}>Ингредиенты не найдены</div>
               )}
             </div>
           </div>

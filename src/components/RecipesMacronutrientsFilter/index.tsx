@@ -12,27 +12,27 @@ export function MacronutrientsFilter({
 }: MacronutrientsFilterProps) {
     return (
         <div className={styles.filterGroup}>
-            <h3>Macronutrients</h3>
+            <h3>КБЖУ</h3>
             
             <MacroSlider 
-                title="Carbohydrates"
+                title="Углеводы"
                 onRangeChange={onCarbsRangeChange}
                 maxValue={100}
-                unit="g"
+                unit="г"
             />
             
             <MacroSlider 
-                title="Proteins"
+                title="Белки"
                 onRangeChange={onProteinsRangeChange}
                 maxValue={60}
-                unit="g"
+                unit="г"
             />
             
             <MacroSlider 
-                title="Fats"
+                title="Жиры"
                 onRangeChange={onFatsRangeChange}
                 maxValue={100}
-                unit="g"
+                unit="г"
             />
         </div>
     );

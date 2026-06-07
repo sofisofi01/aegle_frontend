@@ -62,7 +62,7 @@ export function WorkoutCard({
             {displayText}
             {text.length > maxLength && (
               <button className={styles.moreButton} onClick={() => setIsExpanded(!isExpanded)}>
-                {isExpanded ? " Show less" : "...Show more"}
+                {isExpanded ? " Свернуть" : "...Показать ещё"}
               </button>
             )}
           </p>
@@ -73,15 +73,15 @@ export function WorkoutCard({
               rel="noopener noreferrer"
               className={styles.videoLink}
             >
-              Watch Video
+              Смотреть видео
             </a>
           )}
         </div>
       </div>
       <div className={styles.addButtonContainer}>
         <button className={styles.addButton} onClick={handleAddClick}>
-          <span>Add to your workout</span>
-          <Image src={plusIcon} alt="Add" width={30} height={30} className={styles.plusIcon} />
+          <span>Добавить в тренировку</span>
+          <Image src={plusIcon} alt="Добавить" width={30} height={30} className={styles.plusIcon} />
         </button>
       </div>
     </div>

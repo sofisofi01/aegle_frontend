@@ -51,7 +51,7 @@ export function Header({ menu }: HeaderProps) {
                   className={styles.link}
                   style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
                 >
-                  Logout
+                  Выйти
                 </button>
               </div>
             ) : (
@@ -59,7 +59,7 @@ export function Header({ menu }: HeaderProps) {
                 href="/signin"
                 className={`${styles.link} ${pathname === "/signin" ? styles.active : ""}`}
               >
-                Sign In
+                Войти
               </Link>
             )}
           </li>
