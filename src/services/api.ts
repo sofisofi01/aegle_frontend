@@ -1,25 +1,7 @@
 import axios from "axios";
 import { useAuthStore } from "@/store/useAuthStore";
 
-// Use public env var if provided (set NEXT_PUBLIC_API_URL in .env.local),
-// otherwise fallback to relative `/api` for proxy setups.
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
-
-if (typeof window !== "undefined") {
-  try {
-    // eslint-disable-next-line no-console
-    console.log("API base URL:", API_URL);
-    if (API_URL === "/api" && window.location.port === "3000") {
-      // eslint-disable-next-line no-console
-      console.warn(
-        "Dev warning: frontend is running on port 3000 and API base is '/api' -> requests will hit the Next dev server and return 404.\n" +
-          "Either set NEXT_PUBLIC_API_URL to your backend (e.g. http://localhost:3000) and restart, or run the frontend on a different port (e.g. 3001)."
-      );
-    }
-  } catch (e) {
-    // ignore
-  }
-}
 
 const api = axios.create({
   baseURL: API_URL,
