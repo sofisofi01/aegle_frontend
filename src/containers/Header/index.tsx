@@ -41,15 +41,15 @@ export function Header({ menu }: HeaderProps) {
                   href="/profile"
                   className={`${styles.link} ${pathname === "/profile" ? styles.active : ""}`}
                 >
-                  {user?.first_name || "Profile"}
+                  {user?.first_name || "Профиль"}
                 </Link>
                 <button
+                  type="button"
                   onClick={() => {
                     useAuthStore.getState().logout();
                     window.location.href = "/";
                   }}
-                  className={styles.link}
-                  style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                  className={`${styles.link} ${styles.button}`}
                 >
                   Выйти
                 </button>
