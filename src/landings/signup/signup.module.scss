@@ -236,6 +236,59 @@
   }
 }
 
+@media (max-width: 1019px) {
+  .labelRow {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+
+  .rowOptions {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+    width: 100%;
+  }
+
+  .rowOptions .option {
+    width: 100%;
+    justify-self: stretch;
+  }
+}
+
+@media (max-width: 560px) {
+  .labelRow {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .label {
+    width: auto;
+    min-width: 0;
+  }
+
+  .labelRow input,
+  .labelRow .rowOptions {
+    width: 100%;
+  }
+
+  .rowOptions {
+    grid-template-columns: none;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .rowOptions .option {
+    min-width: 100px;
+    flex: 0 1 auto;
+  }
+}
+
 @include breakpoints(xl) {
   .wrapper { padding: 50px 300px; }
 }

@@ -41,7 +41,7 @@ export function Header({ menu }: HeaderProps) {
                   href="/profile"
                   className={`${styles.link} ${pathname === "/profile" ? styles.active : ""}`}
                 >
-                  {user?.first_name || "Profile"}
+                  {user?.first_name || "Профиль"}
                 </Link>
                 <button
                   type="button"
