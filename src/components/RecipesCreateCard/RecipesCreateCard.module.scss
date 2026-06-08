@@ -18,9 +18,9 @@
     border-radius: 30px;
     margin-bottom: 20px;
     overflow: hidden;
+    box-sizing: border-box;
 }
 
-// Image styles
 .imageWrapper {
     flex: 1;
     flex-shrink: 0;
@@ -470,6 +470,7 @@
     font-size: 14px;
     font-family: $font-family-secondary;
     resize: vertical;
+    height: 100px;
     background-color: $color-light-green;
     border: none;
     color: $color-text-black;
@@ -548,10 +549,15 @@
     .recipeTitle, .ingredientsTitle, .titleInput {
         font-size: $font-size-title;
     }
+
     .imagePlaceholder {    
         span {
             font-size: $font-size-base;
         }
+    }
+
+    .recipeTextarea {
+        height: 200px;
     }
 
     .selectInput {
@@ -603,6 +609,10 @@
     .recipeImage, .imagePlaceholder {
         width: 350px;
         height: 250px;
+    }
+
+    .recipeTextarea {
+        height: 400px;
     }
     
     .card {
