@@ -72,7 +72,7 @@ export function NutritionTableCard({
                 target.src = workoutDefaultImg.src;
               }}
             />
-            {showDone && <div className={styles.donePopup}>Done!</div>}
+            {showDone && <div className={styles.donePopup}>Готово!</div>}
             <button className={styles.doneButton} onClick={handleComplete}>
               <Image
                 src={isEaten ? doneIcon : nodoneIcon}
@@ -90,12 +90,12 @@ export function NutritionTableCard({
             >
               —
             </button>
-            {showDelete && <div className={styles.deletePopup}>Remove?</div>}
+            {showDelete && <div className={styles.deletePopup}>Удалить?</div>}
           </div>
         )}
         <div className={styles.bottom}>
           <div className={styles.title}>{title}</div>
-          <div className={styles.calories}>{calories} kcal</div>
+          <div className={styles.calories}>{calories} ккал</div>
         </div>
       </div>
 

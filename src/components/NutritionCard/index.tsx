@@ -65,7 +65,7 @@ export function NutritionCard({
                 target.src = workoutDefaultImg.src;
               }}
             />
-            {showDone && <div className={styles.donePopup}>Done!</div>}
+            {showDone && <div className={styles.donePopup}>Готово!</div>}
             <button className={styles.doneButton} onClick={handleComplete}>
               <Image
                 src={isEaten ? doneIcon : nodoneIcon}
@@ -79,7 +79,7 @@ export function NutritionCard({
         )}
         <div className={styles.bottom}>
           <div className={styles.title}>{title}</div>
-          <div className={styles.calories}>{calories} kkal</div>
+          <div className={styles.calories}>{calories} ккал</div>
         </div>
       </div>
 

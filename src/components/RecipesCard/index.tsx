@@ -181,7 +181,6 @@ export function RecipesCard({
                 <div>
                   Углеводы: <span className={styles.value}>{item.carbohydrates}</span>
                 </div>
-                <div className={styles.perunit}>(на 100 грамм)</div>
               </div>
             </div>
             <div className={styles.recipeContainer}>
