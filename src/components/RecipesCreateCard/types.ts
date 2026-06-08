@@ -24,7 +24,7 @@ export type CreateRecipesCardProps = {
 }
 
 export const RECIPE_TYPES = ['Завтрак', 'Обед', 'Ужин', 'Снеки'] as const;
-export const AMOUNT_UNITS = ['г', 'кг', 'мл', 'л', 'ч.л.', 'ст.л.', 'кружка'] as const;
+export const AMOUNT_UNITS = ['г', 'кг', 'мл', 'л', 'ч.л.', 'ст.л.', 'кружка', 'шт'] as const;
 
 export type RecipeType = typeof RECIPE_TYPES[number];
 export type AmountUnit = typeof AMOUNT_UNITS[number];

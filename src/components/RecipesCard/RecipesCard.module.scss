@@ -14,7 +14,21 @@
   border-radius: 30px;
   margin-bottom: 20px;
   overflow: hidden;
+  box-sizing: border-box;
 }
+
+.recipeContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.recipe {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
 
 .recipeImage {
   object-fit: cover;
@@ -22,6 +36,8 @@
   margin: 0 auto 20px auto;
   display: block;
   border-radius: 30px;
+  width: 200px;
+  height: 150px;
 }
 
 .imageWrapper {
@@ -45,15 +61,18 @@
   font-size: 14px;
   display: flex;
   flex-direction: row;
-  gap: 20px;
+  gap: 20px;  
 }
 
 .title {
   color: $color-text-green-dark;
   font-size: 18px;
+  margin-bottom: 10px;
   font-weight: bold;
   text-align: center;
-  margin-bottom: 20px;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .ingredientsTitle {
@@ -96,23 +115,70 @@
   word-break: break-word;
 }
 
+.addToPlanButton {
+  margin-top: 20px;
+  padding: 10px 24px;
+  background: $color-button;
+  font-size: 16px;
+  color: $color-text-white;
+  border: none;
+  border-radius: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: filter 0.2s;
+  align-self: flex-end;
+  width: auto; 
+  white-space: nowrap; 
+
+  &:hover {
+    filter: brightness(0.9);
+  }
+}
+
 @include breakpoints(sm) {
+  .recipeImage {
+    width: 250px;
+    height: 170px;
+  }
+
+  .recipeTitle,
+  .ingredientsTitle {
+    font-size: $font-size-title;
+    margin: 20px;
+  }
+
+  .title {
+    font-size: $font-size-title;
+    margin-bottom: 20px;
+  }
+
+  .recipeText,
+  .ingredientsList,
+  .macronutrients,
+  .addToPlanButton {
+    font-size: $font-size-base;
+  }
+}
+
+@include breakpoints(md) {
   .recipeImage {
     width: 300px;
     height: 200px;
   }
 
-  .recipeTitle,
-  .ingredientsTitle,
-  .title {
-    font-size: $font-size-title;
-    margin: 20px;
+  .card {
+    width: 90%;
+  }
+}
+
+@include breakpoints(lg) {
+  .recipeImage {
+    width: 350px;
+    height: 220px;
   }
 
-  .recipeText,
-  .ingredientsList,
-  .macronutrients {
-    font-size: $font-size-base;
+  .card {
+    width: 80%;
   }
 }
 
@@ -132,28 +198,7 @@
   }
 
   .recipeImage {
-    width: 700px;
+    width: 400px;
     height: 250px;
-  }
-
-  .card {
-    width: 90%;
-  }
-}
-
-.addToPlanButton {
-  margin-top: 20px;
-  width: 100%;
-  padding: 12px;
-  background: $color-button-tick;
-  color: $color-text-green-dark;
-  border: none;
-  border-radius: 15px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: filter 0.2s;
-
-  &:hover {
-    filter: brightness(0.9);
   }
 }

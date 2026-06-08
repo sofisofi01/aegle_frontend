@@ -181,17 +181,16 @@ export function RecipesCard({
                 <div>
                   Углеводы: <span className={styles.value}>{item.carbohydrates}</span>
                 </div>
-                <div className={styles.perunit}>(на 100 грамм)</div>
               </div>
             </div>
             <div className={styles.recipeContainer}>
               <div className={styles.ingredients}>
-                <div className={styles.ingredientsTitle}>Ingredients</div>
+                <div className={styles.ingredientsTitle}>Ингредиенты</div>
                 <div className={styles.ingredientsList}>{item.ingredients}</div>
               </div>
               <div className={styles.recipe}>
                 <div className={styles.recipeTitle}>
-                  Recipe
+                  Рецепт
                   <div className={styles.time}>
                     <Image src={time} alt="Time" height={20} width={20} />
                     <div>{item.time}</div>
